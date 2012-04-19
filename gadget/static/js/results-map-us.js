@@ -1830,7 +1830,7 @@ function usEnabled() {
 			zoomControl: false
 		} : {
 			zoomControlOptions: {
-				position: gm.ControlPosition.TOP_RIGHT,
+				//position: gm.ControlPosition.TOP_RIGHT,
 				style: gm.ZoomControlStyle.SMALL
 			}
 		});
