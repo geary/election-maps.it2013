@@ -137,7 +137,7 @@ var states = [
 		abbr: 'DE',
 		name: 'Delaware',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2660',
 		done: false
 	},
 	{
@@ -376,7 +376,7 @@ var states = [
 		abbr: 'NY',
 		name: 'New York',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2659',
 		done: false
 	},
 	{
@@ -426,7 +426,7 @@ var states = [
 		abbr: 'PA',
 		name: 'Pennsylvania',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2658',
 		done: false
 	},
 	{
@@ -434,7 +434,7 @@ var states = [
 		abbr: 'RI',
 		name: 'Rhode Island',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2656',
 		done: false
 	},
 	{
