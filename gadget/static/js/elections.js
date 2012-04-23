@@ -129,7 +129,7 @@ var states = [
 		name: 'Connecticut',
 		votesby: 'town',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2661',
 		done: false
 	},
 	{
