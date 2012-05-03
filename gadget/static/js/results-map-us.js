@@ -736,6 +736,7 @@ function usEnabled() {
 	
 	var setCenter = 'setCenter';
 	function fitBbox( bbox, centerLL ) {
+		addBboxOverlay( bbox );
 		var z;
 		if( params.zoom  &&  params.zoom != 'auto' ) {
 			z = +params.zoom;
@@ -778,6 +779,47 @@ function usEnabled() {
 	//		bbox[3] - dy
 	//	];
 	//}
+	
+	var bboxOverlay;
+	function addBboxOverlay( bbox ) {
+		if( ! params.bbox ) return;
+		if( bboxOverlay )
+			bboxOverlay.setMap( null );
+		bboxOverlay = null;
+		var feature = {
+			fillColor: '#000000',
+			fillOpacity: 0,
+			strokeWidth: 1,
+			strokeColor: '#FF0000',
+			strokeOpacity: .5,
+			geometry: {
+				type: 'Polygon',
+				coordinates: [
+					[
+						[ bbox[0], bbox[1] ],
+						[ bbox[0], bbox[3] ],
+						[ bbox[2], bbox[3] ],
+						[ bbox[2], bbox[1] ],
+						[ bbox[0], bbox[1] ]
+					]
+				]
+			}
+		};
+		bboxOverlay = new PolyGonzo.PgOverlay({
+			map: map,
+			geos: [{
+				crs: {
+					type: 'name',
+					properties: {
+						name: 'urn:ogc:def:crs:EPSG::3857'
+					}
+				},
+				//kind: where.geo.kind,
+				features: [ feature ]
+			}]
+		});
+		bboxOverlay.setMap( map );
+	}
 	
 	var  mouseFeature;
 	
