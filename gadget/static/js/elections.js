@@ -199,7 +199,7 @@ var states = [
 		abbr: 'IN',
 		name: 'Indiana',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2773',
 		done: false
 	},
 	{
@@ -384,7 +384,7 @@ var states = [
 		abbr: 'NC',
 		name: 'North Carolina',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2771',
 		done: false
 	},
 	{
@@ -515,7 +515,7 @@ var states = [
 		abbr: 'WV',
 		name: 'West Virginia',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2772',
 		done: false
 	},
 	{
