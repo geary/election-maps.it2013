@@ -326,8 +326,7 @@ var states = [
 		fips: '31',
 		abbr: 'NE',
 		name: 'Nebraska',
-		type: 'Caucus',
-		date: '2012-06-10',
+		date: '2012-05-15',
 		electionid: '2775',
 		done: false
 	},
