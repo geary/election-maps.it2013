@@ -103,7 +103,7 @@ var states = [
 		abbr: 'AR',
 		name: 'Arkansas',
 		date: '2012-05-22',
-		electionid: '',
+		electionid: '2776',
 		done: false
 	},
 	{
@@ -225,7 +225,7 @@ var states = [
 		abbr: 'KY',
 		name: 'Kentucky',
 		date: '2012-05-22',
-		electionid: '',
+		electionid: '2777',
 		done: false
 	},
 	{
@@ -328,7 +328,7 @@ var states = [
 		name: 'Nebraska',
 		type: 'Caucus',
 		date: '2012-06-10',
-		electionid: '',
+		electionid: '2775',
 		done: false
 	},
 	{
@@ -418,7 +418,7 @@ var states = [
 		abbr: 'OR',
 		name: 'Oregon',
 		date: '2012-05-15',
-		electionid: '',
+		electionid: '2774',
 		done: false
 	},
 	{
