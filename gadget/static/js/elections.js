@@ -111,7 +111,7 @@ var states = [
 		abbr: 'CA',
 		name: 'California',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2779',
 		done: false
 	},
 	{
@@ -319,7 +319,7 @@ var states = [
 		name: 'Montana',
 		type: 'Caucus',
 		date: '2012-06-16',
-		electionid: '',
+		electionid: '2780',
 		done: false
 	},
 	{
@@ -359,7 +359,7 @@ var states = [
 		abbr: 'NJ',
 		name: 'New Jersey',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2781',
 		done: false
 	},
 	{
@@ -367,7 +367,7 @@ var states = [
 		abbr: 'NM',
 		name: 'New Mexico',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2782',
 		done: false
 	},
 	{
@@ -449,7 +449,7 @@ var states = [
 		abbr: 'SD',
 		name: 'South Dakota',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2783',
 		done: false
 	},
 	{
@@ -465,7 +465,7 @@ var states = [
 		abbr: 'TX',
 		name: 'Texas',
 		date: '2012-05-29',
-		electionid: '',
+		electionid: '2778',
 		done: false
 	},
 	{
