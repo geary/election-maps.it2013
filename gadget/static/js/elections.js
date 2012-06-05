@@ -317,8 +317,7 @@ var states = [
 		fips: '30',
 		abbr: 'MT',
 		name: 'Montana',
-		type: 'Caucus',
-		date: '2012-06-16',
+		date: '2012-06-05',
 		electionid: '2780',
 		done: false
 	},
