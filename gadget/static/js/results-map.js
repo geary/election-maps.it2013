@@ -1316,18 +1316,17 @@ function usEnabled() {
 		var delegates = candidate.delegates;
 		if( params.triple ) delegates = 999;
 		return S(
-			'<div style="float:left; padding:6px 5px 1px 12px;">',
+			'<div style="float:left; padding:6px 3px 1px 9px;">',
 				'<table cellpadding="0" cellspacing="0">',
 					'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
 						'<td class="left">',
 							'<div class="topbar-delegates" style="text-align:center; margin:-1px 0 0 2px;">',
-								candidate.delegates == null ? ' ' :
-									formatNumber( delegates ),
+								delegates == null ? ' ' : delegates,
 							'</div>',
 							'<div style="margin-left:2px;">',
 								formatDivColorPatch(
 									candidate.color || 'white',
-									delegates < 100 ? 23 : 34,
+									delegates < 100 ? 23 : delegates < 1000 ? 34 : 45,
 									12, '1px solid transparent'
 								),
 							'</div>',
