@@ -472,7 +472,7 @@ var states = [
 		abbr: 'UT',
 		name: 'Utah',
 		date: '2012-06-26',
-		electionid: '',
+		electionid: '2790',
 		done: false
 	},
 	{
