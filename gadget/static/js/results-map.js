@@ -32,6 +32,16 @@ var party = params.party in parties ? params.party : 'gop';
 var election = parties[party];
 var currentCandidate;
 
+function longDateFromYMD( yyyymmdd ) {
+	var ymd = yyyymmdd.split('-'), year = ymd[0];
+	if( ymd.length == 1 ) return year;
+	return 'dateFormat'.T({
+		year: year,
+		monthName: ( 'monthName' + ymd[1] ).T(),
+		dayOfMonth: +ymd[2]
+	});
+}
+
 if( params.date ) {
 	var d = dateFromYMD( params.date, election.tzHour, election.tzMinute );
 	times.offset = d - times.gadgetLoaded;
