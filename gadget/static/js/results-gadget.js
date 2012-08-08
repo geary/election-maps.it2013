@@ -68,7 +68,7 @@ function setLanguage() {
 setLanguage();
 
 String.prototype.T = function( args ) {
-	return ( /*prefs.getMsg(this) ||*/ strings[this] || '' ).replace( /\{\{(\w+)\}\}/g,
+	return ( strings[this] || this ).replace( /\{\{(\w+)\}\}/g,
 		function( match, name ) {
 			var value = args[name];
 			return value != null ? value : match;
