@@ -65,7 +65,7 @@ var states = [
 			bbox: [ -13885233, 2819924, -7452828, 6340332 ],
 			centerLL: [ -95.841534, 38.004972 ]
 		},
-		type: 'Primaries',
+		type: 'primaries',
 		date: '2012',
 		electionid: '2511',
 		electionidCounties: '2508',
@@ -85,7 +85,7 @@ var states = [
 		fips: '02',
 		abbr: 'AK',
 		name: 'Alaska',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2524',
 		done: false
@@ -118,7 +118,7 @@ var states = [
 		fips: '08',
 		abbr: 'CO',
 		name: 'Colorado',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-07',
 		electionid: '2518',
 		done: false
@@ -172,7 +172,7 @@ var states = [
 			bbox: [ -17838905, 2145221, -17233301, 2539543 ],
 			centerLL: [ -157.529494, 20.575318 ]
 		},
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-13',
 		electionid: '2541',
 		done: false
@@ -181,7 +181,7 @@ var states = [
 		fips: '16',
 		abbr: 'ID',
 		name: 'Idaho',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2526',
 		done: false
@@ -206,7 +206,7 @@ var states = [
 		fips: '19',
 		abbr: 'IA',
 		name: 'Iowa',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-01-03',
 		electionid: '2512',
 		done: true
@@ -215,7 +215,7 @@ var states = [
 		fips: '20',
 		abbr: 'KS',
 		name: 'Kansas',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-10',
 		electionid: '2539',
 		done: false
@@ -240,7 +240,7 @@ var states = [
 		fips: '23',
 		abbr: 'ME',
 		name: 'Maine',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-11',
 		electionid: '2521',
 		votesby: 'state',
@@ -292,7 +292,7 @@ var states = [
 		fips: '27',
 		abbr: 'MN',
 		name: 'Minnesota',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-07',
 		electionid: '2519',
 		done: false
@@ -333,7 +333,7 @@ var states = [
 		fips: '32',
 		abbr: 'NV',
 		name: 'Nevada',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-04',
 		electionid: '2517',
 		done: true
@@ -389,7 +389,7 @@ var states = [
 		fips: '38',
 		abbr: 'ND',
 		name: 'North Dakota',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2538',
 		votesby: 'district',
@@ -503,7 +503,7 @@ var states = [
 		fips: '53',
 		abbr: 'WA',
 		name: 'Washington',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-03',
 		electionid: '2536',
 		done: false
@@ -528,7 +528,7 @@ var states = [
 		fips: '56',
 		abbr: 'WY',
 		name: 'Wyoming',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-10',
 		electionid: '2537',
 		votesby: 'state',

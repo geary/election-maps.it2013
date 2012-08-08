@@ -37,10 +37,13 @@ if( params.date ) {
 	times.offset = d - times.gadgetLoaded;
 }
 
-states.index('abbr').index('electionid').index('fips');
+states.index('abbr').index('electionid').index('fips').index('name');
+states.by.nameEN = states.by.name;
 
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
+	state.name = ( 'state-' + state.abbr ).T();
+	state.electionTitle = ( state.type || 'primary' ).T({ name: state.name });
 }
 
 params.state = params.state || params.embed_state;
@@ -55,7 +58,6 @@ function State( abbr ) {
 		states.by.abbr[abbr] ||
 		states.by.electionid[abbr] ||
 		stateUS;
-	state.electionTitle = S( state.name, ' ', state.type || 'primary'.T() );
 	state.getResults = function() {
 		return ( this == stateUS  &&  view == 'county' ) ?
 			this.resultsCounty :
@@ -1566,18 +1568,24 @@ function usEnabled() {
 		);
 	}
 	
+	var lsadFormats = {
+		cd: 'district',
+		city: 'city',
+		county: 'county',
+		shd: 'district'
+	};
+	
 	function formatFeatureName( feature ) {
 		if( ! feature ) return '';
 		var s = State( feature );
-		var prefixes = s.prefixes || lsadPrefixes;
-		var suffixes = s.suffixes || lsadSuffixes;
 		var lsad = ( feature.lsad || '' ).toLowerCase();
-		var prefix = prefixes[lsad] || '';
-		var suffix = suffixes[lsad] || '';
-		var andState = ( state == stateUS  &&  ! featureIsState(feature) ) ?
-			S( ', ', s.abbr ) :
-			'';
-		return S( prefix, feature.name, suffix, andState );
+		var format = ( s.formats || lsadFormats )[lsad] || '{{name}}';
+		var name = format.T({ name: feature.name });
+		return(
+			featureIsState(feature) ? states.by.nameEN[name].name :
+			state != stateUS ? name :
+			S( name, ', ', s.abbr )
+		);
 	}
 	
 	function featureIsState( feature ) {
@@ -2116,14 +2124,10 @@ function usEnabled() {
 		loadResultTable( json, true );
 	};
 	
-	var lsadPrefixes = {
-		cd: 'district'.T() + ' ',
-		shd: 'district'.T() + ' '
-	};
-	
+	// Hack for featureResults, not localized
 	var lsadSuffixes = {
-		city: ' ' + 'city'.T(),
-		county: ' ' + 'county'.T()
+		city: ' City',
+		county: ' County'
 	};
 	
 	function featureResults( results, feature ) {
