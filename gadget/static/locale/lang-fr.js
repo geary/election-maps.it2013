@@ -116,7 +116,7 @@ loadStrings({
 "titleViewNational-us": "Consulter les r\u00e9sultats par \u00c9tat", 
 "titleViewUSA": "Consulter les r\u00e9sultats par \u00c9tat", 
 "topbarSubtitle": "1\u00a0144 d\u00e9l\u00e9gu\u00e9s pour d\u00e9crocher l'investiture", 
-"topbarTitle": "D\u00e9compte des d\u00e9l\u00e9gu\u00e9s du Parti r\u00e9publicain", 
+"topbarTitle": "D\u00e9compte des d\u00e9l\u00e9gu\u00e9s du GOP", 
 "viewNational-fr": "&laquo; Revenir \u00e0 la carte g\u00e9n\u00e9rale de France", 
 "viewNational-us": "&laquo; Revenir \u00e0 la carte g\u00e9n\u00e9rale des \u00c9tats-Unis", 
 "viewUSA": "&laquo; Revenir \u00e0 la carte g\u00e9n\u00e9rale des \u00c9tats-Unis", 
