@@ -692,6 +692,7 @@ function usEnabled() {
 		json && fitBbox( json.bbox, json.centerLL );
 	}
 	
+	var setCenter = 'setCenter';
 	function fitBbox( bbox, centerLL ) {
 		var z;
 		if( params.zoom  &&  params.zoom != 'auto' ) {
@@ -706,8 +707,22 @@ function usEnabled() {
 		}
 		z = Math.floor( z );
 		
-		map.setCenter( new gm.LatLng( centerLL[1], centerLL[0] ) );
+		// Force a poly draw if the map is not going to move (much)
+		// TODO: better calculation using pixel position
+		var centerNew = new gm.LatLng( centerLL[1], centerLL[0] );
+		function near( a, b ) { return Math.abs( a - b ) < .001; }
+		var centerMap = map.getCenter();
+		if( centerMap  &&  z == map.getZoom() ) {
+			if(
+				near( centerMap.lat(), centerLL[1] )  &&
+				near( centerMap.lng(), centerLL[0] )
+			) {
+				polys();
+			}
+		}
 		map.setZoom( z );
+		map[setCenter]( centerNew );
+		setCenter = 'panTo';
 		zoom = map.getZoom();
 	}
 	
