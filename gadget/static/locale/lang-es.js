@@ -116,7 +116,7 @@ loadStrings({
 "titleViewNational-us": "Ver resultados por estado", 
 "titleViewUSA": "Ver resultados por estado", 
 "topbarSubtitle": "1144 para ganar la nominaci\u00f3n", 
-"topbarTitle": "Delegados del Partido Republicano", 
+"topbarTitle": "Delegados del GOP", 
 "viewNational-fr": "&laquo; Volver al mapa general de France", 
 "viewNational-us": "&laquo; Volver al mapa general de EE.UU.", 
 "viewUSA": "&laquo; Volver al mapa general de EE.UU.", 
