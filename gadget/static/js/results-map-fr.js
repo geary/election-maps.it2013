@@ -1,4 +1,4 @@
-// results-map.js
+// results-map-fr.js
 // By Michael Geary - http://mg.to/
 // See UNLICENSE or http://unlicense.org/ for public domain notice.
 
@@ -48,6 +48,16 @@ setElection();
 function setElection() {
 	electionKey = [ params.year, params.contest, params.round ].join( '-' );
 	election = elections[electionKey] || elections[defaultElectionKey];
+}
+
+function longDateFromYMD( yyyymmdd ) {
+	var ymd = yyyymmdd.split('-'), year = ymd[0];
+	if( ymd.length == 1 ) return year;
+	return 'dateFormat'.T({
+		year: year,
+		monthName: ( 'monthName' + ymd[1] ).T(),
+		dayOfMonth: +ymd[2]
+	});
 }
 
 function longDateFromYMD( yyyymmdd ) {
@@ -1047,8 +1057,8 @@ function nationalEnabled() {
 			showTip( false );
 		},
 		click: function( event, where ) {
-			event.stopPropagation();
 			if( touch  &&  ! touch.mouse ) return;
+			event.stopPropagation();
 			mousedown = false;
 			var didDrag = dragged;
 			dragged = false;

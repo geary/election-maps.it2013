@@ -32,15 +32,28 @@ var party = params.party in parties ? params.party : 'gop';
 var election = parties[party];
 var currentCandidate;
 
+function longDateFromYMD( yyyymmdd ) {
+	var ymd = yyyymmdd.split('-'), year = ymd[0];
+	if( ymd.length == 1 ) return year;
+	return 'dateFormat'.T({
+		year: year,
+		monthName: ( 'monthName' + ymd[1] ).T(),
+		dayOfMonth: +ymd[2]
+	});
+}
+
 if( params.date ) {
 	var d = dateFromYMD( params.date, election.tzHour, election.tzMinute );
 	times.offset = d - times.gadgetLoaded;
 }
 
-states.index('abbr').index('electionid').index('fips');
+states.index('abbr').index('electionid').index('fips').index('name');
+states.by.nameEN = states.by.name;
 
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
+	state.name = ( 'state-' + state.abbr ).T();
+	state.electionTitle = ( state.type || 'primary' ).T({ name: state.name });
 }
 
 params.state = params.state || params.embed_state;
@@ -55,7 +68,6 @@ function State( abbr ) {
 		states.by.abbr[abbr] ||
 		states.by.electionid[abbr] ||
 		stateUS;
-	state.electionTitle = S( state.name, ' ', state.type || 'primary'.T() );
 	state.getResults = function() {
 		return ( this == stateUS  &&  view == 'county' ) ?
 			this.resultsCounty :
@@ -680,6 +692,7 @@ function usEnabled() {
 		json && fitBbox( json.bbox, json.centerLL );
 	}
 	
+	var setCenter = 'setCenter';
 	function fitBbox( bbox, centerLL ) {
 		var z;
 		if( params.zoom  &&  params.zoom != 'auto' ) {
@@ -694,8 +707,22 @@ function usEnabled() {
 		}
 		z = Math.floor( z );
 		
-		map.setCenter( new gm.LatLng( centerLL[1], centerLL[0] ) );
+		// Force a poly draw if the map is not going to move (much)
+		// TODO: better calculation using pixel position
+		var centerNew = new gm.LatLng( centerLL[1], centerLL[0] );
+		function near( a, b ) { return Math.abs( a - b ) < .001; }
+		var centerMap = map.getCenter();
+		if( centerMap  &&  z == map.getZoom() ) {
+			if(
+				near( centerMap.lat(), centerLL[1] )  &&
+				near( centerMap.lng(), centerLL[0] )
+			) {
+				polys();
+			}
+		}
 		map.setZoom( z );
+		map[setCenter]( centerNew );
+		setCenter = 'panTo';
 		zoom = map.getZoom();
 	}
 	
@@ -1207,7 +1234,7 @@ function usEnabled() {
 		return {
 			counted: counted,
 			total: total,
-			percent: percent1( counted / total ),
+			percent: formatPercent( counted / total ),
 			kind: ''  // TODO
 		};
 	}
@@ -1316,18 +1343,17 @@ function usEnabled() {
 		var delegates = candidate.delegates;
 		if( params.triple ) delegates = 999;
 		return S(
-			'<div style="float:left; padding:6px 5px 1px 12px;">',
+			'<div style="float:left; padding:6px 3px 1px 9px;">',
 				'<table cellpadding="0" cellspacing="0">',
 					'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
 						'<td class="left">',
 							'<div class="topbar-delegates" style="text-align:center; margin:-1px 0 0 2px;">',
-								candidate.delegates == null ? ' ' :
-									formatNumber( delegates ),
+								delegates == null ? ' ' : delegates,
 							'</div>',
 							'<div style="margin-left:2px;">',
 								formatDivColorPatch(
 									candidate.color || 'white',
-									delegates < 100 ? 23 : 34,
+									delegates < 100 ? 23 : delegates < 1000 ? 34 : 45,
 									12, '1px solid transparent'
 								),
 							'</div>',
@@ -1482,7 +1508,7 @@ function usEnabled() {
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate" style="text-align:right;">',
-						percent1( candidate.vsAll ),
+						formatPercent( candidate.vsAll ),
 					'</div>',
 				'</td>',
 				'<td class="right">',
@@ -1521,7 +1547,7 @@ function usEnabled() {
 	function formatListCandidate( candidate, i ) {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var cls = i === 0 ? ' first' : '';
-		var pct = percent1( candidate.vsAll );
+		var pct = formatPercent( candidate.vsAll );
 		return S(
 			'<tr class="legend-candidate', cls, '" id="legend-candidate-', candidate.id, '">',
 				'<td class="left">',
@@ -1567,18 +1593,24 @@ function usEnabled() {
 		);
 	}
 	
+	var lsadFormats = {
+		cd: 'district',
+		city: 'city',
+		county: 'county',
+		shd: 'district'
+	};
+	
 	function formatFeatureName( feature ) {
 		if( ! feature ) return '';
 		var s = State( feature );
-		var prefixes = s.prefixes || lsadPrefixes;
-		var suffixes = s.suffixes || lsadSuffixes;
 		var lsad = ( feature.lsad || '' ).toLowerCase();
-		var prefix = prefixes[lsad] || '';
-		var suffix = suffixes[lsad] || '';
-		var andState = ( state == stateUS  &&  ! featureIsState(feature) ) ?
-			S( ', ', s.abbr ) :
-			'';
-		return S( prefix, feature.name, suffix, andState );
+		var format = ( s.formats || lsadFormats )[lsad] || '{{name}}';
+		var name = format.T({ name: feature.name });
+		return(
+			featureIsState(feature) ? states.by.nameEN[name].name :
+			state != stateUS ? name :
+			S( name, ', ', s.abbr )
+		);
 	}
 	
 	function featureIsState( feature ) {
@@ -1617,7 +1649,7 @@ function usEnabled() {
 		
 		var reporting =
 			boxes ? 'percentReporting'.T({
-				percent: percent1( counted / boxes ),
+				percent: formatPercent( counted / boxes ),
 				counted: counted,
 				total: boxes,
 				kind: ''
@@ -1715,16 +1747,22 @@ function usEnabled() {
 		$maptip.css({ left:x, top:y });
 	}
 	
+	// TODO: rewrite this
 	function formatNumber( nStr ) {
+		var dsep = 'decimalSep'.T(), tsep = 'thousandsSep'.T();
 		nStr += '';
 		x = nStr.split('.');
 		x1 = x[0];
-		x2 = x.length > 1 ? '.' + x[1] : '';
+		x2 = x.length > 1 ? dsep + x[1] : '';
 		var rgx = /(\d+)(\d{3})/;
-		while (rgx.test(x1)) {
-			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		while( rgx.test(x1) ) {
+			x1 = x1.replace( rgx, '$1' + tsep + '$2' );
 		}
 		return x1 + x2;
+	}
+	
+	function formatPercent( n ) {
+		return percent1( n, 'decimalSep'.T() );
 	}
 	
 	function getLeaders( locals ) {
@@ -2117,14 +2155,10 @@ function usEnabled() {
 		loadResultTable( json, true );
 	};
 	
-	var lsadPrefixes = {
-		cd: 'district'.T() + ' ',
-		shd: 'district'.T() + ' '
-	};
-	
+	// Hack for featureResults, not localized
 	var lsadSuffixes = {
-		city: ' ' + 'city'.T(),
-		county: ' ' + 'county'.T()
+		city: ' City',
+		county: ' County'
 	};
 	
 	function featureResults( results, feature ) {
