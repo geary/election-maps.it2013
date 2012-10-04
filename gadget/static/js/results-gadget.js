@@ -68,7 +68,7 @@ function setLanguage() {
 setLanguage();
 
 String.prototype.T = function( args ) {
-	return ( /*prefs.getMsg(this) ||*/ strings[this] || '' ).replace( /\{\{(\w+)\}\}/g,
+	return ( strings[this] || this ).replace( /\{\{(\w+)\}\}/g,
 		function( match, name ) {
 			var value = args[name];
 			return value != null ? value : match;
@@ -78,10 +78,11 @@ String.prototype.T = function( args ) {
 opt.writeScript( '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery' + ( opt.debug ? '.js' : '.min.js' ) );
 
 opt.writeScript(
-	'//maps.google.com/maps/api/js?v=3.5&sensor=false&language=' + params.hl + (
-	/(^|\.)election-maps.appspot.com/.test(location.hostname) ?
-		'&key=AIzaSyBbwxmNf1Sz3ORtmt4SFy5ltFqIFGd2QQg' :
-		''
+	'//maps.google.com/maps/api/js?v=3.5&sensor=false&language=' +
+	params.hl + (
+		/(^|\.)election-maps.appspot.com/.test(location.hostname) ?
+			'&key=AIzaSyBbwxmNf1Sz3ORtmt4SFy5ltFqIFGd2QQg' :
+			''
 	)
 );
 
