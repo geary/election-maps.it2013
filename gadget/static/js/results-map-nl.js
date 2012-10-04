@@ -1,4 +1,4 @@
-// results-map.js
+// results-map-nl.js
 // By Michael Geary - http://mg.to/
 // See UNLICENSE or http://unlicense.org/ for public domain notice.
 
@@ -31,6 +31,16 @@ setElection();
 function setElection() {
 	electionKey = params.year;
 	election = elections[electionKey] || elections[defaultElectionKey];
+}
+
+function longDateFromYMD( yyyymmdd ) {
+	var ymd = yyyymmdd.split('-'), year = ymd[0];
+	if( ymd.length == 1 ) return year;
+	return 'dateFormat'.T({
+		year: year,
+		monthName: ( 'monthName' + ymd[1] ).T(),
+		dayOfMonth: +ymd[2]
+	});
 }
 
 function longDateFromYMD( yyyymmdd ) {

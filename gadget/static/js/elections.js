@@ -65,7 +65,7 @@ var states = [
 			bbox: [ -13885233, 2819924, -7452828, 6340332 ],
 			centerLL: [ -95.841534, 38.004972 ]
 		},
-		type: 'Primaries',
+		type: 'primaries',
 		date: '2012',
 		electionid: '2511',
 		electionidCounties: '2508',
@@ -85,7 +85,7 @@ var states = [
 		fips: '02',
 		abbr: 'AK',
 		name: 'Alaska',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2524',
 		done: false
@@ -103,7 +103,7 @@ var states = [
 		abbr: 'AR',
 		name: 'Arkansas',
 		date: '2012-05-22',
-		electionid: '',
+		electionid: '2776',
 		done: false
 	},
 	{
@@ -111,14 +111,14 @@ var states = [
 		abbr: 'CA',
 		name: 'California',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2779',
 		done: false
 	},
 	{
 		fips: '08',
 		abbr: 'CO',
 		name: 'Colorado',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-07',
 		electionid: '2518',
 		done: false
@@ -129,7 +129,7 @@ var states = [
 		name: 'Connecticut',
 		votesby: 'town',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2661',
 		done: false
 	},
 	{
@@ -137,7 +137,7 @@ var states = [
 		abbr: 'DE',
 		name: 'Delaware',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2660',
 		done: false
 	},
 	{
@@ -172,7 +172,7 @@ var states = [
 			bbox: [ -17838905, 2145221, -17233301, 2539543 ],
 			centerLL: [ -157.529494, 20.575318 ]
 		},
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-13',
 		electionid: '2541',
 		done: false
@@ -181,7 +181,7 @@ var states = [
 		fips: '16',
 		abbr: 'ID',
 		name: 'Idaho',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2526',
 		done: false
@@ -199,14 +199,14 @@ var states = [
 		abbr: 'IN',
 		name: 'Indiana',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2773',
 		done: false
 	},
 	{
 		fips: '19',
 		abbr: 'IA',
 		name: 'Iowa',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-01-03',
 		electionid: '2512',
 		done: true
@@ -215,7 +215,7 @@ var states = [
 		fips: '20',
 		abbr: 'KS',
 		name: 'Kansas',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-10',
 		electionid: '2539',
 		done: false
@@ -225,7 +225,7 @@ var states = [
 		abbr: 'KY',
 		name: 'Kentucky',
 		date: '2012-05-22',
-		electionid: '',
+		electionid: '2777',
 		done: false
 	},
 	{
@@ -240,7 +240,7 @@ var states = [
 		fips: '23',
 		abbr: 'ME',
 		name: 'Maine',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-11',
 		electionid: '2521',
 		votesby: 'state',
@@ -292,7 +292,7 @@ var states = [
 		fips: '27',
 		abbr: 'MN',
 		name: 'Minnesota',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-07',
 		electionid: '2519',
 		done: false
@@ -317,25 +317,23 @@ var states = [
 		fips: '30',
 		abbr: 'MT',
 		name: 'Montana',
-		type: 'Caucus',
-		date: '2012-06-16',
-		electionid: '',
+		date: '2012-06-05',
+		electionid: '2780',
 		done: false
 	},
 	{
 		fips: '31',
 		abbr: 'NE',
 		name: 'Nebraska',
-		type: 'Caucus',
-		date: '2012-06-10',
-		electionid: '',
+		date: '2012-05-15',
+		electionid: '2775',
 		done: false
 	},
 	{
 		fips: '32',
 		abbr: 'NV',
 		name: 'Nevada',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-02-04',
 		electionid: '2517',
 		done: true
@@ -360,7 +358,7 @@ var states = [
 		abbr: 'NJ',
 		name: 'New Jersey',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2781',
 		done: false
 	},
 	{
@@ -368,7 +366,7 @@ var states = [
 		abbr: 'NM',
 		name: 'New Mexico',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2782',
 		done: false
 	},
 	{
@@ -376,7 +374,7 @@ var states = [
 		abbr: 'NY',
 		name: 'New York',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2659',
 		done: false
 	},
 	{
@@ -384,14 +382,14 @@ var states = [
 		abbr: 'NC',
 		name: 'North Carolina',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2771',
 		done: false
 	},
 	{
 		fips: '38',
 		abbr: 'ND',
 		name: 'North Dakota',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-06',
 		electionid: '2538',
 		votesby: 'district',
@@ -418,7 +416,7 @@ var states = [
 		abbr: 'OR',
 		name: 'Oregon',
 		date: '2012-05-15',
-		electionid: '',
+		electionid: '2774',
 		done: false
 	},
 	{
@@ -426,7 +424,7 @@ var states = [
 		abbr: 'PA',
 		name: 'Pennsylvania',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2658',
 		done: false
 	},
 	{
@@ -434,7 +432,7 @@ var states = [
 		abbr: 'RI',
 		name: 'Rhode Island',
 		date: '2012-04-24',
-		electionid: '',
+		electionid: '2656',
 		done: false
 	},
 	{
@@ -450,7 +448,7 @@ var states = [
 		abbr: 'SD',
 		name: 'South Dakota',
 		date: '2012-06-05',
-		electionid: '',
+		electionid: '2783',
 		done: false
 	},
 	{
@@ -466,7 +464,7 @@ var states = [
 		abbr: 'TX',
 		name: 'Texas',
 		date: '2012-05-29',
-		electionid: '',
+		electionid: '2778',
 		done: false
 	},
 	{
@@ -474,7 +472,7 @@ var states = [
 		abbr: 'UT',
 		name: 'Utah',
 		date: '2012-06-26',
-		electionid: '',
+		electionid: '2790',
 		done: false
 	},
 	{
@@ -505,7 +503,7 @@ var states = [
 		fips: '53',
 		abbr: 'WA',
 		name: 'Washington',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-03',
 		electionid: '2536',
 		done: false
@@ -515,7 +513,7 @@ var states = [
 		abbr: 'WV',
 		name: 'West Virginia',
 		date: '2012-05-08',
-		electionid: '',
+		electionid: '2772',
 		done: false
 	},
 	{
@@ -530,7 +528,7 @@ var states = [
 		fips: '56',
 		abbr: 'WY',
 		name: 'Wyoming',
-		type: 'Caucus',
+		type: 'caucus',
 		date: '2012-03-10',
 		electionid: '2537',
 		votesby: 'state',
