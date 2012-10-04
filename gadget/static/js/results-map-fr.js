@@ -60,6 +60,16 @@ function longDateFromYMD( yyyymmdd ) {
 	});
 }
 
+function longDateFromYMD( yyyymmdd ) {
+	var ymd = yyyymmdd.split('-'), year = ymd[0];
+	if( ymd.length == 1 ) return year;
+	return 'dateFormat'.T({
+		year: year,
+		monthName: ( 'monthName' + ymd[1] ).T(),
+		dayOfMonth: +ymd[2]
+	});
+}
+
 if( params.date ) {
 	var d = dateFromYMD( params.date, election.tzHour, election.tzMinute );
 	times.offset = d - times.gadgetLoaded;
@@ -879,10 +889,6 @@ function nationalEnabled() {
 		
 		// Force a poly draw if the map is not going to move (much)
 		// TODO: better calculation using pixel position
-		var centerLL = PolyGonzo.Mercator.coordToLngLat([
-			( bbox[0] + bbox[2] ) / 2,
-			( bbox[1] + bbox[3] ) / 2,
-		]);
 		var centerNew = new gm.LatLng( centerLL[1], centerLL[0] );
 		function near( a, b ) { return Math.abs( a - b ) < .001; }
 		var centerMap = map.getCenter();
