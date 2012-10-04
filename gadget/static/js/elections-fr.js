@@ -310,6 +310,26 @@ var elections = {
 			'987': 2768,
 			'988': 2769
 		}
+	},
+	'2012-leg-1': {
+		date: '2012-06-10',
+		tzHour: +2,
+		photos: false,
+		parties: partiesFR2012,
+		electionids: {
+			'FRL': 2786,
+			'L': 2787
+		}
+	},
+	'2012-leg-2': {
+		date: '2012-06-17',
+		tzHour: +2,
+		photos: false,
+		parties: partiesFR2012,
+		winners: winnersLegFR2012,
+		electionids: {
+			'FRL': 2788,
+			'L': 2789
+		}
 	}
 };
-
