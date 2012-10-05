@@ -44,11 +44,12 @@ function loadStrings( s ) {
 }
 
 function setLanguage() {
-	var defaultLanguage = 'pt-br';
+	var defaultLanguage = 'en';
 	var supportedLanguages = {
 		en: true,
 		es: true,
-		fr: true
+		fr: true,
+		nl: true
 	};
 	var hl = ( params.hl || '' ).toLowerCase();
 	if( ! hl  &&  acceptLanguageHeader != '{{acceptLanguageHeader}}' ) {
@@ -84,9 +85,9 @@ opt.writeScript(
 	)
 );
 
-if( params.randomize ) opt.writeScript( 'js/names-1000.js', opt.nocache );
+//if( params.randomize ) opt.writeScript( 'js/names-1000.js', opt.nocache );
 
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
 opt.writeScript( 'js/scriptino.js', opt.nocache );
-opt.writeScript( 'js/elections-br.js', opt.nocache );
-opt.writeScript( 'js/results-map-br.js', opt.nocache );
+opt.writeScript( 'js/elections.js', opt.nocache );
+opt.writeScript( 'js/results-map.js', opt.nocache );
