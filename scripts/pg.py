@@ -415,8 +415,9 @@ class Database:
 				%(googeom)s = ST_Multi(
 					ST_Transform(
 						ST_Force_2D(
-							ST_MakeValid(
-								%(llgeom)s
+							ST_Buffer(
+								%(llgeom)s,
+								0
 							)
 						),
 						3857
