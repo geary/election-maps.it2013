@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import csv, os.path, urllib2
+import csv, os.path, re, urllib2
 from zipfile import ZipFile
 
 import pg
@@ -30,15 +30,17 @@ def process():
 	db = openDatabase( database )
 	#addSimplificationFunction( db )
 	createSchema( db )
-	loadStates( db, resolution )
-	loadCounties( db, resolution )
-	loadCongressional( db, resolution )
-	loadCountySubdivisions( db, resolution )
-	loadCustom( db, resolution )
-	makeGopNationalTable( db )
-	makeGopLocalTable( db )
-	saveShapefile( db, resolution, 'gop2012nat' )
-	saveShapefile( db, resolution, 'gop2012loc' )
+	loadCongressional( db )
+	#loadStates( db, resolution )
+	#loadCounties( db, resolution )
+	#loadCongressionalPrimaries( db, resolution )
+	#loadCountySubdivisions( db, resolution )
+	#loadCustom( db, resolution )
+	#makeGopNationalTable( db )
+	#makeGopLocalTable( db )
+	#saveShapefile( db, resolution, 'gop2012nat' )
+	#saveShapefile( db, resolution, 'gop2012loc' )
+	saveShapefile( db, resolution, 'house2012', 'select * from carto2010.house2012' )
 	closeDatabase( db )
 
 
@@ -99,7 +101,42 @@ def loadCounties( db, resolution ):
 	deletePR( db, 'county' )
 
 
-def loadCongressional( db, resolution ):
+def loadCongressional( db ):
+	db.loadKML(
+		schema + '.house2012',
+		
+		'../shapes/kml/2012 US Congressional Districts.kml',
+		#'../shapes/kml/congress-test.kml',
+		
+		'Fusiontables folder', fixCongressionalKML,
+		#'''select *, substr(Description,1,2) as 'gov_id', substr(Description,4) as 'dist_id' '''
+		'''select *, Description as 'dist_id' ''',
+		None
+	)
+
+
+def fixCongressionalKML( kml ):
+	kml = re.sub(
+		r'<description>\n<!\[CDATA\[<div (.*?)</description>',
+		fixCongressionalDescription,
+		kml, 0, re.S
+	)
+	return kml
+
+
+def fixCongressionalDescription( match ):
+	m = re.search(
+		r'''
+			<b>SS-NN:</b> *([^<]*)<br>
+		''',
+		match.group(1), re.DOTALL + re.VERBOSE
+	)
+	return '<description>%s</description>' %(
+		m.group(1)
+	)
+
+
+def loadCongressionalPrimaries( db, resolution ):
 	loadForStates( db, resolution, '2010', '500', '11', 'cd', [ '20' ] )
 
 
@@ -243,12 +280,12 @@ def makeGopNationalTable( db ):
 	db.connection.commit()
 
 
-def saveShapefile( db, resolution, table ):
+def saveShapefile( db, resolution, table, select ):
 	shpfile = 'us2012-%s-%s-full' %( table, resolution )
-	table = schema + '.' + table
+	#table = schema + '.' + table
 	db.saveShapefile(
 		shpfile, private.OUTPUT_SHAPEFILE_PATH,
-		table, 'goog_geom', '3857'
+		select, 'goog_geom', '3857'
 	)
 
 
