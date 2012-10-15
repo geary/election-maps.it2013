@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, os, os.path, re, shutil, tempfile, time, unicodedata
+import json, os, os.path, re, shutil, subprocess, tempfile, time, unicodedata
 import psycopg2
 from zipfile import ZipFile
 
@@ -48,6 +48,29 @@ def fixCoord3857( match ):
 def fixCoord4326( match ):
 	value = float( match.group(2) ) - 360
 	return match.group(1) + str(value) + ' '
+
+
+def isKML( filename ):
+	return os.path.splitext(filename)[1].lower() == '.kml'
+
+
+def eachKML( source, tempdir ):
+	if isKML( source ):
+		yield source
+	else:
+		ZipFile( source, 'r' ).extractall( tempdir )
+		for root, dirs, files in os.walk( tempdir ):
+			for name in files:
+				if isKML( name ):
+					yield os.path.join( tempdir, name )
+
+
+def run( *command ):
+	print 'Running ' + ' '.join(command)  # TODO: quotes
+	t1 = time.clock()
+	subprocess.check_call( command )
+	t2 = time.clock()
+	print '%s %.1f seconds' %( command[0], t2 - t1 )
 
 
 class Database:
@@ -165,6 +188,53 @@ class Database:
 	def loadTsvTable( self, source, table, cols, columns, encoding='utf8' ):
 		return loadCsvTable( self, source, table, cols, columns, "HEADER DELIMITER E'\t' ", encoding )
 	
+	def loadKML( self, fulltable, source, kmltable, fixKML, select, fixTable ):
+		fullGeom = 'full_geom'  # temp
+		googGeom = 'goog_geom'  # temp
+		schema, table = fulltable.split('.')
+		tempdir = tempfile.mkdtemp( dir=private.TEMP_PATH )
+		newkmlfile = os.path.join( tempdir, 'new.kml' )
+		for kmlfile in eachKML( source, tempdir ):
+			with open( kmlfile, 'rb' ) as f:
+				kml = f.read()
+			
+			if fixKML:
+				kml = fixKML( kml )
+			
+			with open( newkmlfile, 'wb' ) as f:
+				f.write( kml )
+			
+			shppath = '%s/%s' %( tempdir, table )
+			
+			vars = {
+				'gdalpath': private.GDAL_BIN,
+				'shppath': shppath,
+				'kmltable': kmltable,
+				'kmlfile': newkmlfile,
+				'table': table,
+				'select': select,
+			}
+			
+			makeNewDir( shppath )
+			
+			vars['shpfilename'] = shpfilename = '%s/%s.shp' %( shppath, table )
+			
+			command = '''"%(gdalpath)s/ogr2ogr.exe" -f "ESRI Shapefile" -lco ENCODING=UTF-8 -overwrite -sql "%(select)s from '%(kmltable)s'" %(shpfilename)s %(kmlfile)s''' % vars
+			subprocess.check_call( command )
+			
+			print 'Loading %s' % shpfilename
+			self.loadShapefile(
+				shpfilename, private.TEMP_PATH, fulltable,
+				fullGeom, '4326', None, True,
+				shpfilename
+			)
+			if fixTable:
+				fixTable()
+			self.addGoogleGeometry( fulltable, fullGeom, googGeom )
+			self.indexGeometryColumn( fulltable, googGeom )
+		
+		shutil.rmtree( tempdir )
+	
 	def loadShapefile( self, zipfile, tempdir, tablename, column=None, srid=None, encoding=None, create=True, shpfilename=None, tweaksql=None ):
 		if column is None: column = 'full_geom'
 		if srid is None: srid = '4269'
@@ -215,21 +285,16 @@ class Database:
 		if srid is None: srid = '4269'
 		outdir = os.path.join( shpdir, shpfile )
 		makeNewDir( outdir )
-		print 'saveShapefile %s' % shpfile
-		t1 = time.clock()
-		command = '"%s/pgsql2shp" -f %s/%s -h %s -p %s -u %s -P %s -g %s %s %s' %(
-			private.POSTGRES_BIN, outdir, shpfile,
-			private.POSTGRES_HOST,
-			private.POSTGRES_PORT,
-			private.POSTGRES_USERNAME,
-			private.POSTGRES_PASSWORD,
-			column, self.database, tablename
+		run(
+			'%s/pgsql2shp' % private.POSTGRES_BIN,
+			'-f', '%s/%s' %( outdir, shpfile ),
+			'-h', private.POSTGRES_HOST,
+			'-p', private.POSTGRES_PORT,
+			'-u', private.POSTGRES_USERNAME,
+			'-P', private.POSTGRES_PASSWORD,
+			'-g', column,
+			self.database, tablename
 		)
-		print 'Running pgsql2shp:\n%s' % command
-		os.system( command )
-		t2 = time.clock()
-		print 'pgsql2shp %.1f seconds' %( t2 - t1 )
-		print 'saveShapefile done'
 	
 	def getSRID( self, table, column ):
 		( schema, table ) = splitTableName( table )
