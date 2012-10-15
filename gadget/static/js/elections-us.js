@@ -49,8 +49,16 @@ var elections = {
 				{ color: '#009925', id: 'paul', firstName: 'Ron', lastName: 'Paul', fullName: 'Ron Paul' },
 				{ color: '#3369E8', id: 'perry', firstName: 'Rick', lastName: 'Perry', fullName: 'Rick Perry' },
 				{ color: '#A58DF4', id: 'roemer', firstName: 'Buddy', lastName: 'Roemer', fullName: 'Buddy Roemer', skip: true },
-				{ color: '#EEB211', id: 'romney', firstName: 'Mitt', lastName: 'Romney', fullName: 'Mitt Romney' },
+				{ color: '#0000FF', id: 'romney', firstName: 'Mitt', lastName: 'Romney', fullName: 'Mitt Romney' },
 				{ color: '#AA0C76', id: 'santorum', firstName: 'Rick', lastName: 'Santorum', fullName: 'Rick Santorum' }
+			]
+		},
+		general: {
+			tzHour: -4,
+			photos: true,
+			candidates: [
+				{ color: '#0000FF', id: 'obama', firstName: 'Barack', lastName: 'Obama', fullName: 'Barack Obama' },
+				{ color: '#FF0000', id: 'romney', firstName: 'Mitt', lastName: 'Romney', fullName: 'Mitt Romney' }
 			]
 		}
 	}
@@ -67,19 +75,17 @@ var states = [
 		},
 		type: 'primaries',
 		date: '2012',
-		electionid: '2511',
-		electionidCounties: '2508',
-		electionidDelegates: '2510',
-		votesby: 'state',
-		done: false
+		electionidPrimary: '2511',
+		electionidPrimaryCounties: '2508',
+		electionidPrimaryDelegates: '2510',
+		votesby: 'state'
 	},
 	{
 		fips: '01',
 		abbr: 'AL',
 		name: 'Alabama',
 		date: '2012-03-13',
-		electionid: '2540',
-		done: false
+		electionidPrimary: '2540'
 	},
 	{
 		fips: '02',
@@ -87,32 +93,28 @@ var states = [
 		name: 'Alaska',
 		type: 'caucus',
 		date: '2012-03-06',
-		electionid: '2524',
-		done: false
+		electionidPrimary: '2524'
 	},
 	{
 		fips: '04',
 		abbr: 'AZ',
 		name: 'Arizona',
 		date: '2012-02-28',
-		electionid: '2522',
-		done: false
+		electionidPrimary: '2522'
 	},
 	{
 		fips: '05',
 		abbr: 'AR',
 		name: 'Arkansas',
 		date: '2012-05-22',
-		electionid: '2776',
-		done: false
+		electionidPrimary: '2776'
 	},
 	{
 		fips: '06',
 		abbr: 'CA',
 		name: 'California',
 		date: '2012-06-05',
-		electionid: '2779',
-		done: false
+		electionidPrimary: '2779'
 	},
 	{
 		fips: '08',
@@ -120,8 +122,7 @@ var states = [
 		name: 'Colorado',
 		type: 'caucus',
 		date: '2012-02-07',
-		electionid: '2518',
-		done: false
+		electionidPrimary: '2518'
 	},
 	{
 		fips: '09',
@@ -129,40 +130,35 @@ var states = [
 		name: 'Connecticut',
 		votesby: 'town',
 		date: '2012-04-24',
-		electionid: '2661',
-		done: false
+		electionidPrimary: '2661'
 	},
 	{
 		fips: '10',
 		abbr: 'DE',
 		name: 'Delaware',
 		date: '2012-04-24',
-		electionid: '2660',
-		done: false
+		electionidPrimary: '2660'
 	},
 	{
 		fips: '11',
 		abbr: 'DC',
 		name: 'District of Columbia',
 		date: '2012-04-03',
-		electionid: '2545',
-		done: false
+		electionidPrimary: '2545'
 	},
 	{
 		fips: '12',
 		abbr: 'FL',
 		name: 'Florida',
 		date: '2012-01-31',
-		electionid: '2516',
-		done: true
+		electionidPrimary: '2516'
 	},
 	{
 		fips: '13',
 		abbr: 'GA',
 		name: 'Georgia',
 		date: '2012-03-06',
-		electionid: '2525',
-		done: false
+		electionidPrimary: '2525'
 	},
 	{
 		fips: '15',
@@ -174,8 +170,7 @@ var states = [
 		},
 		type: 'caucus',
 		date: '2012-03-13',
-		electionid: '2541',
-		done: false
+		electionidPrimary: '2541'
 	},
 	{
 		fips: '16',
@@ -183,24 +178,21 @@ var states = [
 		name: 'Idaho',
 		type: 'caucus',
 		date: '2012-03-06',
-		electionid: '2526',
-		done: false
+		electionidPrimary: '2526'
 	},
 	{
 		fips: '17',
 		abbr: 'IL',
 		name: 'Illinois',
 		date: '2012-03-20',
-		electionid: '2543',
-		done: false
+		electionidPrimary: '2543'
 	},
 	{
 		fips: '18',
 		abbr: 'IN',
 		name: 'Indiana',
 		date: '2012-05-08',
-		electionid: '2773',
-		done: false
+		electionidPrimary: '2773'
 	},
 	{
 		fips: '19',
@@ -208,8 +200,7 @@ var states = [
 		name: 'Iowa',
 		type: 'caucus',
 		date: '2012-01-03',
-		electionid: '2512',
-		done: true
+		electionidPrimary: '2512'
 	},
 	{
 		fips: '20',
@@ -217,24 +208,21 @@ var states = [
 		name: 'Kansas',
 		type: 'caucus',
 		date: '2012-03-10',
-		electionid: '2539',
-		done: false
+		electionidPrimary: '2539'
 	},
 	{
 		fips: '21',
 		abbr: 'KY',
 		name: 'Kentucky',
 		date: '2012-05-22',
-		electionid: '2777',
-		done: false
+		electionidPrimary: '2777'
 	},
 	{
 		fips: '22',
 		abbr: 'LA',
 		name: 'Louisiana',
 		date: '2012-03-24',
-		electionid: '2544',
-		done: false
+		electionidPrimary: '2544'
 	},
 	{
 		fips: '23',
@@ -242,24 +230,22 @@ var states = [
 		name: 'Maine',
 		type: 'caucus',
 		date: '2012-02-11',
-		electionid: '2521',
-		votesby: 'state',
-		done: false
+		electionidPrimary: '2521',
+		votesby: 'state'
 	},
 	{
 		fips: '24',
 		abbr: 'MD',
 		name: 'Maryland',
 		date: '2012-04-03',
-		electionid: '2546',
-		done: false
+		electionidPrimary: '2546'
 	},
 	{
 		fips: '25',
 		abbr: 'MA',
 		name: 'Massachusetts',
 		date: '2012-03-06',
-		electionid: '2528',
+		electionidPrimary: '2528',
 		votesby: 'town',
 		fix: {
 			"Agawam": "Agawam Town",
@@ -277,16 +263,14 @@ var states = [
 			"West Springfield": "West Springfield Town",
 			"Weymouth": "Weymouth Town",
 			"Winthrop": "Winthrop Town"
-		},
-		done: false
+		}
 	},
 	{
 		fips: '26',
 		abbr: 'MI',
 		name: 'Michigan',
 		date: '2012-02-28',
-		electionid: '2523',
-		done: false
+		electionidPrimary: '2523'
 	},
 	{
 		fips: '27',
@@ -294,40 +278,35 @@ var states = [
 		name: 'Minnesota',
 		type: 'caucus',
 		date: '2012-02-07',
-		electionid: '2519',
-		done: false
+		electionidPrimary: '2519'
 	},
 	{
 		fips: '28',
 		abbr: 'MS',
 		name: 'Mississippi',
 		date: '2012-03-13',
-		electionid: '2542',
-		done: false
+		electionidPrimary: '2542'
 	},
 	{
 		fips: '29',
 		abbr: 'MO',
 		name: 'Missouri',
 		date: '2012-02-07',
-		electionid: '2520',
-		done: false
+		electionidPrimary: '2520'
 	},
 	{
 		fips: '30',
 		abbr: 'MT',
 		name: 'Montana',
 		date: '2012-06-05',
-		electionid: '2780',
-		done: false
+		electionidPrimary: '2780'
 	},
 	{
 		fips: '31',
 		abbr: 'NE',
 		name: 'Nebraska',
 		date: '2012-05-15',
-		electionid: '2775',
-		done: false
+		electionidPrimary: '2775'
 	},
 	{
 		fips: '32',
@@ -335,8 +314,7 @@ var states = [
 		name: 'Nevada',
 		type: 'caucus',
 		date: '2012-02-04',
-		electionid: '2517',
-		done: true
+		electionidPrimary: '2517'
 	},
 	{
 		fips: '33',
@@ -349,41 +327,36 @@ var states = [
 		},
 		votesby: 'town',
 		date: '2012-01-10',
-		electionid: '2513',
-		suffixes: {},
-		done: true
+		electionidPrimary: '2513',
+		suffixes: {}
 	},
 	{
 		fips: '34',
 		abbr: 'NJ',
 		name: 'New Jersey',
 		date: '2012-06-05',
-		electionid: '2781',
-		done: false
+		electionidPrimary: '2781'
 	},
 	{
 		fips: '35',
 		abbr: 'NM',
 		name: 'New Mexico',
 		date: '2012-06-05',
-		electionid: '2782',
-		done: false
+		electionidPrimary: '2782'
 	},
 	{
 		fips: '36',
 		abbr: 'NY',
 		name: 'New York',
 		date: '2012-04-24',
-		electionid: '2659',
-		done: false
+		electionidPrimary: '2659'
 	},
 	{
 		fips: '37',
 		abbr: 'NC',
 		name: 'North Carolina',
 		date: '2012-05-08',
-		electionid: '2771',
-		done: false
+		electionidPrimary: '2771'
 	},
 	{
 		fips: '38',
@@ -391,89 +364,78 @@ var states = [
 		name: 'North Dakota',
 		type: 'caucus',
 		date: '2012-03-06',
-		electionid: '2538',
-		votesby: 'district',
-		done: false
+		electionidPrimary: '2538',
+		votesby: 'district'
 	},
 	{
 		fips: '39',
 		abbr: 'OH',
 		name: 'Ohio',
 		date: '2012-03-06',
-		electionid: '2530',
-		done: false
+		electionidPrimary: '2530'
 	},
 	{
 		fips: '40',
 		abbr: 'OK',
 		name: 'Oklahoma',
 		date: '2012-03-06',
-		electionid: '2531',
-		done: false
+		electionidPrimary: '2531'
 	},
 	{
 		fips: '41',
 		abbr: 'OR',
 		name: 'Oregon',
 		date: '2012-05-15',
-		electionid: '2774',
-		done: false
+		electionidPrimary: '2774'
 	},
 	{
 		fips: '42',
 		abbr: 'PA',
 		name: 'Pennsylvania',
 		date: '2012-04-24',
-		electionid: '2658',
-		done: false
+		electionidPrimary: '2658'
 	},
 	{
 		fips: '44',
 		abbr: 'RI',
 		name: 'Rhode Island',
 		date: '2012-04-24',
-		electionid: '2656',
-		done: false
+		electionidPrimary: '2656'
 	},
 	{
 		fips: '45',
 		abbr: 'SC',
 		name: 'South Carolina',
 		date: '2012-01-21',
-		electionid: '2515',
-		done: true
+		electionidPrimary: '2515'
 	},
 	{
 		fips: '46',
 		abbr: 'SD',
 		name: 'South Dakota',
 		date: '2012-06-05',
-		electionid: '2783',
-		done: false
+		electionidPrimary: '2783'
 	},
 	{
 		fips: '47',
 		abbr: 'TN',
 		name: 'Tennessee',
 		date: '2012-03-06',
-		electionid: '2532',
-		done: false
+		electionidPrimary: '2532'
 	},
 	{
 		fips: '48',
 		abbr: 'TX',
 		name: 'Texas',
 		date: '2012-05-29',
-		electionid: '2778',
-		done: false
+		electionidPrimary: '2778'
 	},
 	{
 		fips: '49',
 		abbr: 'UT',
 		name: 'Utah',
 		date: '2012-06-26',
-		electionid: '2790',
-		done: false
+		electionidPrimary: '2790'
 	},
 	{
 		fips: '50',
@@ -488,16 +450,14 @@ var states = [
 			"St. Albans Town": "5001161750"
 		},
 		date: '2012-03-06',
-		electionid: '2534',
-		done: false
+		electionidPrimary: '2534'
 	},
 	{
 		fips: '51',
 		abbr: 'VA',
 		name: 'Virginia',
 		date: '2012-03-06',
-		electionid: '2535',
-		done: false
+		electionidPrimary: '2535'
 	},
 	{
 		fips: '53',
@@ -505,24 +465,21 @@ var states = [
 		name: 'Washington',
 		type: 'caucus',
 		date: '2012-03-03',
-		electionid: '2536',
-		done: false
+		electionidPrimary: '2536'
 	},
 	{
 		fips: '54',
 		abbr: 'WV',
 		name: 'West Virginia',
 		date: '2012-05-08',
-		electionid: '2772',
-		done: false
+		electionidPrimary: '2772'
 	},
 	{
 		fips: '55',
 		abbr: 'WI',
 		name: 'Wisconsin',
 		date: '2012-04-03',
-		electionid: '2547',
-		done: false
+		electionidPrimary: '2547'
 	},
 	{
 		fips: '56',
@@ -530,16 +487,14 @@ var states = [
 		name: 'Wyoming',
 		type: 'caucus',
 		date: '2012-03-10',
-		electionid: '2537',
-		votesby: 'state',
-		done: false
+		electionidPrimary: '2537',
+		votesby: 'state'
 	}/*,
 	{
 		fips: '72',
 		abbr: 'PR',
 		name: 'Puerto Rico',
 		date: '2012-03-18',
-		electionid: '',
-		done: false
+		electionidPrimary: ''
 	}*/
 ];

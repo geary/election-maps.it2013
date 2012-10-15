@@ -8,6 +8,8 @@ var times = {
 };
 
 // Default params
+params.year = params.year || '2012';
+params.contest = params.contest || 'pres';
 params.source = ( params.source == 'gop' ? 'gop' : 'ap' );
 var hostPrefix = location.host.split('.')[0];
 var match = hostPrefix.match( /^([a-z][a-z])2012(-\w+)$/ );
@@ -28,7 +30,7 @@ opt.randomized = params.randomize || params.zero;
 
 var year = params.year in elections ? +params.year : 2012;
 var parties = elections[year];
-var party = params.party in parties ? params.party : 'gop';
+var party = params.party in parties ? params.party : 'general';
 var election = parties[party];
 var currentCandidate;
 
@@ -47,7 +49,7 @@ if( params.date ) {
 	times.offset = d - times.gadgetLoaded;
 }
 
-states.index('abbr').index('electionid').index('fips').index('name');
+states.index('abbr').index('electionidPrimary').index('fips').index('name');
 states.by.nameEN = states.by.name;
 
 for( var state, i = -1;  state = states[++i]; ) {
@@ -61,17 +63,19 @@ params.state = params.state || params.embed_state;
 if( ( params.state || '' ).toLowerCase() == 'us' ) delete params.state;
 
 function State( abbr ) {
-	if( abbr && abbr.bbox && abbr.id ) abbr = abbr.id.split('US')[1].slice(0,2);
+	if( abbr && abbr.bbox && abbr.id ) abbr = abbr.fips;  // really a feature object
 	abbr = ( abbr || params.state || 'US' ).toUpperCase();
 	var state =
 		states.by.fips[abbr] ||
 		states.by.abbr[abbr] ||
-		states.by.electionid[abbr] ||
+		states.by.electionidPrimary[abbr] ||
 		stateUS;
 	state.getResults = function() {
-		return ( this == stateUS  &&  view == 'county' ) ?
-			this.resultsCounty :
-			this.results;
+		return(
+			params.contest == 'house' ? this.resultsHouse :
+			this == stateUS  &&  view == 'county' ? this.resultsCounty :
+			this.results
+		);
 	};
 	return state;
 }
@@ -410,6 +414,7 @@ function usEnabled() {
 		}
 		else {
 			if( fips == '00'  &&  view == 'county' ) fips = '00-county';
+			if( params.contest == 'house' ) fips = '00-house';
 			var file = S( 'carto2010', '-', fips, '-goog_geom', level, '.js' );
 			getGeoJSON( 'shapes/json/' + file );
 		}
@@ -439,7 +444,7 @@ function usEnabled() {
 				initSelectors();
 			}
 		}
-		var target = json.county ? 'county' : 'state';
+		var target = json.house ? 'house' : json.county ? 'county' : 'state';
 		var fips = json[target].id;
 		var state = State( fips );
 		state.geo = state.geo || {};
@@ -459,12 +464,27 @@ function usEnabled() {
 	function indexFeatures( geo ) {
 		var features = geo.features;
 		var usa = ( geo.id == '00'  &&  /state/.test(geo.table) );  // TODO
+		var house = ( geo.id == '00-house' );
 		var by = features.by = {};
-		for( var feature, i = -1;  feature = features[++i]; ) {
-			var fips = feature.id.split('US')[1];
-			by[feature.id] = by[fips] = by[feature.name] = feature;
-			if( fips.length == 2 ) by[fips+'000'] = feature;
-			if( usa ) by[ states.by.fips[fips].abbr ] = feature;
+		if( house ) {
+			for( var feature, i = -1;  feature = features[++i]; ) {
+				var m = feature.id.split('-');
+				feature.abbr = m[0];
+				feature.district = m[1].replace( /^0*/, '' );
+				var state = feature.state = states.by.abbr[feature.abbr];
+				feature.fips = state.fips;
+				by[feature.id] = by[feature.abbr] = by[state.fips] = by[feature.district] = feature;
+				//if( usa ) by[ states.by.fips[fips].abbr ] = feature;
+			}
+		}
+		else {
+			for( var feature, i = -1;  feature = features[++i]; ) {
+				var fips = feature.fips = feature.id.split('US')[1];
+				by[feature.id] = by[fips] = by[feature.name] = feature;
+				if( fips.length == 2 ) by[fips+'000'] = feature;
+				var state = feature.state = states.by.fips[fips];
+				if( usa ) by[state.abbr] = feature;
+			}
 		}
 	}
 	
@@ -658,6 +678,9 @@ function usEnabled() {
 	}
 	
 	function currentGeos() {
+		if( params.contest == 'house' ) {
+			return [ state.geo.house/*, state.geo.state*/ ];
+		}
 		if( state == stateUS ) {
 			return view == 'county' ?
 				[ state.geo.county, state.geo.state ] :
@@ -826,6 +849,7 @@ function usEnabled() {
 				showTip( false );
 			},
 			click: function( event, where ) {
+				if( params.contest == 'house' ) return;  // TEMP
 				if( touch  && ! touch.mouse ) return;
 				mousedown = false;
 				var didDrag = dragged;
@@ -894,6 +918,12 @@ function usEnabled() {
 			) {
 				kind = 'state';
 			}
+			if(
+				kind == 'house2012_512'  ||
+				kind == 'house2012_4096'
+			) {
+				kind = 'house';
+			}
 			var colorizers = {
 				state: function() {
 					if( state.votesby == 'state'  && !( state == stateUS && view == 'county' ) )
@@ -905,6 +935,9 @@ function usEnabled() {
 					colorSimple( features, '#FFFFFF', '#444444', .5, .5 );
 				},
 				cousub: function() {
+					colorVotes( features, '#666666', .5, .5 );
+				},
+				house: function() {
 					colorVotes( features, '#666666', .5, .5 );
 				}
 			};
@@ -990,10 +1023,12 @@ function usEnabled() {
 	}
 	
 	function useInset() {
+		return false;  // TEMP
 		return state == stateUS  &&  map.getZoom() == 4;
 	}
 	
 	function insetFeatures( abbr, callback ) {
+		return;  // TEMP
 		var sf = stateUS.geo.state.features.by;
 		var cf = ( view == 'county' ) && stateUS.geo.county.features.by;
 		if( abbr == 'AK' ) {
@@ -1014,7 +1049,9 @@ function usEnabled() {
 			delete feature.offset;
 		}
 		if( ! stateUS.geo ) return null;
-		var kind = view == 'county' ? 'county' : 'state';
+		var kind =
+			params.contest == 'house' ? 'house' :
+			view == 'county' ? 'county' : 'state';
 		var features = stateUS.geo[kind].features;
 		if( ! useInset() ) {
 			insetFeatures( 'AK', clear );
@@ -1603,6 +1640,12 @@ function usEnabled() {
 	function formatFeatureName( feature ) {
 		if( ! feature ) return '';
 		var s = State( feature );
+		if( params.contest == 'house' ) {
+			// TODO: localize
+			return feature.district == 'AL' ?
+				S( s.name, ' (one district)' ) :
+				S( s.name, ' district ', feature.district );
+		}
 		var lsad = ( feature.lsad || '' ).toLowerCase();
 		var format = ( s.formats || lsadFormats )[lsad] || '{{name}}';
 		var name = format.T({ name: feature.name });
@@ -1626,8 +1669,8 @@ function usEnabled() {
 	
 	function formatTip( feature ) {
 		if( ! feature ) return null;
-		var fips = feature.id.split('US')[1];
-		var st = State( fips.slice(0,2) );
+		var fips = feature.fips;
+		var st = State( feature.fips.slice(0,2) );
 		var diff = now() + times.offset - st.dateUTC;
 		var future = ( diff < 0 );
 		var results = state.getResults(), col = results && results.colsById;
@@ -2041,13 +2084,15 @@ function usEnabled() {
 	var cacheResults = new Cache;
 	
 	function getResults() {
-		var electionid = state.electionid;
+		var electionid =
+			params.contest == 'house' ? null :  // TODO
+			state.electionidPrimary;
 		if( ! electionid ) {
 			loadTestResults( state.fips, false );
 			return;
 		}
 		if( state == stateUS  &&  view == 'county' )
-			electionid = state.electionidCounties;
+			electionid = state.electionidPrimaryCounties;
 		
 		//if( electionid == 'random' ) {
 		//	opt.randomized = params.randomize = true;
@@ -2055,7 +2100,7 @@ function usEnabled() {
 		//}
 		
 		var results =
-			( state != stateUS  ||  cacheResults.get( stateUS.electionidDelegates ) )  &&
+			( state != stateUS  ||  cacheResults.get( stateUS.electionidPrimaryDelegates ) )  &&
 			cacheResults.get( electionid );
 		if( results ) {
 			loadResultTable( results, false );
@@ -2073,7 +2118,7 @@ function usEnabled() {
 		
 		getElections(
 			state == stateUS ?
-				[ id, stateUS.electionidDelegates ] :
+				[ id, stateUS.electionidPrimaryDelegates ] :
 				[ id ]
 		);
 	}
@@ -2113,8 +2158,10 @@ function usEnabled() {
 		);
 		col.index();
 		
-		var kind = state.votesby || 'county';
-		var isDelegates = ( electionid == state.electionidDelegates );  // TEMP
+		var kind =
+			params.contest == 'house' ? 'house' :
+			state.votesby || 'county';
+		var isDelegates = ( electionid == state.electionidPrimaryDelegates );  // TEMP
 		if( state == stateUS  &&  view == 'county'  &&  ! isDelegates ) kind = 'county';  // TEMP
 		if( kind == 'town'  ||  kind == 'district' ) kind = 'county';  // TEMP
 		var rows = state.geo[kind].features.map( function( feature ) {
@@ -2163,14 +2210,14 @@ function usEnabled() {
 	
 	function featureResults( results, feature ) {
 		if( !( results && feature ) ) return null;
-		var id = feature.id, fips = id.split('US')[1];
-		var state = fips.length == 2  &&  states.by.fips[fips];  // TEMP
-		var abbr = state && state.abbr;  // TEMP
-		feature.state = state || states.by.fips[ fips.slice(0,2) ];
+		var id = feature.id, fips = feature.fips, state = feature.state;
+		//var state = fips.length == 2  &&  states.by.fips[fips];  // TEMP
+		//var abbr = state && state.abbr;  // TEMP
+		//feature.state = state || states.by.fips[ fips.slice(0,2) ];
 		return (
 			results.rowsByID[ id ] ||
 			results.rowsByID[ fips ] ||
-			results.rowsByID[ abbr ] ||  // TEMP
+			results.rowsByID[ state.abbr ] ||  // TEMP
 			results.rowsByID[ feature.name ]  ||
 			results.rowsByID[ feature.name + (
 				lsadSuffixes[ ( feature.lsad || '' ).toLowerCase() ]
@@ -2210,11 +2257,13 @@ function usEnabled() {
 		
 		var state = State( json.electionid );
 		var results = json.table;
-		var isDelegates = ( json.electionid == state.electionidDelegates );
+		var isDelegates = ( json.electionid == state.electionidPrimaryDelegates );
 		if( isDelegates )
 			state.delegates = results;
 		else if( state == stateUS  &&  view == 'county' )
 			state.resultsCounty = results;
+		else if( params.contest == 'house' )
+			state.resultsHouse = results;  // TODO
 		else
 			state.results = results;
 		results.mode = json.mode;
@@ -2238,7 +2287,9 @@ function usEnabled() {
 		
 		var fix = state.fix || {};
 		
-		var kind = state.votesby || 'county';
+		var kind =
+			params.contest == 'house' ? 'house' :
+			state.votesby || 'county';
 		if( state == stateUS  &&  view == 'county'  &&  ! isDelegates ) kind = 'county';  // TEMP
 		if( kind == 'town'  ||  kind == 'district' ) kind = 'county';  // TEMP
 		var features = state.geo[kind].features;
