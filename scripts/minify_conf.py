@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 jsFiles = [
+	'underscore.js',
 	'polygonzo.js',
 	'scriptino.js',
 	'elections-us.js',

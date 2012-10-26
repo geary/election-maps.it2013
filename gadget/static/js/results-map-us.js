@@ -37,9 +37,9 @@ var currentCandidate;
 function longDateFromYMD( yyyymmdd ) {
 	var ymd = yyyymmdd.split('-'), year = ymd[0];
 	if( ymd.length == 1 ) return year;
-	return 'dateFormat'.T({
+	return T( 'dateFormat', {
 		year: year,
-		monthName: ( 'monthName' + ymd[1] ).T(),
+		monthName: T( 'monthName' + ymd[1] ),
 		dayOfMonth: +ymd[2]
 	});
 }
@@ -49,13 +49,13 @@ if( params.date ) {
 	times.offset = d - times.gadgetLoaded;
 }
 
-states.index('abbr').index('electionidPrimary').index('fips').index('name');
+indexArray( states, 'abbr', 'electionidPrimary', 'fips', 'name' );
 states.by.nameEN = states.by.name;
 
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
-	state.name = ( 'state-' + state.abbr ).T();
-	state.electionTitle = ( state.type || 'primary' ).T({ name: state.name });
+	state.name = T( 'state-' + state.abbr );
+	state.electionTitle = T( state.type || 'primary', { name: state.name } );
 }
 
 params.state = params.state || params.embed_state;
@@ -96,7 +96,7 @@ _gaq.push([ '_trackPageview' ]);
 
 //function resultsFields() {
 //	return S(
-//		election.candidates.map( function( candidate ) {
+//		_.map( election.candidates, function( candidate ) {
 //			return S( "'TabCount-", candidate.id, "'" );
 //		}).join( ',' ),
 //		',ID,TabTotal',
@@ -133,14 +133,14 @@ opt.reloadTime = 60 * 1000;
 
 var zoom;
 
-election.candidates.index('id');
+indexArray( election.candidates, 'id' );
 
 var candidateZero = { id: '0' };
 loadCandidatePatterns();
 
 function loadCandidatePatterns( callback ) {
 	var loading = 0;
-	election.candidates.forEach( loadPattern );
+	_.each( election.candidates, loadPattern );
 	loadPattern( candidateZero );
 	function loadPattern( candidate ) {
 		++loading;
@@ -295,11 +295,11 @@ document.write(
 	'</div>',
 	'<div id="maptip">',
 	'</div>',
-	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/apelections" title="', 'dataAttribTitle'.T(), '">',
+	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/apelections" title="', T('dataAttribTitle'), '">',
 	'</a>',
-	'<a id="gop-logo" class="logo" target="_blank" href="http://www.nvgopcaucus.com/" title="', 'dataAttribTitleGOP'.T(), '">',
+	'<a id="gop-logo" class="logo" target="_blank" href="http://www.nvgopcaucus.com/" title="', T('dataAttribTitleGOP'), '">',
 	'</a>',
-	'<a id="google-logo" class="logo" target="_blank" href="http://www.google.com/elections/ed/us/home" title="', 'googlePoliticsTitle'.T(), '">',
+	'<a id="google-logo" class="logo" target="_blank" href="http://www.google.com/elections/ed/us/home" title="', T('googlePoliticsTitle'), '">',
 	'</a>',
 	'<div id="error" style="display:none;">',
 	'</div>',
@@ -314,13 +314,14 @@ function contentTable() {
 			//'<div id="selectors">',
 			//	'<div style="margin:0; padding:6px;">',
 			//		//'<label for="stateSelector">',
-			//		//	'stateLabel'.T(),
+			//		//	T('stateLabel'),
 			//		//'</label>',
 			//		//'<select id="stateSelector">',
-			//		//	option( '-1', 'nationwideLabel'.T() ),
+			//		//	option( '-1', T('nationwideLabel') ),
 			//		//	option( '', '', false, true ),
-			//		//	sortArrayBy( stateUS.geo.state.features, 'name' )
-			//		//		.mapjoin( function( state ) {
+			//		//	mapjoin(
+			//		//		sortArrayBy( stateUS.geo.state.features, 'name' ),
+			//		//		function( state ) {
 			//		//			return stateOption(
 			//		//				state,
 			//		//				state.abbr == opt.state
@@ -330,7 +331,7 @@ function contentTable() {
 			//		//'&nbsp;&nbsp;&nbsp;',
 			//		//'&nbsp;&nbsp;&nbsp;',
 			//		//'<input type="checkbox" id="chkCounties">',
-			//		//'<label for="chkCounties">', 'countiesCheckbox'.T(), '</label>',
+			//		//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
 			//	'</div>',
 			//'</div>',
 			'<div id="legend">',
@@ -374,7 +375,7 @@ function usEnabled() {
 		( ! params.embed_state  ||  params.embed_state.toLowerCase() == 'us' );
 }
 
-//(function( $ ) {
+(function( $ ) {
 	
 	// TODO: Refactor and use this exponential retry logic
 	//function getJSON( type, path, file, cache, callback, retries ) {
@@ -669,7 +670,7 @@ function usEnabled() {
 	var polyTimeNext = 250;
 	
 	var didGeoReady;
-	function geoReady() {
+	geoReady = function() {
 		// TODO: refactor with duplicate code in resizeViewNow()
 		setSidebar();
 		setLegend();
@@ -918,7 +919,7 @@ function usEnabled() {
 		//		feature.strokeWidth = 2;
 		//	}
 		//}
-		geos.forEach( function( geo ) {
+		_.each( geos, function( geo ) {
 			var features = geo.features;
 			var kind = geo.table.split('.')[1];
 			if(
@@ -1054,7 +1055,7 @@ function usEnabled() {
 		}
 		else {  // HI
 			callback( sf.HI || sf['15'] );
-			cf && '15001 15003 15005 15007 15009'.words( function( fips ) {
+			cf && eachWord( '15001 15003 15005 15007 15009', function( fips ) {
 				callback( cf[fips] );
 			});
 		}
@@ -1239,10 +1240,10 @@ function usEnabled() {
 		border = border || '1px solid #C2C2C2';
 		return S(
 			'<span class="legend-candidate-color" style="border:', border, '; zoom:1;">',
-				colors.mapjoin( function( color ) {
+				mapjoin( colors, function( color ) {
 					return S(
 						'<span class="legend-candidate-color" style="background:', color, '; zoom:1;">',
-							'&nbsp;'.repeat( spaces || 6 ),
+							repeatString( '&nbsp;', spaces || 6 ),
 						'</span>'
 					);
 				}),
@@ -1283,7 +1284,7 @@ function usEnabled() {
 			var topCandidates = getTopCandidates( results, -1, 'delegates', 4 );
 			//var top = formatTopbarTopCandidates( topCandidates );
 			var candidates =
-				topCandidates.length ? topCandidates.map( formatTopbarCandidate ) :
+				topCandidates.length ? _.map( topCandidates, formatTopbarCandidate ) :
 				formatTopbarCandidate({});
 			candidatesHTML = [ /*top*/ ].concat( candidates ).join('');
 		}
@@ -1292,15 +1293,15 @@ function usEnabled() {
 			'<div id="topbar" style="position:relative;">',
 				'<div class="topbar-header" style="float:left;">',
 					'<div id="election-title" class="title-text">',
-						'topbarTitle'.T(),
+						T('topbarTitle'),
 					'</div>',
 					'<div id="election-subtitle" class="subtitle-text" style="',
 						test ? 'color:red; font-weight:bold;' : '',
 					'">',
-						test ? 'testData'.T() : 'topbarSubtitle'.T(),
+						test ? T('testData') : T('topbarSubtitle'),
 					'</div>',
 					'<div class="subtitle-text">',
-						'delegatesAttrib'.T(),
+						T('delegatesAttrib'),
 					'</div>',
 				'</div>',
 				'<div id="topbar-candidates" style="position:relative; float:right;">',
@@ -1315,7 +1316,7 @@ function usEnabled() {
 	}
 	
 	//function formatTopbarTopCandidates( topCandidates ) {
-	//	var colors = topCandidates.map( function( candidate ) {
+	//	var colors = _.map( topCandidates, function( candidate ) {
 	//		return candidate.color;
 	//	});
 	//	var selected = currentCandidate ? '' : ' selected';
@@ -1323,7 +1324,7 @@ function usEnabled() {
 	//		'<td class="legend-candidate', selected, '" id="legend-candidate-top">',
 	//			'<div class="legend-candidate">',
 	//				formatSpanColorPatch( colors, 2 ),
-	//				'&nbsp;', 'allCandidatesShort'.T(), '&nbsp;',
+	//				'&nbsp;', T('allCandidatesShort'), '&nbsp;',
 	//			'</div>',
 	//		'</td>'
 	//	);
@@ -1371,7 +1372,7 @@ function usEnabled() {
 	}
 	
 	function nameCase( name ) {
-		return name && name.split(' ').map( function( word ) {
+		return name && _.map( name.split(' '), function( word ) {
 			return word.slice( 0, 1 ) + word.slice( 1 ).toLowerCase();
 		}).join(' ');
 	}
@@ -1396,23 +1397,23 @@ function usEnabled() {
 			var test = testFlag( results );
 			var viewUSA = usEnabled() ? S(
 				'<div style="padding-bottom:6px;">',
-					'<a href="#" id="viewUSA" title="', 'titleViewUSA'.T(), '" style="">',
-						'viewUSA'.T(),
+					'<a href="#" id="viewUSA" title="', T('titleViewUSA'), '" style="">',
+						T('viewUSA'),
 					'</a>',
 				'</div>'
 			) : '';
 			resultsHeaderHTML = S(
 				'<div id="percent-reporting" class="body-text">',
-					'percentReporting'.T( totalReporting(state.results) ),
+					T( 'percentReporting', totalReporting(state.results) ),
 				'</div>',
 				'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
 					test ? 'color:red; font-weight:bold;' : '',
 				'">',
-					test ? 'testData'.T() : 'automaticUpdate'.T(),
+					test ? T('testData') : T('automaticUpdate'),
 				'</div>',
 				viewUSA
 			);
-			var candidates = topCandidates.map( formatSidebarCandidate );
+			var candidates = _.map( topCandidates, formatSidebarCandidate );
 			resultsScrollingHTML = none ? '' : S(
 				formatCandidateList(
 					[ top ].concat( candidates ),
@@ -1431,8 +1432,8 @@ function usEnabled() {
 			'<a href="http://www.google.com/elections/ed/us/results/2012/gop-primary/',
 					state.abbr.toLowerCase(),
 					'" target="_parent" id="linkToMap" class="small-text" title="',
-					'linkToMapTitle'.T(), '">',
-				'linkToMap'.T(),
+					T('linkToMapTitle'), '">',
+				T('linkToMap'),
 			'</a>'
 		) : '';
 		return S(
@@ -1463,7 +1464,7 @@ function usEnabled() {
 	}
 	
 	function formatSidebarTopCandidates( topCandidates ) {
-		var colors = topCandidates.map( function( candidate ) {
+		var colors = _.map( topCandidates, function( candidate ) {
 			return candidate.color;
 		});
 		var selected = currentCandidate ? '' : ' selected';
@@ -1476,7 +1477,7 @@ function usEnabled() {
 				'</td>',
 				'<td colspan="3" class="right">',
 					'<div class="legend-candidate">',
-						'allCandidates'.T(),
+						T('allCandidates'),
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1513,24 +1514,24 @@ function usEnabled() {
 	
 	function formatCandidateList( topCandidates, formatter, header ) {
 		if( ! topCandidates.length )
-			return 'waitingForVotes'.T();
+			return T('waitingForVotes');
 		var thead = header ? S(
 			'<tr>',
 				'<th colspan="3" style="text-align:left; padding-bottom:4px;">',
-					'candidate'.T(),
+					T('candidate'),
 				'</th>',
 				'<th style="text-align:right; padding-bottom:4px;">',
-					'votes'.T(),
+					T('votes'),
 				'</th>',
 				'<th style="text-align:right; padding-bottom:4px;">',
-					state == stateUS  &&  view != 'county' ? 'delegatesAbbr'.T() : '',
+					state == stateUS  &&  view != 'county' ? T('delegatesAbbr') : '',
 				'</th>',
 			'</tr>'
 		) : '';
 		return S(
 			'<table class="candidates" cellpadding="0" cellspacing="0">',
 				thead,
-				topCandidates.mapjoin( formatter ),
+				mapjoin( topCandidates, formatter ),
 			'</table>'
 		);
 	}
@@ -1602,7 +1603,7 @@ function usEnabled() {
 		}
 		var lsad = ( feature.lsad || '' ).toLowerCase();
 		var format = ( s.formats || lsadFormats )[lsad] || '{{name}}';
-		var name = format.T({ name: feature.name });
+		var name = T( format, { name: feature.name } );
 		return(
 			featureIsState(feature) ? states.by.nameEN[name].name :
 			state != stateUS ? name :
@@ -1638,21 +1639,21 @@ function usEnabled() {
 		}
 		
 		var reporting =
-			boxes ? 'percentReporting'.T({
+			boxes ? T( 'percentReporting', {
 				percent: formatPercent( counted / boxes ),
 				counted: counted,
 				total: boxes,
 				kind: ''
 			}) :
 			future ? longDateFromYMD(st.date) :
-			( state == stateUS  &&  view != 'county' )  ||  ! results ? 'waitingForVotes'.T() :
-			row ? 'noVotesHere'.T() :
-			'neverVotesHere'.T();
+			( state == stateUS  &&  view != 'county' )  ||  ! results ? T('waitingForVotes') :
+			row ? T('noVotesHere') :
+			T('neverVotesHere');
 		
 		var clickForLocal =
 			top.length && state == stateUS ? S(
 				'<div class="click-for-local faint-text">',
-					( touch ? 'tapForLocal' : 'clickForLocal' ).T(),
+					T( touch ? 'tapForLocal' : 'clickForLocal' ),
 				'</div>'
 			) : '';
 		// TODO
@@ -1690,7 +1691,7 @@ function usEnabled() {
 					reporting,
 					test ? S(
 						'<span style="color:red; font-weight:bold; font-size:100%;"> ',
-							'testData'.T(),
+							T('testData'),
 						'</span>'
 					) : '',
 				'</div>',
@@ -1739,7 +1740,7 @@ function usEnabled() {
 	
 	// TODO: rewrite this
 	function formatNumber( nStr ) {
-		var dsep = 'decimalSep'.T(), tsep = 'thousandsSep'.T();
+		var dsep = T('decimalSep'), tsep = T('thousandsSep');
 		nStr += '';
 		x = nStr.split('.');
 		x1 = x[0];
@@ -1752,7 +1753,7 @@ function usEnabled() {
 	}
 	
 	function formatPercent( n ) {
-		return percent1( n, 'decimalSep'.T() );
+		return percent1( n, T('decimalSep') );
 	}
 	
 	function setState( s, why ) {
@@ -1917,7 +1918,7 @@ function usEnabled() {
 	function startCycle() {
 		if( opt.cycleTimer ) return;
 		startCycleTime = now();
-		this.title = 'cycleStopTip'.T();
+		this.title = T('cycleStopTip');
 		var player = players.candidates;
 		opt.cycleTimer = setInterval( player.tick, 3000 );
 		player.tick();
@@ -1930,7 +1931,7 @@ function usEnabled() {
 		opt.cycleTimer = null;
 		$('#btnCycle')
 			.removeClass( 'selected' )
-			.prop({ title: 'cycleTip'.T() });
+			.prop({ title: T('cycleTip') });
 		var seconds = Math.round( ( now() - startCycleTime ) / 1000 );
 		analytics( 'cycle', 'stop', '', seconds );
 	}
@@ -2035,4 +2036,4 @@ function usEnabled() {
 	
 	analytics( 'map', 'load' );
 	
-//})( jQuery );
+})( jQuery );

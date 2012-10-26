@@ -2,64 +2,35 @@
 // By Michael Geary - http://mg.to/
 // See UNLICENSE or http://unlicense.org/ for public domain notice.
 
-if( ! Array.prototype.forEach ) {
-	Array.prototype.forEach = function( fun /*, thisp*/ ) {
-		if( typeof fun != 'function' )
-			throw new TypeError();
-		
-		var thisp = arguments[1];
-		for( var i = 0, n = this.length;  i < n;  ++i ) {
-			if( i in this )
-				fun.call( thisp, this[i], i, this );
-		}
-	};
+function mapjoin( array, fun, delim ) {
+	return _.map( array, fun ).join( delim || '' );
 }
 
-if( ! Array.prototype.map ) {
-	Array.prototype.map = function( fun /*, thisp*/ ) {
-		var len = this.length;
-		if( typeof fun != 'function' )
-			throw new TypeError();
-		
-		var res = new Array( len );
-		var thisp = arguments[1];
-		for( var i = 0;  i < len;  ++i ) {
-			if( i in this )
-				res[i] = fun.call( thisp, this[i], i, this );
+function indexArray( array ) {
+	if( arguments.length == 1 ) {
+		for( var i = 0, n = array.length;  i < n;  ++i ) {
+			var str = array[i];
+			array[str] = i;
 		}
-		
-		return res;
-	};
-}
-
-Array.prototype.mapjoin = function( fun, delim ) {
-	return this.map( fun ).join( delim || '' );
-};
-
-if( ! Array.prototype.index ) {
-	Array.prototype.index = function( field ) {
-		if( field ) {
-			this.by = this.by || {};
-			var by = this.by[field] = {};
-			for( var i = 0, n = this.length;  i < n;  ++i ) {
-				var obj = this[i];
+	}
+	else {
+		for( a = 1;  a < arguments.length;  ++a ) {
+			var field = arguments[a];
+			array.by = array.by || {};
+			var by = array.by[field] = {};
+			for( var i = 0, n = array.length;  i < n;  ++i ) {
+				var obj = array[i];
 				by[obj[field]] = obj;
 				obj.index = i;
 			}
 		}
-		else {
-			for( var i = 0, n = this.length;  i < n;  ++i ) {
-				var str = this[i];
-				this[str] = i;
-			}
-		}
-		return this;
-	};
+	}
+	return array;
 }
 
-Array.prototype.random = function() {
-	return this[ randomInt(this.length) ];
-};
+function randomElement( array ) {
+	return array[ randomInt(array.length) ];
+}
 
 function deleteFromArray( array, value ) {
 	for( var i = -1, n = array.length;  ++i < n; ) {
@@ -111,17 +82,13 @@ function sortArrayBy( array, key, opt ) {
 	return output;
 }
 
-String.prototype.repeat = function( n ) {
-	return new Array( n + 1 ).join( this );
-};
+function repeatString( string, n ) {
+	return new Array( n + 1 ).join( string );
+}
 
-String.prototype.trim = function() {
-	return this.replace( /^\s\s*/, '' ).replace( /\s\s*$/, '' );
-};
-
-String.prototype.words = function( fun ) {
-	this.split(' ').forEach( fun );
-};
+function eachWord( words, fun ) {
+	_.each( words.split(' '), fun );
+}
 
 function S() {
 	return Array.prototype.join.call( arguments, '' );

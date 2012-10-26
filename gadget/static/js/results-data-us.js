@@ -139,7 +139,7 @@
 	function getElections( electionids ) {
 		electionLoading = electionids[0];
 		electionsPending = [].concat( electionids );
-		electionids.forEach( function( electionid ) {
+		_.each( electionids, function( electionid ) {
 			var url = S(
 				'https://pollinglocation.googleapis.com/results?',
 				'electionid=', electionid,
@@ -154,7 +154,7 @@
 		delete params.randomize;
 		
 		var col = [];
-		election.candidates.forEach( function( candidate ) {
+		_.each( election.candidates, function( candidate ) {
 			if( candidate.skip ) return;
 			col.push( 'TabCount-' + candidate.id );
 		});
@@ -164,7 +164,7 @@
 			'NumBallotBoxes',
 			'NumCountedBallotBoxes'
 		);
-		col.index();
+		indexArray( col );
 		
 		var kind =
 			params.contest == 'house' ? 'house' :
@@ -172,7 +172,7 @@
 		var isDelegates = ( electionid == state.electionidPrimaryDelegates );  // TEMP
 		if( state == stateUS  &&  view == 'county'  &&  ! isDelegates ) kind = 'county';  // TEMP
 		if( kind == 'town'  ||  kind == 'district' ) kind = 'county';  // TEMP
-		var rows = state.geo[kind].features.map( function( feature ) {
+		var rows = _.map( state.geo[kind].features, function( feature ) {
 			var row = [];
 			row[col.ID] = feature.id;
 			var nVoters = 0;
@@ -235,7 +235,7 @@
 	}
 	
 	function fixShortFIPS( col, rows ) {
-		rows.forEach( function( row ) {
+		_.each( rows, function( row ) {
 			var id = row[col];
 			if( /^\d\d\d\d$/.test(id) ) row[col] = '0' + id;
 		});
@@ -244,7 +244,7 @@
 	function isCountyTEMP( json ) {
 		try {
 			var table = json.table, cols = table.cols, rows = table.rows;
-			var col = cols.index()['ID'];
+			var col = indexArray( cols )['ID'];
 			var id = rows[0][col];
 			/*if( /^\d\d\d\d$/.test(id) )*/ fixShortFIPS( col, rows );
 			return ! /^[A-Z][A-Z]$/.test(id);
@@ -291,7 +291,7 @@
 			var id = cols[i].split('-')[1].toLowerCase(), candidate = election.candidates.by.id[id];
 			candidates.push( $.extend( {}, candidate ) );
 		}
-		candidates.index('id');
+		indexArray( candidates, 'id' );
 		
 		var fix = state.fix || {};
 		
