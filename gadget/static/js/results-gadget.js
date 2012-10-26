@@ -67,10 +67,10 @@ function setLanguage() {
 }
 setLanguage();
 
-String.prototype.T = function( args ) {
-	return ( /*prefs.getMsg(this) ||*/ strings[this] || this ).replace( /\{\{(\w+)\}\}/g,
-		function( match, name ) {
-			var value = args[name];
+function T( name, args ) {
+	return ( /*prefs.getMsg(name) ||*/ strings[name] || name ).replace( /\{\{(\w+)\}\}/g,
+		function( match, key ) {
+			var value = args[key];
 			return value != null ? value : match;
 		});
 }
@@ -87,6 +87,7 @@ opt.writeScript(
 
 //if( params.randomize ) opt.writeScript( 'js/names-1000.js', opt.nocache );
 
+opt.writeScript( 'js/underscore.js', opt.nocache );
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
 opt.writeScript( 'js/scriptino.js', opt.nocache );
 opt.writeScript( 'js/elections-us.js', opt.nocache );
