@@ -429,8 +429,7 @@ function usEnabled() {
 	}
 	
 	function getGeoJSON( url ) {
-		clearInterval( reloadTimer );
-		reloadTimer = null;
+		reloadTimer.clear();
 		$('#spinner').show();
 		getScript( cacheUrl( url ) );
 	}
@@ -646,7 +645,25 @@ function usEnabled() {
 	
 	//var state = states[opt.state];
 	
-	var reloadTimer;
+	var reloadTimer = {
+		timer: null,
+		
+		clear: function() {
+			clearInterval( this.timer );
+			this.timer = null;
+		},
+		
+		set: function( fn, time ) {
+			this.clear();
+			this.timer = setInterval( fn, time );
+		},
+		
+		disable: function() {
+			this.clear();
+			opt.resultCacheTime = Infinity;
+			opt.reloadTime = false;
+		}
+	};
 	
 	var geoMoveNext = true;
 	var polyTimeNext = 250;
@@ -665,11 +682,11 @@ function usEnabled() {
 		polys();
 		//mapIdled = false;
 		$('#spinner').hide();
-		if( ! opt.randomized  &&  opt.reloadTime  &&  params.refresh != 'false' ) {
-			clearInterval( reloadTimer );
-			reloadTimer = setInterval( function() {
-				loadView();
-			}, opt.reloadTime );
+		if( opt.randomized  ||  ! opt.reloadTime  ||  params.refresh == 'false' ) {
+			reloadTimer.disable();
+		}
+		else {
+			reloadTimer.set( loadView, opt.reloadTime );
 		}
 		if( ! didGeoReady ) {
 			setPlayback();
@@ -1927,8 +1944,7 @@ function usEnabled() {
 		//opt.state = +$('#stateSelector').val();
 		//var state = curState = data.state.geo.features.by.abbr[opt.abbr];
 		$('#spinner').show();
-		clearInterval( reloadTimer );
-		reloadTimer = null;
+		reloadTimer.clear();
 		loadRegion();
 	}
 	
