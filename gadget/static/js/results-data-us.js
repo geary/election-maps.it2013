@@ -151,10 +151,6 @@
 	
 	function loadTestResults( electionid, randomize ) {
 		var random = randomize ? randomInt : function() { return 0; };
-		opt.resultCacheTime = Infinity;
-		opt.reloadTime = false;
-		clearInterval( reloadTimer );
-		reloadTimer = null;
 		delete params.randomize;
 		
 		var col = [];
