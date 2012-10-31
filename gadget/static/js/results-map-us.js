@@ -624,7 +624,8 @@ function usEnabled() {
 	
 	var useSidebar;
 	function setSidebar() {
-		useSidebar = ( state != stateUS );
+		//useSidebar = ( state != stateUS );
+		useSidebar = true;
 		$body.toggleClass( 'sidebar', useSidebar );
 	}
 	
