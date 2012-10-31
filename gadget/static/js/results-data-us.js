@@ -12,12 +12,12 @@
 	}
 	
 	function totalReporting( results ) {
-		var col = results.colsById;
-		var rows = results.rows;
+		var places = results.places;
 		var counted = 0, total = 0;
-		for( var row, i = -1;  row = rows[++i]; ) {
-			counted += row[col.NumCountedBallotBoxes];
-			total += row[col.NumBallotBoxes];
+		for( var i = 0, n = places.length;  i < n;  ++i ) {
+			var place = places[i];
+			counted += place.counted;
+			total += place.precincts;
 		}
 		return {
 			counted: counted,
@@ -30,7 +30,14 @@
 	function getTopCandidates( results, result, sortBy, max ) {
 		max = max || Infinity;
 		if( ! result ) return [];
-		if( result == -1 ) result = results.totals;
+		if( result == -1 ) {
+			var votes = 0, candidates = [];
+			_(results.candidates).each( function( candidate ) {
+				votes += candidate.votes;
+				candidates.push( candidate );
+			});
+			result = { candidates: candidates, votes: votes };
+		}
 		var top = result.candidates.slice();
 		for( var i = 0, n = top.length;  i < top.length;  ++i ) {
 			var candidate = top[i], votes = candidate.votes;
@@ -95,7 +102,7 @@
 	
 	function getResults() {
 		var electionid =
-			electionids.byStateContest( params.state, params.contest );
+			electionids.byStateContest( state.abbr, params.contest );
 			//params.contest == 'house' ? null :  // TODO
 			//state.electionidPrimary;
 		if( ! electionid ) {
@@ -262,7 +269,12 @@
 		if( loading )
 			cacheResults.add( json.electionid, json, opt.resultCacheTime );
 		
-		var state = State( json.electionid );
+		var eid = electionids[json.electionid];
+		if( ! eid ) {
+			window.console && console.log( 'No election ID ' + json.electionid );
+			return;
+		}
+		var state = State( eid.state );
 		var results = json.table;
 /*
 		var isDelegates = ( json.electionid == state.electionidPrimaryDelegates );
