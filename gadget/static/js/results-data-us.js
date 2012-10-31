@@ -380,6 +380,7 @@
 					}
 					candidates.push( candidate );
 				}
+				indexArray( candidates, 'id' );
 				var result = {
 					id: row[colsID],
 					precincts: row[cols.NumBallotBoxes],
