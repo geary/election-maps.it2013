@@ -9,7 +9,7 @@ var times = {
 
 // Default params
 params.year = params.year || '2012';
-params.contest = params.contest || 'pres';
+params.contest = params.contest || 'president';
 params.source = ( params.source == 'gop' ? 'gop' : 'ap' );
 var hostPrefix = location.host.split('.')[0];
 var match = hostPrefix.match( /^([a-z][a-z])2012(-\w+)$/ );
@@ -72,8 +72,8 @@ function State( abbr ) {
 		stateUS;
 	state.getResults = function() {
 		return(
-			params.contest == 'house' ? this.resultsHouse :
-			this == stateUS  &&  view == 'county' ? this.resultsCounty :
+			//params.contest == 'house' ? this.resultsHouse :
+			//this == stateUS  &&  view == 'county' ? this.resultsCounty :
 			this.results
 		);
 	};
@@ -133,10 +133,10 @@ opt.reloadTime = 60 * 1000;
 
 var zoom;
 
-indexArray( election.candidates, 'id' );
+//indexArray( election.candidates, 'id' );
 
 var candidateZero = { id: '0' };
-loadCandidatePatterns();
+//loadCandidatePatterns();
 
 function loadCandidatePatterns( callback ) {
 	var loading = 0;
@@ -375,7 +375,7 @@ function usEnabled() {
 		( ! params.embed_state  ||  params.embed_state.toLowerCase() == 'us' );
 }
 
-(function( $ ) {
+//(function( $ ) {
 	
 	// TODO: Refactor and use this exponential retry logic
 	//function getJSON( type, path, file, cache, callback, retries ) {
@@ -579,7 +579,7 @@ function usEnabled() {
 			//	if( ! next  ||  next >= length ) next = 0;
 			//	while( next < length ) {
 			//		var feature = order[next++], id = feature.id;
-			//		var row = featureResults( results, feature );
+			//		var row = featureResult( results, feature );
 			//		var use = row && row[col.NumCountedBallotBoxes];
 			//		if( use ) {
 			//			outlineFeature({ geo:geo, feature:feature });
@@ -976,16 +976,17 @@ function usEnabled() {
 	function colorVotes( features, strokeColor, strokeOpacity, strokeWidth ) {
 		var time = now() + times.offset;
 		var results = state.getResults();
-		var col = results && results.cols;
 		var candidates = results && results.candidates;
 		if( !( candidates && currentCandidate ) ) {
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
-				var row = featureResults( results, feature );
+				var result = featureResult( results, feature );
 				var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
 				var hatch = state == stateUS  &&  diff >= 0  &&  diff <= (24+9) * 60 * 60 * 1000;
-				var candidate = row && candidates[row.candidateMax];
+				var candidate = result && result.candidates[result.iMaxVotes];
 				if( candidate ) {
-					feature.fillColor = hatch ? { image: candidate.pattern } : candidate.color;
+					//feature.fillColor = hatch ? { image: candidate.pattern } : candidate.color;
+					var party = election.parties[candidate.party];
+					feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
 					feature.fillOpacity = .6;
 				}
 				else {
@@ -998,21 +999,21 @@ function usEnabled() {
 						feature.fillOpacity = 0;
 					}
 				}
-				var complete = row &&
-					row[col.NumCountedBallotBoxes] ==
-					row[col.NumBallotBoxes];
+				var complete = result  &&  result.counted == result.precincts;
 				feature.strokeColor = strokeColor;
 				feature.strokeOpacity = strokeOpacity;
 				feature.strokeWidth = strokeWidth;
 			}
 		}
 		else {
-			var rows = results.rows;
+debugger;  // partially updated: search for 'row' in this block to finish
 			var max = 0;
-			var candidate = candidates.by.id[currentCandidate], color = candidate.color, index = candidate.index;
+			var candidate = candidates.by.id[currentCandidate], index = candidate.index;
+			var party = election.parties[candidate.party];
+			var color = party && party.color || '#FFFFFF';  // TEMP
 			var nCols = candidates.length;
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
-				var row = featureResults( results, feature );
+				var row = featureResult( results, feature );
 				var total = 0, value = 0;
 				if( row ) {
 					var total = 0;
@@ -1025,14 +1026,12 @@ function usEnabled() {
 				}
 			}
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
-				var row = featureResults( results, feature );
+				var result = featureResult( results, feature );
 				var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
 				var hatch = state == stateUS  &&  diff >= 0  &&  diff <= (24+9) * 60 * 60 * 1000;
-				feature.fillColor = hatch ? { image: candidate.pattern } : candidate.color;
+				feature.fillColor = hatch ? { image: candidate.pattern } : color;
 				feature.fillOpacity = row && max ? row.fract / max * .75 : 0;
-				var complete = row &&
-					row[col.NumCountedBallotBoxes] ==
-					row[col.NumBallotBoxes];
+				var complete = result  &&  result.counted == result.precincts;
 				feature.strokeColor = strokeColor;
 				feature.strokeOpacity = strokeOpacity;
 				feature.strokeWidth = strokeWidth;
@@ -1041,12 +1040,10 @@ function usEnabled() {
 	}
 	
 	function useInset() {
-		return false;  // TEMP
 		return state == stateUS  &&  map.getZoom() == 4;
 	}
 	
 	function insetFeatures( abbr, callback ) {
-		return;  // TEMP
 		var sf = stateUS.geo.state.features.by;
 		var cf = ( view == 'county' ) && stateUS.geo.county.features.by;
 		if( abbr == 'AK' ) {
@@ -1220,9 +1217,11 @@ function usEnabled() {
 		var size = Math.round( Math.sqrt( candidate.vsTop ) * max );
 		var margin1 = Math.floor( ( max - size ) / 2 );
 		var margin2 = max - size - margin1;
+		var party = election.parties[candidate.party];
+		var color = party && party.color || '#FFFFFF';  // TEMP
 		return S(
 			'<div style="margin:', margin1, 'px ', margin2, 'px ', margin2, 'px ', margin1, 'px;">',
-				formatDivColorPatch( candidate.color, size, size ),
+				formatDivColorPatch( color, size, size ),
 			'</div>'
 		);
 	}
@@ -1334,6 +1333,8 @@ function usEnabled() {
 		var selected = ( candidate.id === currentCandidate ) ? ' selected' : '';
 		var delegates = candidate.delegates;
 		if( params.triple ) delegates = 999;
+		var party = election.parties[candidate.party];
+		var color = party && party.color || '#FFFFFF';  // TEMP
 		return S(
 			'<div style="float:left; padding:6px 3px 1px 9px;">',
 				'<table cellpadding="0" cellspacing="0">',
@@ -1344,7 +1345,7 @@ function usEnabled() {
 							'</div>',
 							'<div style="margin-left:2px;">',
 								formatDivColorPatch(
-									candidate.color || 'white',
+									color || 'white',
 									delegates < 100 ? 23 : delegates < 1000 ? 34 : 45,
 									12, '1px solid transparent'
 								),
@@ -1465,7 +1466,9 @@ function usEnabled() {
 	
 	function formatSidebarTopCandidates( topCandidates ) {
 		var colors = _.map( topCandidates, function( candidate ) {
-			return candidate.color;
+			var party = election.parties[candidate.party];
+			var color = party && party.color || '#FFFFFF';  // TEMP
+			return color;
 		});
 		var selected = currentCandidate ? '' : ' selected';
 		return S(
@@ -1486,11 +1489,13 @@ function usEnabled() {
 	
 	function formatSidebarCandidate( candidate ) {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
+		var party = election.parties[candidate.party];
+		var color = party && party.color || '#FFFFFF';  // TEMP
 		return S(
 			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
-						formatSpanColorPatch( candidate.color, 8 ),
+						formatSpanColorPatch( color, 8 ),
 					'</div>',
 				'</td>',
 				'<td>',
@@ -1621,21 +1626,21 @@ function usEnabled() {
 		var st = State( feature.fips.slice(0,2) );
 		var diff = now() + times.offset - st.dateUTC;
 		var future = ( diff < 0 );
-		var results = state.getResults(), col = results && results.colsById;
-		var row = featureResults( results, feature );
+		var results = state.getResults();
+		var result = featureResult( results, feature );
 		var top = [];
-		if( row  &&  col  &&  mayHaveResults(row,col) ) {
-			row.fips = fips;
-			row.state = st;
-			top = getTopCandidates( results, row, 'votes', /*useSidebar ? 0 :*/ 4 );
+		if( mayHaveResults(result) ) {
+			result.fips = fips;
+			result.state = st;
+			top = getTopCandidates( results, result, 'votes', /*useSidebar ? 0 :*/ 4 );
 			var content = S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, true ),
 				'</div>'
 			);
 			
-			var boxes = row[col.NumBallotBoxes];
-			var counted = row[col.NumCountedBallotBoxes];
+			var boxes = result.precincts;
+			var counted = result.counted;
 		}
 		
 		var reporting =
@@ -1647,7 +1652,7 @@ function usEnabled() {
 			}) :
 			future ? longDateFromYMD(st.date) :
 			( state == stateUS  &&  view != 'county' )  ||  ! results ? T('waitingForVotes') :
-			row ? T('noVotesHere') :
+			result ? T('noVotesHere') :
 			T('neverVotesHere');
 		
 		var clickForLocal =
@@ -2036,4 +2041,4 @@ function usEnabled() {
 	
 	analytics( 'map', 'load' );
 	
-})( jQuery );
+//})( jQuery );
