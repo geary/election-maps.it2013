@@ -121,7 +121,7 @@
 			( state != stateUS  ||  cacheResults.get( stateUS.electionidPrimaryDelegates ) )  &&
 			cacheResults.get( electionid );
 		if( results ) {
-			gotResultTable( results );
+			gotResultsTable( results );
 			return;
 		}
 		
