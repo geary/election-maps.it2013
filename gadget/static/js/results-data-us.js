@@ -121,7 +121,7 @@
 			( state != stateUS  ||  cacheResults.get( stateUS.electionidPrimaryDelegates ) )  &&
 			cacheResults.get( electionid );
 		if( results ) {
-			loadResultTable( results, false );
+			gotResultTable( results );
 			return;
 		}
 		
@@ -206,14 +206,14 @@
 			}
 		};
 		
-		loadResultTable( json, true );
+		loadResultTable( json );
 	}
 	
 	loadResults = function( json, electionid, mode ) {
 		deleteFromArray( electionsPending, electionid );
 		json.electionid = '' + electionid;
 		json.mode = mode;
-		loadResultTable( json, true );
+		loadResultTable( json );
 	};
 	
 	// Hack for featureResult, not localized
@@ -264,10 +264,9 @@
 		US: { AS:1, GU:1, MP:1, PR:1, VI:1 }
 	};
 	
-	function loadResultTable( json, loading ) {
+	function loadResultTable( json ) {
 		//var counties = isCountyTEMP( json );
-		if( loading )
-			cacheResults.add( json.electionid, json, opt.resultCacheTime );
+		cacheResults.add( json.electionid, json, opt.resultCacheTime );
 		
 		var eid = electionids[json.electionid];
 		if( ! eid ) {
@@ -403,11 +402,15 @@
 		delete results.rows;
 		features.didMissingCheck = true;
 		
-		if( electionsPending.length == 0 )
-			geoReady();
+		gotResultsTable( results );
 		
 		if( missing.length  &&  debug  &&  debug != 'quiet' ) {
 			alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
 		}
+	}
+	
+	function gotResultsTable( results ) {
+		if( electionsPending.length == 0 )
+			geoReady();
 	}
 	
