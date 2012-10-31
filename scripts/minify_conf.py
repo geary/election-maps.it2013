@@ -5,8 +5,8 @@ jsFiles = [
 	'polygonzo.js',
 	'scriptino.js',
 	'elections-us.js',
-	'results-data-us.js',
 	'results-map-us.js',
+	'results-data-us.js',
 ]
 
 jsMinFile = 'results-map-us-min.js'

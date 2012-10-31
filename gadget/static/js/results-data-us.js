@@ -31,13 +31,11 @@
 		max = max || Infinity;
 		if( ! result ) return [];
 		if( result == -1 ) result = results.totals;
-		var col = results.colsById;
-		var top = results.candidates.slice();
-		for( var i = -1;  ++i < top.length; ) {
-			var candidate = top[i], votes = result[i];
-			candidate.votes = votes;
-			candidate.vsAll = votes / result[col.TabTotal];
-			candidate.delegates = getCandidateDelegates( result.state || stateUS, candidate );
+		var top = result.candidates.slice();
+		for( var i = 0, n = top.length;  i < top.length;  ++i ) {
+			var candidate = top[i], votes = candidate.votes;
+			candidate.vsAll = votes / result.votes;
+			//candidate.delegates = getCandidateDelegates( result.state || stateUS, candidate );
 			//candidate.total = total;
 		}
 		top = sortArrayBy( top, sortBy, { numeric:true } )
@@ -55,20 +53,20 @@
 		return top;
 	}
 	
-	function getCandidateDelegates( state, candidate ) {
-		var delegates = stateUS.delegates;
-		if( ! delegates ) return 0;
-		var iCol = delegates.colsById[ 'TabCount-' + candidate.id ];
-		var row =
-			state == stateUS ? delegates.totals :
-			delegates.rowsByID[state.abbr];
-		return row ? row[iCol] : 0;
-	}
+	//function getCandidateDelegates( state, candidate ) {
+	//	var delegates = stateUS.delegates;
+	//	if( ! delegates ) return 0;
+	//	var iCol = delegates.colsById[ 'TabCount-' + candidate.id ];
+	//	var row =
+	//		state == stateUS ? delegates.totals :
+	//		delegates.places[state.abbr];
+	//	return row ? row[iCol] : 0;
+	//}
 	
-	function mayHaveResults( row, col ) {
-		return(
-			row[col.TabTotal] > 0  ||
-			row[col.NumCountedBallotBoxes] < row[col.NumBallotBoxes]
+	function mayHaveResults( result ) {
+		return result && (
+			result.votes > 0  ||
+			result.counted < result.precincts
 		);
 	}
 	
@@ -97,14 +95,15 @@
 	
 	function getResults() {
 		var electionid =
-			params.contest == 'house' ? null :  // TODO
-			state.electionidPrimary;
+			electionids.byStateContest( params.state, params.contest );
+			//params.contest == 'house' ? null :  // TODO
+			//state.electionidPrimary;
 		if( ! electionid ) {
 			loadTestResults( state.fips, false );
 			return;
 		}
-		if( state == stateUS  &&  view == 'county' )
-			electionid = state.electionidPrimaryCounties;
+		//if( state == stateUS  &&  view == 'county' )
+		//	electionid = state.electionidPrimaryCounties;
 		
 		//if( electionid == 'random' ) {
 		//	opt.randomized = params.randomize = true;
@@ -129,8 +128,8 @@
 		var id = params.source == 'gop' ? e[1] : e[0];
 		
 		getElections(
-			state == stateUS ?
-				[ id, stateUS.electionidPrimaryDelegates ] :
+			//state == stateUS ?
+			//	[ id, stateUS.electionidPrimaryDelegates ] :
 				[ id ]
 		);
 	}
@@ -210,24 +209,24 @@
 		loadResultTable( json, true );
 	};
 	
-	// Hack for featureResults, not localized
+	// Hack for featureResult, not localized
 	var lsadSuffixes = {
 		city: ' City',
 		county: ' County'
 	};
 	
-	function featureResults( results, feature ) {
+	function featureResult( results, feature ) {
 		if( !( results && feature ) ) return null;
 		var id = feature.id, fips = feature.fips, state = feature.state;
 		//var state = fips.length == 2  &&  states.by.fips[fips];  // TEMP
 		//var abbr = state && state.abbr;  // TEMP
 		//feature.state = state || states.by.fips[ fips.slice(0,2) ];
 		return (
-			results.rowsByID[ id ] ||
-			results.rowsByID[ fips ] ||
-			results.rowsByID[ state.abbr ] ||  // TEMP
-			results.rowsByID[ feature.name ]  ||
-			results.rowsByID[ feature.name + (
+			results.places[ id ] ||
+			results.places[ fips ] ||
+			results.places[ state.abbr ] ||  // TEMP
+			results.places[ feature.name ]  ||
+			results.places[ feature.name + (
 				lsadSuffixes[ ( feature.lsad || '' ).toLowerCase() ]
 				|| ''
 			) ]
@@ -259,58 +258,60 @@
 	};
 	
 	function loadResultTable( json, loading ) {
-		var counties = isCountyTEMP( json );
+		//var counties = isCountyTEMP( json );
 		if( loading )
 			cacheResults.add( json.electionid, json, opt.resultCacheTime );
 		
 		var state = State( json.electionid );
 		var results = json.table;
+/*
 		var isDelegates = ( json.electionid == state.electionidPrimaryDelegates );
 		if( isDelegates )
 			state.delegates = results;
 		else if( state == stateUS  &&  view == 'county' )
 			state.resultsCounty = results;
-		else if( params.contest == 'house' )
+		else
+*/
+		if( params.contest == 'house' )
 			state.resultsHouse = results;  // TODO
 		else
 			state.results = results;
 		results.mode = json.mode;
 		var zero = ( json.mode == 'test'  &&  ! debug );
 		
-		var col = results.colsById = {};
-		col.candidates = 0;
 		var cols = results.cols;
-		var totals = results.totals = [];
-		for( var id, iCol = -1;  id = cols[++iCol]; ) {
-			col[id] = iCol;
-			totals.push( 0 );
-		}
+		indexArray( cols );
+		var colsID = cols.ID, nCandidates = colsID / 4;
 		
-		var candidates = results.candidates = [];
-		for( var i = 0, colID = col.ID;  i < colID;  ++i ) {
-			var id = cols[i].split('-')[1].toLowerCase(), candidate = election.candidates.by.id[id];
-			candidates.push( $.extend( {}, candidate ) );
-		}
-		indexArray( candidates, 'id' );
+		//var candidates = results.candidates = [];
+		//for( var i = 0, colID = col.ID;  i < colID;  ++i ) {
+		//	var id = cols[i].split('-')[1].toLowerCase(), candidate = election.candidates.by.id[id];
+		//	candidates.push( $.extend( {}, candidate ) );
+		//}
+		//indexArray( candidates, 'id' );
 		
 		var fix = state.fix || {};
 		
 		var kind =
 			params.contest == 'house' ? 'house' :
 			state.votesby || 'county';
-		if( state == stateUS  &&  view == 'county'  &&  ! isDelegates ) kind = 'county';  // TEMP
+		//if( state == stateUS  &&  view == 'county'  &&  ! isDelegates ) kind = 'county';  // TEMP
 		if( kind == 'town'  ||  kind == 'district' ) kind = 'county';  // TEMP
 		var features = state.geo[kind].features;
 		
+		var parties = election.parties;
 		var missing = [];
-		var rowsByID = results.rowsByID = {};
 		var rows = results.rows;
-		for( var row, iRow = -1;  row = rows[++iRow]; ) {
-			var id = row[col.ID];
-			var fixed = fix[id];
-			if( fixed ) {
-				id = row[col.ID] = fixed;
-			}
+		var places = results.places = {};
+		var allCandidates = results.candidates = {};
+		for( var iRow = 0, nRows = rows.length;  iRow < nRows;  ++iRow ) {
+			var row = rows[iRow];
+			var id = row[colsID];
+			id = fix[id] || id;
+			var votes = row[cols.TabTotal];
+			var precincts = row[cols.NumBallotBoxes];
+			var counted = row[cols.NumCountedBallotBoxes];
+			var winner = row[cols.Winner];
 			if( state.geo ) {
 				var feature = features.by[id];
 				if( ! feature ) {
@@ -320,33 +321,74 @@
 							missing.push( id );
 				}
 			}
-			rowsByID[id] = row;
-			if( /^\d\d000$/.test(id) ) rowsByID[id.slice(0,2)] = row;
-			var nCandidates = candidates.length;
-			var max = 0,  candidateMax = -1;
-			if( zero ) {
-				for( iCol = -1;  ++iCol < nCandidates; ) {
-					row[iCol] = 0;
-				}
-				row[col.TabTotal] = 0;
-				totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
-				row[col.NumCountedBallotBoxes] = 0;
-			}
-			else {
-				for( iCol = -1;  ++iCol < nCandidates; ) {
-					var count = row[iCol];
-					totals[iCol] += count;
-					if( count > max ) {
-						max = count;
-						candidateMax = iCol;
+			
+			//if( /^\d\d000$/.test(id) ) rowsByID[id.slice(0,2)] = row;
+			//var nCandidates = candidates.length;
+			var totalVotes = 0, maxVotes = 0,  iMaxVotes = -1;
+			//if( zero ) {
+			//	for( iCol = -1;  ++iCol < nCandidates; ) {
+			//		row[iCol] = 0;
+			//	}
+			//	row[col.TabTotal] = 0;
+			//	totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
+			//	row[col.NumCountedBallotBoxes] = 0;
+			//}
+			//else {
+				var candidates = [];
+				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
+					var party = row[iCol+3];
+					if( ! party ) break;
+					if( ! parties[party] ) {
+						params.debug && window.console && console.log( party );
+						parties[party] = { color: '#808080' };
 					}
+					var firstName = row[iCol+1], lastName = row[iCol+2];
+					var id = firstName + ' ' + lastName, votes = row[iCol];
+					var candidate = {
+						id: id,
+						votes: votes,
+						firstName: firstName,
+						lastName: lastName,
+						party: party
+					};
+					if( ! allCandidates[id] ) {
+						allCandidates[id] = {
+							id: id,
+							votes: 0,
+							firstName: firstName,
+							lastName: lastName,
+							party: party
+						};
+					}
+					allCandidates[id].votes += votes;
+					//totals[iCol] += count;
+					totalVotes += votes;
+					if( maxVotes < votes ) {
+						maxVotes = votes;
+						iMaxVotes = candidates.length;
+					}
+					candidates.push( candidate );
 				}
-				totals[col.TabTotal] += row[col.TabTotal];
-				totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
-				totals[col.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
-			}
-			row.candidateMax = candidateMax;
+				var result = {
+					id: row[colsID],
+					precincts: row[cols.NumBallotBoxes],
+					counted: row[cols.NumCountedBallotBoxes],
+					votes: totalVotes,
+					//winner: /* needs to be calculated */,
+					candidates: candidates,
+					iMaxVotes: iMaxVotes
+				};
+				places[result.id] = result;
+				
+				//totals[col.TabTotal] += row[col.TabTotal];
+				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
+				//totals[col.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
+			//}
+			//row.candidateMax = candidateMax;
 		}
+		results.oldtemp = { cols: results.cols, rows: results.rows };  // TEMP debugging
+		delete results.cols;
+		delete results.rows;
 		features.didMissingCheck = true;
 		
 		if( electionsPending.length == 0 )
