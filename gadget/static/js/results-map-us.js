@@ -979,6 +979,7 @@ function usEnabled() {
 		var results = state.getResults();
 		var candidates = results && results.candidates;
 		if( !( candidates && currentCandidate ) ) {
+			// Multi-candidate view
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var result = featureResult( results, feature );
 				var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
@@ -1007,31 +1008,29 @@ function usEnabled() {
 			}
 		}
 		else {
-debugger;  // partially updated: search for 'row' in this block to finish
+			// Single candidate heatmap
 			var max = 0;
-			var candidate = candidates.by.id[currentCandidate], index = candidate.index;
+			var candidate = candidates[currentCandidate];
 			var party = election.parties[candidate.party];
 			var color = party && party.color || '#FFFFFF';  // TEMP
-			var nCols = candidates.length;
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
-				var row = featureResult( results, feature );
-				var total = 0, value = 0;
-				if( row ) {
-					var total = 0;
-					for( var iCol = -1;  ++iCol < nCols; )
-						total += row[iCol];
-					value = row[index];
-					max = Math.max( max,
-						row.fract = total ? value / total : 0
-					);
+				var result = featureResult( results, feature );
+				if( result ) {
+					var can = result.candidates.by.id[currentCandidate];
+					if( can ) {
+						max = Math.max( max,
+							result.fract = result.votes ? can.votes / result.votes : 0
+						);
+					}
 				}
 			}
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var result = featureResult( results, feature );
-				var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
-				var hatch = state == stateUS  &&  diff >= 0  &&  diff <= (24+9) * 60 * 60 * 1000;
-				feature.fillColor = hatch ? { image: candidate.pattern } : color;
-				feature.fillOpacity = row && max ? row.fract / max * .75 : 0;
+				//var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
+				//var hatch = state == stateUS  &&  diff >= 0  &&  diff <= (24+9) * 60 * 60 * 1000;
+				//feature.fillColor = hatch ? { image: candidate.pattern } : color;
+				feature.fillColor = color;
+				feature.fillOpacity = result && result.fract && max ? result.fract / max * .75 : 0;
 				var complete = result  &&  result.counted == result.precincts;
 				feature.strokeColor = strokeColor;
 				feature.strokeOpacity = strokeOpacity;
