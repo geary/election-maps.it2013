@@ -14,8 +14,8 @@
 	function totalReporting( results ) {
 		var places = results.places;
 		var counted = 0, total = 0;
-		for( var i = 0, n = places.length;  i < n;  ++i ) {
-			var place = places[i];
+		for( var name in places ) {
+			var place = places[name];
 			counted += place.counted;
 			total += place.precincts;
 		}
