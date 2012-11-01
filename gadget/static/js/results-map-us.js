@@ -870,7 +870,8 @@ function usEnabled() {
 			},
 			click: function( event, where ) {
 				if( params.contest == 'house' ) return;  // TEMP
-				if( touch  && ! touch.mouse ) return;
+				event.stopPropagation();
+				if( touch  &&  ! touch.mouse ) return;
 				mousedown = false;
 				var didDrag = dragged;
 				dragged = false;
