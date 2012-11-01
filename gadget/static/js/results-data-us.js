@@ -283,10 +283,7 @@
 			state.resultsCounty = results;
 		else
 */
-		if( params.contest == 'house' )
-			state.resultsHouse = results;  // TODO
-		else
-			state.results = results;
+		state.results[params.contest] = results;
 		results.mode = json.mode;
 		var zero = ( json.mode == 'test'  &&  ! debug );
 		

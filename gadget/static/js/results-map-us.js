@@ -56,6 +56,7 @@ for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
 	state.name = T( 'state-' + state.abbr );
 	state.electionTitle = T( state.type || 'primary', { name: state.name } );
+	state.results = {};
 }
 
 params.state = params.state || params.embed_state;
@@ -71,11 +72,8 @@ function State( abbr ) {
 		states.by.electionidPrimary[abbr] ||
 		stateUS;
 	state.getResults = function() {
-		return(
-			//params.contest == 'house' ? this.resultsHouse :
-			//this == stateUS  &&  view == 'county' ? this.resultsCounty :
-			this.results
-		);
+		return this.results[params.contest];
+		//this == stateUS  &&  view == 'county' ? this.resultsCounty :
 	};
 	return state;
 }
@@ -290,6 +288,10 @@ function stateOption( s, index, selected ) {
 	return option( s.id, s.name, selected );
 }
 
+function contestOption( value, name ) {
+	return option( value, name, value == params.contest );
+}
+
 document.write(
 	'<div id="outer">',
 	'</div>',
@@ -327,8 +329,14 @@ function contentTable() {
 								);
 							}),
 					'</select>',
+					'&nbsp;&nbsp;',
 					//'&nbsp;&nbsp;&nbsp;',
-					//'&nbsp;&nbsp;&nbsp;',
+					'<select id="contestSelector">',
+						contestOption( 'president', T('president') ),
+						contestOption( 'senate', T('senate') ),
+						contestOption( 'house', T('house') ),
+						contestOption( 'governor', T('governor') ),
+					'</select>',
 					//'<input type="checkbox" id="chkCounties">',
 					//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
 				'</div>',
@@ -405,7 +413,11 @@ function usEnabled() {
 	function loadRegion( s, kind ) {
 		s = s || state;
 		var level = params.level || s.level || '4096';
-		kind = kind || ( state == stateUS ? 'state' : 'county' );
+		kind = kind || (
+			params.contest == 'house' ? 'house' :
+			state == stateUS ? 'state' :
+			'county'
+		);
 		if( kind == 'county' ) level = '512';  // TEMP
 		var fips = s.fips;
 		var json = jsonRegion[fips+kind];
@@ -445,6 +457,7 @@ function usEnabled() {
 		}
 		var target = json.house ? 'house' : json.county ? 'county' : 'state';
 		var fips = json[target].id;
+		fips = fips.split('-')[0];  // hack for 00-house
 		var state = State( fips );
 		state.geo = state.geo || {};
 		for( var kind in json ) {
@@ -543,7 +556,7 @@ function usEnabled() {
 			setup: function() {
 			},
 			tick: function() {
-				var topCandidates = getTopCandidates( state.results, -1, 'votes' );
+				var topCandidates = getTopCandidates( state.getResults(), -1, 'votes' );
 				if( ! currentCandidate ) {
 					i = 0;
 				}
@@ -1437,9 +1450,9 @@ function usEnabled() {
 		// TODO: refactor with formatTopbar()
 		var resultsHeaderHTML = '';
 		var resultsScrollingHTML = '';
-		var results = state.results;
+		var results = state.getResults();
 		if( results ) {
-			var topCandidates = getTopCandidates( state.results, -1, 'votes' );
+			var topCandidates = getTopCandidates( results, -1, 'votes' );
 			var none = ! topCandidates.length;
 			var top = none ? '' : formatSidebarTopCandidates( topCandidates.slice( 0, 4 ) );
 			var test = testFlag( results );
@@ -1452,7 +1465,7 @@ function usEnabled() {
 			) : '';
 			resultsHeaderHTML = S(
 				'<div id="percent-reporting" class="body-text">',
-					T( 'percentReporting', totalReporting(state.results) ),
+					T( 'percentReporting', totalReporting( state.getResults() ) ),
 				'</div>',
 				'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
 					test ? 'color:red; font-weight:bold;' : '',
@@ -1906,6 +1919,11 @@ function usEnabled() {
 		$('#stateSelector').bindSelector( 'change keyup', function() {
 			var value = this.value.split('US')[1];
 			setState( value, 'select' );
+		});
+		
+		$('#contestSelector').bindSelector( 'change keyup', function() {
+			params.contest = this.value;
+			loadView();
 		});
 		
 		//$('#chkCounties').click( function() {
