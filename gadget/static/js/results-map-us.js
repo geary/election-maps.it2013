@@ -285,7 +285,7 @@ function optionHTML( value, name, selected, disabled ) {
 
 function stateOption( s, index, selected ) {
 	State(s).selectorIndex = index;
-	return option( s.id, s.name, selected );
+	return option( s.id.split('US')[1], s.name, selected );
 }
 
 function contestOption( value, name ) {
@@ -1917,8 +1917,7 @@ function usEnabled() {
 		//setState( opt.state );
 		
 		$('#stateSelector').bindSelector( 'change keyup', function() {
-			var value = this.value.split('US')[1];
-			setState( value, 'select' );
+			setState( this.value, 'select' );
 		});
 		
 		$('#contestSelector').bindSelector( 'change keyup', function() {
