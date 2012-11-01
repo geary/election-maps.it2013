@@ -42,7 +42,7 @@ loadStrings({
 "finalResults": "Final Results", 
 "frSource": "Source: Ministry of the Interior", 
 "googlePoliticsTitle": "Google Politics & Elections", 
-"governors": "Governors", 
+"governor": "Governor", 
 "house": "House", 
 "houseDistrict": "{{name}} district {{number}}", 
 "languageName": "English", 

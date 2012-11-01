@@ -42,7 +42,7 @@ loadStrings({
 "finalResults": "Resultados Finales", 
 "frSource": "Fuente: Ministerio del Interior", 
 "googlePoliticsTitle": "Pol\u00edtica y elecciones de Google", 
-"governors": "Gobernadores", 
+"governor": "Gobernador", 
 "house": "C\u00e1mara", 
 "houseDistrict": "{{name}} distrito {{number}}", 
 "languageName": "Espa\u00f1ol", 

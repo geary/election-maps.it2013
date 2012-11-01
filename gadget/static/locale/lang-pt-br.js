@@ -42,7 +42,7 @@ loadStrings({
 "finalResults": "Resultados Finais", 
 "frSource": "Fonte: Minist\u00e9rio do Interior", 
 "googlePoliticsTitle": "Pol\u00edtica e elei\u00e7\u00f5es no Google", 
-"governors": "", 
+"governor": "", 
 "house": "", 
 "houseDistrict": "", 
 "languageName": "Portugu\u00eas (Brasil)", 

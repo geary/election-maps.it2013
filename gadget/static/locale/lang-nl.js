@@ -42,7 +42,7 @@ loadStrings({
 "finalResults": "Definitieve Resultaten", 
 "frSource": "Bron: Ministerie van Binnenlandse Zaken", 
 "googlePoliticsTitle": "Google Politics & Elections", 
-"governors": "", 
+"governor": "", 
 "house": "", 
 "houseDistrict": "", 
 "languageName": "Nederlands", 
