@@ -42,7 +42,7 @@ loadStrings({
 "finalResults": "R\u00e9sultats Finaux", 
 "frSource": "Source: Minist\u00e8re de l'Int\u00e9rieur", 
 "googlePoliticsTitle": "Google\u00a0Politics\u00a0&\u00a0Elections", 
-"governors": "", 
+"governor": "", 
 "house": "", 
 "houseDistrict": "", 
 "languageName": "Fran\u00e7ais", 
