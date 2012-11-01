@@ -117,8 +117,8 @@ var $window = $(window), ww = $window.width(), wh = $window.height();
 var mapPixBounds;
 
 var debug = params.debug;
-opt.state = params.state;
-opt.counties = !! opt.state;
+//opt.state = params.state;
+//opt.counties = !! opt.state;
 opt.candidate = '1';
 //opt.zoom = opt.zoom || 3;
 opt.fontsize = '15px';
@@ -165,7 +165,7 @@ document.body.scroll = 'no';
 document.write(
 	'<style type="text/css">',
 		'html, body { width:', ww, 'px; height:', wh, 'px; margin:0; padding:0; overflow:hidden; color:#222; background-color:white; }',
-		'#legend, #maptip { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
+		'#sidebar, #maptip { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
 		'a { font-size:13px; text-decoration:none; color:#1155CC; }',
 		'a:hover { text-decoration:underline; }',
 		//'a:visited { color:#6611CC; }',
@@ -214,13 +214,13 @@ document.write(
 		'.tiptitletext { font-weight:bold; font-size:120%; }',
 		'.tipcontent { padding:4px 8px 8px 8px; border-bottom:1px solid #AAA; }',
 		'.tipreporting { font-size:80%; padding:2px 0; }',
-		'#selectors { background-color:#D0E3F8; }',
+		//'#selectors { background-color:#D0E3F8; }',
 		'#selectors, #selectors * { font-size:14px; }',
 		'#selectors label { font-weight:bold; }',
 		'#selectors, #legend { width:100%; border-bottom:1px solid #C2C2C2; }',
-		'#legend { background-color:white; }',
+		'body.sidebar { background-color:white; }',
 		'body.tv #legend { margin-top:8px; }',
-		'body.sidebar #legend { width:', sidebarWidth, 'px; }',
+		'body.sidebar #selectors, body.sidebar #legend { width:', sidebarWidth, 'px; }',
 		'#sidebar table.candidates { width:100%; }',
 		'table.candidates td { border-top:1px solid #E7E7E7; }',
 		'#maptip table.candidates { width:100%; }',
@@ -285,9 +285,9 @@ function optionHTML( value, name, selected, disabled ) {
 	);
 }
 
-function stateOption( state, selected ) {
-	state.selectorIndex = index;
-	return option( state.id, state.name, selected );
+function stateOption( s, index, selected ) {
+	State(s).selectorIndex = index;
+	return option( s.id, s.name, selected );
 }
 
 document.write(
@@ -311,29 +311,28 @@ document.write(
 function contentTable() {
 	return S(
 		'<div>',
-			//'<div id="selectors">',
-			//	'<div style="margin:0; padding:6px;">',
-			//		//'<label for="stateSelector">',
-			//		//	T('stateLabel'),
-			//		//'</label>',
-			//		//'<select id="stateSelector">',
-			//		//	option( '-1', T('nationwideLabel') ),
-			//		//	option( '', '', false, true ),
-			//		//	mapjoin(
-			//		//		sortArrayBy( stateUS.geo.state.features, 'name' ),
-			//		//		function( state ) {
-			//		//			return stateOption(
-			//		//				state,
-			//		//				state.abbr == opt.state
-			//		//			);
-			//		//		}),
-			//		//'</select>',
-			//		//'&nbsp;&nbsp;&nbsp;',
-			//		//'&nbsp;&nbsp;&nbsp;',
-			//		//'<input type="checkbox" id="chkCounties">',
-			//		//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
-			//	'</div>',
-			//'</div>',
+			'<div id="selectors">',
+				'<div style="margin:0; padding:6px;">',
+					//'<label for="stateSelector">',
+					//	T('stateLabel'),
+					//'</label>',
+					'<select id="stateSelector">',
+						option( 'US00', T('state-US') ),
+						option( '', '', false, true ),
+						mapjoin(
+							sortArrayBy( stateUS.geo.state.features, 'name' ),
+							function( s, i ) {
+								return stateOption(
+									s, i + 2, s.abbr == state.abbr
+								);
+							}),
+					'</select>',
+					//'&nbsp;&nbsp;&nbsp;',
+					//'&nbsp;&nbsp;&nbsp;',
+					//'<input type="checkbox" id="chkCounties">',
+					//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
+				'</div>',
+			'</div>',
 			'<div id="legend">',
 				formatLegendTable( [] ),
 			'</div>',
@@ -406,7 +405,7 @@ function usEnabled() {
 	function loadRegion( s, kind ) {
 		s = s || state;
 		var level = params.level || s.level || '4096';
-		kind = kind || ( opt.counties ? 'county' : 'state' );
+		kind = kind || ( state == stateUS ? 'state' : 'county' );
 		if( kind == 'county' ) level = '512';  // TEMP
 		var fips = s.fips;
 		var json = jsonRegion[fips+kind];
@@ -592,16 +591,16 @@ function usEnabled() {
 		}
 	};
 	
-	var setCountiesFirst = true;
-	function setCounties( counties, force ) {
-		counties = !! counties;
-		if( counties == opt.counties  &&  ! force  &&  ! setCountiesFirst )
-			return;
-		setCountiesFirst = false;
-		opt.counties = counties;
-		$('#chkCounties').prop( 'checked', counties );
-		loadView();
-	}
+	//var setCountiesFirst = true;
+	//function setCounties( counties, force ) {
+	//	counties = !! counties;
+	//	if( counties == opt.counties  &&  ! force  &&  ! setCountiesFirst )
+	//		return;
+	//	setCountiesFirst = false;
+	//	opt.counties = counties;
+	//	$('#chkCounties').prop( 'checked', counties );
+	//	loadView();
+	//}
 	
 	function showError( type, file ) {
 		file = file.replace( '.json', '' ).replace( '-all', '' ).toUpperCase();
@@ -1818,10 +1817,11 @@ function usEnabled() {
 		if( s == stateUS ) currentCandidate = 0;
 		state = s;
 		var select = $('#stateSelector')[0];
-		select && ( select.selectedIndex = state.selectorIndex );
-		opt.state = state.abbr.toLowerCase();
+		if( select ) select.selectedIndex = state.selectorIndex;
+		//opt.state = state.abbr.toLowerCase();
 		geoMoveNext = true;
-		setCounties( state.fips != '00' );
+		//setCounties( state.fips != '00' );
+		loadView();
 		if( why ) analytics( why, 'state', state.abbr );
 	}
 	
@@ -1903,18 +1903,14 @@ function usEnabled() {
 		
 		//setState( opt.state );
 		
-		//$('#stateSelector').bindSelector( 'change keyup', function() {
-		//	var value = this.value.replace('!','').toLowerCase();
-		//	if( opt.state == value ) return;
-		//	opt.state = value;
-		//	setCounties( value > 0 );
-		//	var state = data.state.geo.features.by.id[value];
-		//	fitBbox( state ? state.bbox : data.state.geo.bbox );
-		//});
-		
-		$('#chkCounties').click( function() {
-			setCounties( this.checked );
+		$('#stateSelector').bindSelector( 'change keyup', function() {
+			var value = this.value.split('US')[1];
+			setState( value, 'select' );
 		});
+		
+		//$('#chkCounties').click( function() {
+		//	setCounties( this.checked );
+		//});
 		
 		var $legend = $('#legend');
 		$legend.delegate( 'tr.legend-candidate', {
