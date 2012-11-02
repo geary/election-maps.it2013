@@ -327,12 +327,11 @@ function contentTable() {
 					//'</label>',
 					'<select id="stateSelector">',
 						option( 'US00', T('state-US') ),
-						option( '', '', false, true ),
 						mapjoin(
 							sortArrayBy( stateUS.geo.state.features, 'name' ),
 							function( s, i ) {
 								return stateOption(
-									s, i + 2, s.abbr == state.abbr
+									s, i + 1, s.abbr == state.abbr
 								);
 							}),
 					'</select>',
