@@ -1673,7 +1673,7 @@ function usEnabled() {
 				S( s.name, ' district ', feature.district );
 		}
 		var lsad = ( feature.lsad || '' ).toLowerCase();
-		var format = ( s.formats || lsadFormats )[lsad] || '{{name}}';
+		var format = ( s.formats || lsadFormats )[lsad] || 'name';
 		var name = T( format, { name: feature.name } );
 		return(
 			featureIsState(feature) ? states.by.nameEN[name].name :

@@ -38,9 +38,11 @@ opt.writeScript = function( url, nocache ) {
 		'<\/script>' );
 };
 
-var strings;
-function loadStrings( s ) {
-	strings = s;
+function loadStrings( strings ) {
+	// There are more strings than templates, so copy templates to strings
+	// but let strings override templates
+	_.defaults( strings, templates );
+	templates = strings;
 }
 
 function setLanguage() {
@@ -63,17 +65,31 @@ function setLanguage() {
 	if( !( hl in supportedLanguages ) )
 		hl = defaultLanguage;
 	params.hl = hl;
-	opt.writeScript( 'locale/lang-' + params.hl + '.js' );
 }
 setLanguage();
 
-function T( name, args ) {
-	return ( /*prefs.getMsg(name) ||*/ strings[name] || name ).replace( /\{\{(\w+)\}\}/g,
-		function( match, key ) {
-			var value = args[key];
-			return value != null ? value : match;
-		});
+// Compile a template, trimming whitespace, removing tab characters,
+// and converting Mustache-style syntax to Underscore:
+// {{escapedValue}}
+// {{{unescapedValue}}}
+// {{@JavaScriptCode}}
+function compileTemplate( template ) {
+	var text = $.trim( template.replace( /\t/g, '' ) )
+		.replace( /\{\{\{/g, '<%=' )
+		.replace( /\{\{@/g, '<%' )
+		.replace( /\{\{/g, '<%-' )
+		.replace( /\}\}\}/g, '%>' )
+		.replace( /\}\}/g, '%>' )
+	return _.template( text );
 }
+
+function T( name, args ) {
+	if( ! T.templates[name] ) {
+		T.templates[name] = compileTemplate( templates[name] );
+	}
+	return T.templates[name]( args );
+}
+T.templates = {};
 
 opt.writeScript( '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery' + ( opt.debug ? '.js' : '.min.js' ) );
 
@@ -91,5 +107,7 @@ opt.writeScript( 'js/underscore.js', opt.nocache );
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
 opt.writeScript( 'js/scriptino.js', opt.nocache );
 opt.writeScript( 'js/elections-us.js', opt.nocache );
+opt.writeScript( 'js/results-templates-us.js', opt.nocache );
+opt.writeScript( 'locale/lang-' + params.hl + '.js', opt.nocache );
 opt.writeScript( 'js/results-map-us.js', opt.nocache );
 opt.writeScript( 'js/results-data-us.js', opt.nocache );
