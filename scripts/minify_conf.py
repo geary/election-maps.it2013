@@ -5,6 +5,7 @@ jsFiles = [
 	'polygonzo.js',
 	'scriptino.js',
 	'elections-us.js',
+	'results-templates-us.js',
 	'results-map-us.js',
 	'results-data-us.js',
 ]
