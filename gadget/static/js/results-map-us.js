@@ -216,6 +216,7 @@ document.write(
 		'#selectors, #selectors * { font-size:14px; }',
 		'#selectors label { font-weight:bold; }',
 		'#selectors, #legend { width:100%; border-bottom:1px solid #C2C2C2; }',
+		'#selectors option.disabled { color:#BBB; }',
 		'body.sidebar { background-color:white; }',
 		'body.tv #legend { margin-top:8px; }',
 		'body.sidebar #selectors, body.sidebar #legend { width:', sidebarWidth, 'px; }',
@@ -272,12 +273,14 @@ function option( value, name, selected, disabled ) {
 }
 
 function optionHTML( value, name, selected, disabled ) {
-	var id = value ? 'id="option-' + value + '" ' : '';
-	var style = disabled ? 'color:#AAA; font-style:italic; font-weight:bold;' : '';
+	var idclass = S(
+		value ? 'id="option-' + value + '" ' : '',
+		disabled ? 'class="disabled" ' : ''
+	);
 	selected = selected ? 'selected="selected" ' : '';
 	disabled = disabled ? 'disabled="disabled" ' : '';
 	return S(
-		'<option ', id, 'value="', value, '" style="', style, '" ', selected, disabled, '>',
+		'<option ', idclass, 'value="', value, '" ', selected, disabled, '>',
 			name,
 		'</option>'
 	);
@@ -290,6 +293,10 @@ function stateOption( s, index, selected ) {
 
 function contestOption( value, name ) {
 	return option( value, name, value == params.contest );
+}
+
+function enableOption( element, enable ) {
+	$(element).toggleClass( 'disabled', ! enable ).prop( 'disabled', ! enable );
 }
 
 document.write(
@@ -1912,6 +1919,22 @@ function usEnabled() {
 		//}
 	}
 	
+	function enableStateContests() {
+		var okSelection = true;
+		$('#stateSelector option').each( function( i, option ) {
+			if( ! option.value ) return;
+			var enable = params.contest == 'house'  ||
+				!! electionids.byStateContest( option.value, params.contest );
+			enableOption( option, enable );
+			if( ! enable  &&  option.selected ) {
+				okSelection = false;
+			}
+		});
+		if( ! okSelection ) {
+			setState( '00', 'select' );
+		}
+	}
+	
 	function initSelectors() {
 		
 		//setState( opt.state );
@@ -1922,6 +1945,7 @@ function usEnabled() {
 		
 		$('#contestSelector').bindSelector( 'change keyup', function() {
 			params.contest = this.value;
+			enableStateContests();
 			loadView();
 		});
 		
