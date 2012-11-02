@@ -43,6 +43,7 @@ function loadStrings( strings ) {
 	// but let strings override templates
 	_.defaults( strings, templates );
 	templates = strings;
+	_.templateSettings.variable = 'v';
 }
 
 function setLanguage() {
@@ -75,9 +76,9 @@ setLanguage();
 // {{@JavaScriptCode}}
 function compileTemplate( template ) {
 	var text = $.trim( template.replace( /\t/g, '' ) )
-		.replace( /\{\{\{/g, '<%=' )
+		.replace( /\{\{\{/g, '<%=v.' )
 		.replace( /\{\{@/g, '<%' )
-		.replace( /\{\{/g, '<%-' )
+		.replace( /\{\{/g, '<%-v.' )
 		.replace( /\}\}\}/g, '%>' )
 		.replace( /\}\}/g, '%>' )
 	return _.template( text );
@@ -87,7 +88,7 @@ function T( name, args ) {
 	if( ! T.templates[name] ) {
 		T.templates[name] = compileTemplate( templates[name] );
 	}
-	return T.templates[name]( args );
+	return T.templates[name]( args, { variable: 'v' } );
 }
 T.templates = {};
 
