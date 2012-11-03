@@ -178,7 +178,14 @@ function renderNotchBar( a ) {
 	});
 }
 
-function renderControlPane( title, seats, trends ) {
+function renderControlPane( contest, seats, trends ) {
+	var title = 
+		contest == 'house' ? T('controlOfHouse') :
+		contest == 'senate' ? T('controlOfSenate') :
+		T('governor');
+	var subtitle =
+		contest == 'governor' ? T( 'countUndecided', { count: trends.undecided } ) :
+		T( 'balanceOfPower', { count: Math.ceil( seats.total / 2 ) } );
 	var party = trends.parties.by.id;
 	function partyGet( id, prop ) { return party[id] && party[id][prop] || 0; }
 	function partySeats( id ) { return partyGet( id, 'seats' ); }
@@ -192,14 +199,13 @@ function renderControlPane( title, seats, trends ) {
 		ind: partySeats( 'Ind' ),
 		gop: partySeats( 'GOP' ),
 		width: 180,
-		notch: true
+		notch: contest != 'governor'
 	});
 	bar.undecided = seats.total - bar.dem - bar.ind - bar.gop;
 	var center = seats.total / 2;
 	return T( 'controlPane', {
 		title: title,
-		balance: center,
-		subtitle: T( 'balanceOfPower', { count: Math.ceil(center) } ),
+		subtitle: subtitle,
 		dem: { total: partySeats('Dem'), delta: partyDelta('Dem') },
 		ind: { total: partySeats('Ind'), delta: partyDelta('Ind') },
 		gop: { total: partySeats('GOP'), delta: partyDelta('GOP') },
