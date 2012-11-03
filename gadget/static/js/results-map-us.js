@@ -1537,7 +1537,7 @@ function usEnabled() {
 						headerHTML,
 					'</div>',
 				'</div>',
-				'<div xclass="scroller" id="sidebar-scroll">',
+				'<div class="scroller" id="sidebar-scroll">',
 					scrollingHTML,
 				'</div>',
 			'</div>'
@@ -2075,8 +2075,8 @@ function usEnabled() {
 		if( useSidebar ) {
 			mapLeft = sidebarWidth;
 			mapWidth -= mapLeft;
-			//var $sidebarScroll = $('#sidebar-scroll');
-			//$sidebarScroll.height( wh - $sidebarScroll.offset().top );
+			var $sidebarScroll = $('#sidebar-scroll');
+			$sidebarScroll.height( wh - $sidebarScroll.offset().top );
 		}
 		else {
 			var topbarHeight = $('#topbar').height() + 1;
