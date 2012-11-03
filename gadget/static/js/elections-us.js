@@ -56,6 +56,29 @@ var elections = {
 		general: {
 			tzHour: -4,
 			photos: false,
+			seats: {
+				governor: {
+					total: 50,
+					beforeElection: { Dem: 20, GOP: 29, Ind: 1 },
+					notElecting: { Dem: 12, GOP: 26, Ind: 1 },
+					electing: 11
+				},
+				house: {
+					total: 435,
+					beforeElection: { Dem: 190, GOP: 240 },
+					electing: 435
+				},
+				senate: {
+					total: 100,
+					beforeElection: { Dem: 51, GOP: 47, Ind: 2 },
+					notElecting: { Dem: 30, GOP: 37 },
+					electing: 33
+				},
+				// Parties for balance of power chart (Ind includes others)
+				validPartiesForBalance: [ 'Dem', 'GOP', 'Ind' ],
+				maxElectoralVotes: 538,
+				thirdPartyId: "Ind"
+			},
 			parties: {
 				'AIP': { color: '#00FF00' },
 				'AmC': { color: '#00FF00' },
