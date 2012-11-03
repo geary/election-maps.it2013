@@ -664,6 +664,7 @@ var electionidlist = [
 	'2916|governor|VT',
 	'2917|governor|WA',
 	'2918|governor|WV',
+	'2919|trends|US',
 	''
 ];
 

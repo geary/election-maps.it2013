@@ -32,22 +32,29 @@
 		if( ! result ) return [];
 		if( result == -1 ) {
 			var votes = 0, candidates = [];
-			_(results.candidates).each( function( candidate ) {
+			_.each( results.candidates, function( candidate ) {
 				votes += candidate.votes;
 				candidates.push( candidate );
 			});
 			result = { candidates: candidates, votes: votes };
 		}
 		var top = result.candidates.slice();
-		for( var i = 0, n = top.length;  i < top.length;  ++i ) {
-			var candidate = top[i], votes = candidate.votes;
-			candidate.vsAll = votes / result.votes;
-			//candidate.delegates = getCandidateDelegates( result.state || stateUS, candidate );
+		_.each( top, function( candidate, i ) {
+			candidate.vsAll = candidate.votes / result.votes;
+			if( sortBy == 'electoralVotes' ) {
+				candidate.electoralVotes =
+					getCandidateElectoralVotes( result.state || stateUS, candidate );
+			}
 			//candidate.total = total;
+		});
+		var sorter = sortBy;
+		if( sortBy != 'votes' ) {
+			sorter = function( candidate ) {
+				return candidate.votes + ( candidate[sortBy] * 1000000000 );
+			};
 		}
-		top = sortArrayBy( top, sortBy, { numeric:true } )
-			.reverse()
-			.slice( 0, max );
+		top = sortArrayBy( top, sorter, { numeric:true } );
+		top = top.reverse().slice( 0, max );
 		while( top.length  &&  ! top[top.length-1].votes )
 			top.pop();
 		if( top.length ) {
@@ -60,15 +67,16 @@
 		return top;
 	}
 	
-	//function getCandidateDelegates( state, candidate ) {
-	//	var delegates = stateUS.delegates;
-	//	if( ! delegates ) return 0;
-	//	var iCol = delegates.colsById[ 'TabCount-' + candidate.id ];
-	//	var row =
-	//		state == stateUS ? delegates.totals :
-	//		delegates.places[state.abbr];
-	//	return row ? row[iCol] : 0;
-	//}
+	function getCandidateElectoralVotes( state, candidate ) {
+		if( state == stateUS ) {
+			var party = trends.president.parties.by.id[candidate.party];
+			return party ? party.electoralVote : 0;
+		}
+		else {
+			//debugger;
+			return 0;  // TEMP
+		}
+	}
 	
 	function mayHaveResults( result ) {
 		return result && (
@@ -121,7 +129,7 @@
 			( state != stateUS  ||  cacheResults.get( stateUS.electionidPrimaryDelegates ) )  &&
 			cacheResults.get( electionid );
 		if( results ) {
-			gotResultsTable( results );
+			gotResultsTable();
 			return;
 		}
 		
@@ -135,8 +143,8 @@
 		var id = params.source == 'gop' ? e[1] : e[0];
 		
 		getElections(
-			//state == stateUS ?
-			//	[ id, stateUS.electionidPrimaryDelegates ] :
+			state == stateUS ?
+				[ id, electionids.byStateContest( 'US', 'trends' ) ] :
 				[ id ]
 		);
 	}
@@ -273,6 +281,12 @@
 			window.console && console.log( 'No election ID ' + json.electionid );
 			return;
 		}
+		if( eid.electionid == electionids.byStateContest( 'US', 'trends' ) ) {
+			loadTrends( json );
+			gotResultsTable();
+			return;
+		}
+		
 		var state = State( eid.state );
 		var results = json.table;
 /*
@@ -400,14 +414,14 @@
 		delete results.rows;
 		features.didMissingCheck = true;
 		
-		gotResultsTable( results );
+		gotResultsTable();
 		
 		if( missing.length  &&  debug  &&  debug != 'quiet' ) {
 			alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
 		}
 	}
 	
-	function gotResultsTable( results ) {
+	function gotResultsTable() {
 		if( electionsPending.length == 0 )
 			geoReady();
 	}
@@ -443,5 +457,7 @@
 		return trend;
 	}
 	
-	// TEMP:
-	var trends = fixupTrends( trendsJSON );
+	var trends;
+	function loadTrends( json ) {
+		trends = fixupTrends( json );
+	}
