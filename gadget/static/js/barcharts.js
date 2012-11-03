@@ -33,13 +33,13 @@ _.extend( templates, {
 		/*	border-right: none;*/\
 		/*}*/\
 		div.hseg-dem {\
-			background-color: blue;\
+			background-color: {{blue}};\
 		}\
 		div.hseg-ind {\
 			background-color: #444;\
 		}\
 		div.hseg-gop {\
-			background-color: red;\
+			background-color: {{red}};\
 		}\
 		div.hseg-undecided {\
 			background-color: #E0E0E0;\
@@ -72,10 +72,10 @@ _.extend( templates, {
 			line-height: 16px;\
 		}\
 		div.control-pane-dem {\
-			color: blue;\
+			color: {{blue}};\
 		}\
 		div.control-pane-gop {\
-			color: red;\
+			color: {{red}};\
 		}\
 		div.control-pane-delta {\
 			text-align: center;\
@@ -136,7 +136,7 @@ _.extend( templates, {
 });
 
 function renderBarStyles() {
-	return T( 'barStyles' );
+	return T( 'barStyles', color );
 }
 
 function renderControlBar( a ) {
