@@ -14,6 +14,7 @@ loadStrings({
 "clickForLocal": "Cliquez pour obtenir des r\u00e9sultats d\u00e9taill\u00e9s", 
 "controlOfHouse": "", 
 "controlOfSenate": "", 
+"countUndecided": "", 
 "countdownHeading": "R\u00e9sultats en direct dans\u00a0:", 
 "countdownHour": "1\u00a0heure", 
 "countdownHours": "{{hours}}\u00a0heures", 

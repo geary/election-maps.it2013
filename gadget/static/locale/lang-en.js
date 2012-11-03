@@ -14,6 +14,7 @@ loadStrings({
 "clickForLocal": "Click for detailed results", 
 "controlOfHouse": "Control of House", 
 "controlOfSenate": "Control of Senate", 
+"countUndecided": "{{count}} Undecided", 
 "countdownHeading": "Live results in:", 
 "countdownHour": "1 hour", 
 "countdownHours": "{{hours}} hours", 

@@ -14,6 +14,7 @@ loadStrings({
 "clickForLocal": "Klik voor gedetailleerde resultaten", 
 "controlOfHouse": "", 
 "controlOfSenate": "", 
+"countUndecided": "", 
 "countdownHeading": "Live resultaten over:", 
 "countdownHour": "1 uur", 
 "countdownHours": "{{hours}} uur", 

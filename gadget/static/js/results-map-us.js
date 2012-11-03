@@ -1481,10 +1481,10 @@ function usEnabled() {
 			var contest = params.contest;
 			if(
 			   state == stateUS  &&
-			   ( contest == 'house'  ||  contest == 'senate' )
+			   ( contest == 'house'  ||  contest == 'senate'  ||  contest == 'governor' )
 			) {
 				scrollingHTML = renderControlPane(
-					contest == 'house' ? T('controlOfHouse') : T('controlOfSenate'),
+					contest,
 					election.seats[contest],
 					trends[contest]
 				);
