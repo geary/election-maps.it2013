@@ -250,7 +250,7 @@ document.write(
 		'body.tv #maptip div.candidate-percent { font-size:20px; font-weight:bold; }',
 		'#sidebar-scroll { padding:0 4px; }',
 		'tr.legend-candidate td, tr.legend-filler td { border:1px solid white; }',
-		'div.legend-candidate, div.legend-filler { font-size:13px; padding:4px; }',
+		'div.legend-candidate, div.legend-filler { font-size:13px; padding:6px 4px; }',
 		//'body.tv div.legend-candidate, body.tv div.legend-filler { font-size:22px; }',
 		'body.web div.legend-candidate { color:#333; }',
 		'body.tv div.legend-candidate, body.tv div.legend-filler { font-size:21px; font-weight:bold; }',
@@ -1509,7 +1509,8 @@ function usEnabled() {
 				);
 			}
 			else {
-				var topCandidates = getTopCandidates( results, -1, 'votes' );
+				var sortBy = ( params.contest == 'president' ? 'electoralVotes' : 'votes' );
+				var topCandidates = getTopCandidates( results, -1, sortBy );
 				var none = ! topCandidates.length;
 				var candidates = _.map( topCandidates, formatSidebarCandidate );
 				var top = none ? '' : formatSidebarTopCandidates( topCandidates.slice( 0, 4 ) );
@@ -1564,22 +1565,32 @@ function usEnabled() {
 	}
 	
 	function formatSidebarTopCandidates( topCandidates ) {
-		var colors = _.map( topCandidates, function( candidate ) {
-			var party = election.parties[candidate.party];
-			var color = party && party.color || '#FFFFFF';  // TEMP
-			return color;
-		});
+		//var colors = _.map( topCandidates, function( candidate ) {
+		//	var party = election.parties[candidate.party];
+		//	var color = party && party.color || '#FFFFFF';  // TEMP
+		//	return color;
+		//});
 		var selected = currentCandidate ? '' : ' selected';
 		return S(
 			'<tr class="legend-candidate', selected, '" id="legend-candidate-top">',
+				//'<td class="left">',
+				//	'<div class="legend-candidate">',
+				//		formatSpanColorPatch( colors, 2 ),
+				//	'</div>',
+				//'</td>',
 				'<td class="left">',
 					'<div class="legend-candidate">',
-						formatSpanColorPatch( colors, 2 ),
+						T('candidate'),
 					'</div>',
 				'</td>',
-				'<td colspan="3" class="right">',
-					'<div class="legend-candidate">',
-						T('allCandidates'),
+				'<td>',
+					'<div class="legend-candidate" style="font-size:70%; text-align:center; white-space:pre;">',
+						T('popularVote'),
+					'</div>',
+				'</td>',
+				'<td class="right">',
+					'<div class="legend-candidate" style="font-size:70%; white-space:pre;">',
+						T('electoral'),
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1590,26 +1601,37 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var party = election.parties[candidate.party];
 		var color = party && party.color || '#FFFFFF';  // TEMP
+		var boldEV = candidate.electoralVotes ? 'font-weight:bold; ' : '';
 		return S(
 			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
-				'<td class="left">',
-					'<div class="legend-candidate">',
-						formatSpanColorPatch( color, 8 ),
-					'</div>',
-				'</td>',
+				//'<td class="left">',
+				//	'<div class="legend-candidate">',
+				//		formatSpanColorPatch( color, 8 ),
+				//	'</div>',
+				//'</td>',
 				'<td>',
-					'<div class="legend-candidate">',
-						candidate.lastName,
+					'<div class="legend-candidate" style="color:', color, '">',
+						'<div>',
+							candidate.firstName,
+						'</div>',
+						'<div style="font-weight:bold;">',
+							candidate.lastName,
+						'</div>',
 					'</div>',
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate" style="text-align:right;">',
-						formatPercent( candidate.vsAll ),
+						'<div style="xfont-size:110%; font-weight:bold;">',
+							formatPercent( candidate.vsAll ),
+						'</div>',
+						'<div>',
+							formatNumber( candidate.votes ),
+						'</div>',
 					'</div>',
 				'</td>',
 				'<td class="right">',
-					'<div class="legend-candidate" style="text-align:right;">',
-						formatNumber( candidate.votes ),
+					'<div class="legend-candidate" style="font-size:110%; ', boldEV, 'text-align:right; color:', color, '">',
+						candidate.electoralVotes,
 					'</div>',
 				'</td>',
 			'</tr>'
