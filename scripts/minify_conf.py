@@ -6,6 +6,7 @@ jsFiles = [
 	'scriptino.js',
 	'elections-us.js',
 	'results-templates-us.js',
+	'barcharts.js',
 	'results-map-us.js',
 	'results-data-us.js',
 ]

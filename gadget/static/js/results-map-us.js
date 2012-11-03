@@ -261,6 +261,7 @@ document.write(
 		'body.hidelogo #google-logo { display:none; }',
 		'body.ie7 #gop-logo, body.ie7 #ap-logo { right:4px; }',
 		'body.ie7 #google-logo, body.ie7 #linkToMap { display:none; }',
+		renderBarStyles(),
 	'</style>'
 );
 
@@ -1454,13 +1455,10 @@ function usEnabled() {
 	
 	function formatSidebar() {
 		// TODO: refactor with formatTopbar()
-		var resultsHeaderHTML = '';
-		var resultsScrollingHTML = '';
+		var headerHTML = '';
+		var scrollingHTML = '';
 		var results = state.getResults();
 		if( results ) {
-			var topCandidates = getTopCandidates( results, -1, 'votes' );
-			var none = ! topCandidates.length;
-			var top = none ? '' : formatSidebarTopCandidates( topCandidates.slice( 0, 4 ) );
 			var test = testFlag( results );
 			var viewUSA = usEnabled() ? S(
 				'<div style="padding-bottom:6px;">',
@@ -1469,7 +1467,7 @@ function usEnabled() {
 					'</a>',
 				'</div>'
 			) : '';
-			resultsHeaderHTML = S(
+			headerHTML = S(
 				'<div id="percent-reporting" class="body-text">',
 					T( 'percentReporting', totalReporting( state.getResults() ) ),
 				'</div>',
@@ -1480,16 +1478,32 @@ function usEnabled() {
 				'</div>',
 				viewUSA
 			);
-			var candidates = _.map( topCandidates, formatSidebarCandidate );
-			resultsScrollingHTML = none ? '' : S(
-				formatCandidateList(
-					[ top ].concat( candidates ),
-					function( candidate ) {
-						return candidate;
-					},
-					false
-				)
-			);
+			var contest = params.contest;
+			if(
+			   state == stateUS  &&
+			   ( contest == 'house'  ||  contest == 'senate' )
+			) {
+				scrollingHTML = renderControlPane(
+					contest == 'house' ? T('controlOfHouse') : T('controlOfSenate'),
+					election.seats[contest],
+					trends[contest]
+				);
+			}
+			else {
+				var topCandidates = getTopCandidates( results, -1, 'votes' );
+				var none = ! topCandidates.length;
+				var candidates = _.map( topCandidates, formatSidebarCandidate );
+				var top = none ? '' : formatSidebarTopCandidates( topCandidates.slice( 0, 4 ) );
+				scrollingHTML = none ? '' : S(
+					formatCandidateList(
+						[ top ].concat( candidates ),
+						function( candidate ) {
+							return candidate;
+						},
+						false
+					)
+				);
+			}
 		}
 		var linkHTML = !(
 			params.usa ||
@@ -1520,11 +1534,11 @@ function usEnabled() {
 						'</div>',
 					'</div>',
 					'<div id="sidebar-results-header">',
-						resultsHeaderHTML,
+						headerHTML,
 					'</div>',
 				'</div>',
 				'<div xclass="scroller" id="sidebar-scroll">',
-					resultsScrollingHTML,
+					scrollingHTML,
 				'</div>',
 			'</div>'
 		);

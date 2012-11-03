@@ -412,3 +412,36 @@
 			geoReady();
 	}
 	
+	function fixupTrends( trendsIn ) {
+		var trends = {};
+		_.each( trendsIn.results, function( trendItem ) {
+			for( var key in trendItem ) {
+				trends[key] = fixupTrend( trendItem[key] );
+			}
+		});
+		// temp
+		if( trends.governors ) {
+			trends.governor = trends.governors;
+			delete trends.governors;
+		}
+		// end temp
+		return trends;
+	}
+	
+	function fixupTrend( trend ) {
+		trend.parties = [];
+		_.each( trend.rows, function( row ) {
+			var party = {};
+			_.each( trend.cols, function( key, i ) {
+				party[key] = row[i];
+			});
+			trend.parties.push( party );
+		});
+		delete trend.cols;
+		delete trend.rows;
+		indexArray( trend.parties, 'id' );
+		return trend;
+	}
+	
+	// TEMP:
+	var trends = fixupTrends( trendsJSON );
