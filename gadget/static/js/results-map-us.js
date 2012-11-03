@@ -1097,7 +1097,7 @@ function usEnabled() {
 			// Single candidate heatmap
 			var max = 0;
 			var candidate = candidates[currentCandidate];
-			var party = election.parties[candidate.party];
+			var party = candidate && election.parties[candidate.party];
 			var color = party && party.color || '#FFFFFF';  // TEMP
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var result = featureResult( results, feature );
