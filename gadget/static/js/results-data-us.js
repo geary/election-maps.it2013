@@ -351,11 +351,9 @@
 				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
 					row[iCol] = 0;
 				}
-				row[cols.TabTotal] = 0;
-				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
 				row[cols.NumCountedBallotBoxes] = 0;
 			}
-			else {
+			//else {
 				var candidates = [];
 				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
 					var party = row[iCol+3];
@@ -406,7 +404,7 @@
 				//totals[col.TabTotal] += row[col.TabTotal];
 				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
 				//totals[col.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
-			}
+			//}
 			//row.candidateMax = candidateMax;
 		}
 		results.oldtemp = { cols: results.cols, rows: results.rows };  // TEMP debugging
