@@ -347,15 +347,15 @@
 			//if( /^\d\d000$/.test(id) ) rowsByID[id.slice(0,2)] = row;
 			//var nCandidates = candidates.length;
 			var totalVotes = 0, maxVotes = 0,  iMaxVotes = -1;
-			//if( zero ) {
-			//	for( iCol = -1;  ++iCol < nCandidates; ) {
-			//		row[iCol] = 0;
-			//	}
-			//	row[col.TabTotal] = 0;
-			//	totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
-			//	row[col.NumCountedBallotBoxes] = 0;
-			//}
-			//else {
+			if( zero ) {
+				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
+					row[iCol] = 0;
+				}
+				row[cols.TabTotal] = 0;
+				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
+				row[cols.NumCountedBallotBoxes] = 0;
+			}
+			else {
 				var candidates = [];
 				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
 					var party = row[iCol+3];
@@ -406,7 +406,7 @@
 				//totals[col.TabTotal] += row[col.TabTotal];
 				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
 				//totals[col.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
-			//}
+			}
 			//row.candidateMax = candidateMax;
 		}
 		results.oldtemp = { cols: results.cols, rows: results.rows };  // TEMP debugging
