@@ -426,19 +426,25 @@
 			geoReady();
 	}
 	
+	var presByState = 'Presidential results by State';
+	
 	function fixupTrends( trendsIn ) {
+		function change( from, to ) {
+			if( trends[from] ) {
+				trends[to] = trends[from];
+				delete trends[from];
+			}
+		}
 		var trends = {};
-		_.each( trendsIn.results, function( trendItem ) {
-			for( var key in trendItem ) {
-				trends[key] = fixupTrend( trendItem[key] );
+		_.each( trendsIn.results, function( trend ) {
+			if( trend.name == presByState )
+				trends.states = fixupTrendStates( trend.states );
+			else
+				for( var key in trend ) {
+					trends[key] = fixupTrend( trend[key] );
 			}
 		});
-		// temp
-		if( trends.governors ) {
-			trends.governor = trends.governors;
-			delete trends.governors;
-		}
-		// end temp
+		change( 'governors', 'governor' );
 		return trends;
 	}
 	
@@ -455,6 +461,14 @@
 		delete trend.rows;
 		indexArray( trend.parties, 'id' );
 		return trend;
+	}
+	
+	function fixupTrendStates( statesIn ) {
+		var states = {}
+		_.each( statesIn, function( state ) {
+			states[state.id] = state;
+		});
+		return states;
 	}
 	
 	var trends;
