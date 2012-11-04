@@ -66,7 +66,6 @@ _.extend( templates, {
 			text-align: center;\
 		}\
 		div.control-pane-total {\
-			//text-align: center;\
 			font-weight: bold;\
 			font-size: 16px;\
 			line-height: 16px;\
@@ -78,7 +77,6 @@ _.extend( templates, {
 			color: {{red}};\
 		}\
 		div.control-pane-delta {\
-			//text-align: center;\
 			font-size: 12px;\
 		}\
 		td.control-pane-barchart {\
