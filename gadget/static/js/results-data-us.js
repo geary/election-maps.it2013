@@ -353,59 +353,51 @@
 				}
 				row[cols.NumCountedBallotBoxes] = 0;
 			}
-			//else {
-				var candidates = [];
-				for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
-					var party = row[iCol+3];
-					if( ! party ) break;
-					if( ! parties[party] ) {
-						params.debug && window.console && console.log( party );
-						parties[party] = { color: '#808080' };
-					}
-					var firstName = row[iCol+1], lastName = row[iCol+2];
-					var id = firstName + ' ' + lastName, votes = row[iCol];
-					var candidate = {
+			var candidates = [];
+			for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
+				var party = row[iCol+3];
+				if( ! party ) break;
+				if( ! parties[party] ) {
+					params.debug && window.console && console.log( party );
+					parties[party] = { color: '#808080' };
+				}
+				var firstName = row[iCol+1], lastName = row[iCol+2];
+				var id = firstName + ' ' + lastName, votes = row[iCol];
+				var candidate = {
+					id: id,
+					votes: votes,
+					firstName: firstName,
+					lastName: lastName,
+					party: party
+				};
+				if( ! allCandidates[id] ) {
+					allCandidates[id] = {
 						id: id,
-						votes: votes,
+						votes: 0,
 						firstName: firstName,
 						lastName: lastName,
 						party: party
 					};
-					if( ! allCandidates[id] ) {
-						allCandidates[id] = {
-							id: id,
-							votes: 0,
-							firstName: firstName,
-							lastName: lastName,
-							party: party
-						};
-					}
-					allCandidates[id].votes += votes;
-					//totals[iCol] += count;
-					totalVotes += votes;
-					if( maxVotes < votes ) {
-						maxVotes = votes;
-						iMaxVotes = candidates.length;
-					}
-					candidates.push( candidate );
 				}
-				indexArray( candidates, 'id' );
-				var result = {
-					id: row[colsID],
-					precincts: row[cols.NumBallotBoxes],
-					counted: row[cols.NumCountedBallotBoxes],
-					votes: totalVotes,
-					//winner: /* needs to be calculated */,
-					candidates: candidates,
-					iMaxVotes: iMaxVotes
-				};
-				places[result.id] = result;
-				
-				//totals[col.TabTotal] += row[col.TabTotal];
-				//totals[col.NumBallotBoxes] += row[col.NumBallotBoxes];
-				//totals[col.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
-			//}
-			//row.candidateMax = candidateMax;
+				allCandidates[id].votes += votes;
+				totalVotes += votes;
+				if( maxVotes < votes ) {
+					maxVotes = votes;
+					iMaxVotes = candidates.length;
+				}
+				candidates.push( candidate );
+			}
+			indexArray( candidates, 'id' );
+			var result = {
+				id: row[colsID],
+				precincts: row[cols.NumBallotBoxes],
+				counted: row[cols.NumCountedBallotBoxes],
+				votes: totalVotes,
+				//winner: /* needs to be calculated */,
+				candidates: candidates,
+				iMaxVotes: iMaxVotes
+			};
+			places[result.id] = result;
 		}
 		results.oldtemp = { cols: results.cols, rows: results.rows };  // TEMP debugging
 		delete results.cols;
