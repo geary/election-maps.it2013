@@ -1486,9 +1486,12 @@ function usEnabled() {
 					'</a>',
 				'</div>'
 			) : '';
+			var reporting = totalReporting( state.getResults() );
 			headerHTML = S(
 				'<div id="percent-reporting" class="body-text">',
-					T( 'percentReporting', totalReporting( state.getResults() ) ),
+					reporting.counted == 0 ?
+						T( 'waitingForVotes' ) :
+						T( 'percentReporting', reporting ),
 				'</div>',
 				'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
 					test ? 'color:red; font-weight:bold;' : '',
