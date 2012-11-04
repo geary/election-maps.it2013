@@ -1075,7 +1075,9 @@ function usEnabled() {
 					//feature.fillColor = hatch ? { image: candidate.pattern } : candidate.color;
 					var party = election.parties[candidate.party];
 					feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
-					feature.fillOpacity = .6;
+					feature.fillOpacity =
+						candidate.winner ? .6 :
+						.3 * result.counted / result.precincts;
 				}
 				else {
 					if( hatch ) {
