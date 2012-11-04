@@ -1077,7 +1077,7 @@ function usEnabled() {
 					feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
 					feature.fillOpacity =
 						candidate.winner ? .6 :
-						.3 * result.counted / result.precincts;
+						.1 + .3 * result.counted / result.precincts;
 				}
 				else {
 					if( hatch ) {
