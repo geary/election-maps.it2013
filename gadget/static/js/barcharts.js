@@ -33,13 +33,13 @@ _.extend( templates, {
 		/*	border-right: none;*/\
 		/*}*/\
 		div.hseg-dem {\
-			background-color: {{blue}};\
+			background-color: {{dem}};\
 		}\
 		div.hseg-ind {\
-			background-color: #444;\
+			background-color: {{ind}};\
 		}\
 		div.hseg-gop {\
-			background-color: {{red}};\
+			background-color: {{gop}};\
 		}\
 		div.hseg-undecided {\
 			background-color: #E0E0E0;\
@@ -71,10 +71,10 @@ _.extend( templates, {
 			line-height: 16px;\
 		}\
 		div.control-pane-dem {\
-			color: {{blue}};\
+			color: {{dem}};\
 		}\
 		div.control-pane-gop {\
-			color: {{red}};\
+			color: {{gop}};\
 		}\
 		div.control-pane-delta {\
 			font-size: 12px;\
