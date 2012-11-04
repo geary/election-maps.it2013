@@ -41,6 +41,7 @@ loadStrings({
 "electionResults": "", 
 "electoral": "", 
 "electoralVotes": "", 
+"electoralVotesAbbr": "", 
 "electoralVotesUndecided": "", 
 "featureSelect": "", 
 "finalResults": "R\u00e9sultats Finaux", 
