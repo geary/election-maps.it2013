@@ -339,7 +339,7 @@
 			var votes = row[cols.TabTotal];
 			var precincts = row[cols.NumBallotBoxes];
 			var counted = row[cols.NumCountedBallotBoxes];
-			var winner = row[cols.Winner];
+			var winner = !! row[cols.Winner];
 			if( state.geo ) {
 				var feature = features.by[id];
 				if( ! feature ) {
@@ -372,6 +372,7 @@
 				var candidate = {
 					id: id,
 					votes: votes,
+					winner: winner,
 					firstName: firstName,
 					lastName: lastName,
 					party: party
