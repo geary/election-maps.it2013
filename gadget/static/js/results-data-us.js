@@ -108,6 +108,8 @@
 	
 	var cacheResults = new Cache;
 	
+	var resultsTimer = {};
+	
 	function getResults() {
 		var electionid =
 			electionids.byStateContest( state.abbr, params.contest );
@@ -129,7 +131,7 @@
 			( state != stateUS  ||  cacheResults.get( stateUS.electionidPrimaryDelegates ) )  &&
 			cacheResults.get( electionid );
 		if( results ) {
-			gotResultsTable();
+			gotResultsTable( electionid );
 			return;
 		}
 		
@@ -154,6 +156,7 @@
 		electionLoading = electionids[0];
 		electionsPending = [].concat( electionids );
 		_.each( electionids, function( electionid ) {
+			resultsTimer[electionid] = { start: now() };
 			var url = S(
 				'https://pollinglocation.googleapis.com/results?',
 				'electionid=', electionid,
@@ -273,6 +276,7 @@
 	};
 	
 	function loadResultTable( json ) {
+		resultsTimer[json.electionid].fetch = now();
 		//var counties = isCountyTEMP( json );
 		cacheResults.add( json.electionid, json, opt.resultCacheTime );
 		
@@ -283,7 +287,7 @@
 		}
 		if( eid.electionid == electionids.byStateContest( 'US', 'trends' ) ) {
 			loadTrends( json );
-			gotResultsTable();
+			gotResultsTable( json.electionid );
 			return;
 		}
 		
@@ -404,16 +408,30 @@
 		delete results.rows;
 		features.didMissingCheck = true;
 		
-		gotResultsTable();
+		gotResultsTable( json.electionid );
 		
 		if( missing.length  &&  debug  &&  debug != 'quiet' ) {
 			alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
 		}
 	}
 	
-	function gotResultsTable() {
+	function gotResultsTable( electionid ) {
+		logResultsTimes( electionid );
 		if( electionsPending.length == 0 )
 			geoReady();
+	}
+	
+	function logResultsTimes( electionid ) {
+		function n( n ) { return ( n / 1000 ).toFixed( 3 ); }
+		if( params.debug  &&  window.console  &&  console.log ) {
+			var t = resultsTimer[electionid];
+			t.process = now();
+			console.log( S(
+				'electionid ', electionid,
+				' get:', n( t.fetch - t.start ),
+				' process:', n( t.process - t.fetch )
+			) );
+		}
 	}
 	
 	var presByState = 'Presidential results by State';
