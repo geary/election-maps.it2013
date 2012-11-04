@@ -68,6 +68,7 @@
 	}
 	
 	function getCandidateElectoralVotes( stateName, candidate ) {
+		if( ! stateName  &&  state != stateUS ) stateName = state.name;
 		if( stateName ) {
 			var parties = trends.states[stateName].parties;
 			if( ! parties.by ) indexArray( parties, 'id' );
