@@ -62,11 +62,11 @@ _.extend( templates, {
 			font-size: 12px;\
 		}\
 		td.control-pane-side {\
-			width: 35px;\
+			width: 40px;\
 			text-align: center;\
 		}\
 		div.control-pane-total {\
-			text-align: center;\
+			//text-align: center;\
 			font-weight: bold;\
 			font-size: 16px;\
 			line-height: 16px;\
@@ -78,7 +78,7 @@ _.extend( templates, {
 			color: {{red}};\
 		}\
 		div.control-pane-delta {\
-			text-align: center;\
+			//text-align: center;\
 			font-size: 12px;\
 		}\
 		td.control-pane-barchart {\
@@ -112,7 +112,7 @@ _.extend( templates, {
 				<tr valign="top">\
 					<td class="control-pane-side">\
 						<div class="control-pane-total control-pane-dem">\
-							{{dem.total}}\
+							{{dem.seats}}\
 						</div>\
 						<div class="control-pane-delta">\
 							({{dem.delta}})\
@@ -121,9 +121,9 @@ _.extend( templates, {
 					<td class="control-pane-barchart">\
 						{{{barchart}}}\
 					</td>\
-					<td class="control-pane-bar-side">\
+					<td class="control-pane-side">\
 						<div class="control-pane-total control-pane-gop">\
-							{{gop.total}}\
+							{{gop.seats}}\
 						</div>\
 						<div class="control-pane-delta">\
 							({{gop.delta}})\
@@ -142,13 +142,13 @@ function renderBarStyles() {
 function renderControlBar( a ) {
 	var n = {
 		segs: [
-			{ classes: 'hseg-dem hseg-pattern', value: a.demKeep || 0 },
-			{ classes: 'hseg-dem', value: a.dem || 0 },
-			{ classes: 'hseg-ind hseg-pattern', value: a.indKeep || 0 },
-			{ classes: 'hseg-ind', value: a.ind || 0 },
+			{ classes: 'hseg-dem hseg-pattern', value: a.dem.keep || 0 },
+			{ classes: 'hseg-dem', value: a.dem.seats || 0 },
+			{ classes: 'hseg-ind hseg-pattern', value: a.ind.keep || 0 },
+			{ classes: 'hseg-ind', value: a.ind.seats || 0 },
 			{ classes: 'hseg-undecided', value: a.undecided || 0 },
-			{ classes: 'hseg-gop', value: a.gop || 0 },
-			{ classes: 'hseg-gop hseg-pattern', value: a.gopKeep || 0 }
+			{ classes: 'hseg-gop', value: a.gop.seats || 0 },
+			{ classes: 'hseg-gop hseg-pattern', value: a.gop.keep || 0 }
 		],
 		notch: a.notch,
 		width: a.width
@@ -172,44 +172,44 @@ function renderNotchBar( a ) {
 	});
 
 	return T( 'notchBar', {
-		width: a.width,
+		width: a.width + 1,
 		segments: segments,
 		notch: notch
 	});
 }
 
-function renderControlPane( contest, seats, trends ) {
+function renderControlPane( contest, seats, trend ) {
 	var title = 
 		contest == 'house' ? T('controlOfHouse') :
 		contest == 'senate' ? T('controlOfSenate') :
 		T('governor');
 	var subtitle =
-		contest == 'governor' ? T( 'countUndecided', { count: trends.undecided } ) :
+		contest == 'governor' ? T( 'countUndecided', { count: trend.undecided } ) :
 		T( 'balanceOfPower', { count: Math.ceil( seats.total / 2 ) } );
-	var party = trends.parties.by.id;
+	var party = trend.parties.by.id;
 	function partyGet( id, prop ) { return party[id] && party[id][prop] || 0; }
 	function partySeats( id ) { return partyGet( id, 'seats' ); }
 	function partyDelta( id ) { return partyGet( id, 'delta' ); }
 	function notElecting( id ) { return seats.notElecting && seats.notElecting[id] || 0 }
-	var bar = renderControlBar({
-		demKeep: notElecting('Dem'),
-		indKeep: notElecting('Ind'),
-		gopKeep: notElecting('GOP'),
-		dem: partySeats( 'Dem' ),
-		ind: partySeats( 'Ind' ),
-		gop: partySeats( 'GOP' ),
-		width: 180,
-		notch: contest != 'governor'
-	});
-	bar.undecided = seats.total - bar.dem - bar.ind - bar.gop;
-	var center = seats.total / 2;
-	return T( 'controlPane', {
+	function partyStuff( id ) {
+		return {
+			delta: partyDelta(id),
+			seats: partySeats(id),
+			keep: notElecting(id),
+		};
+	}
+	var v = {
 		title: title,
 		subtitle: subtitle,
-		dem: { total: partySeats('Dem'), delta: partyDelta('Dem') },
-		ind: { total: partySeats('Ind'), delta: partyDelta('Ind') },
-		gop: { total: partySeats('GOP'), delta: partyDelta('GOP') },
-		barchart: bar
-	});
+		dem: partyStuff( 'Dem' ),
+		gop: partyStuff( 'GOP' ),
+		ind: partyStuff( 'Ind' ),
+		undecided: trend.undecided,
+		width: 165,
+		notch: contest != 'governor'
+	};
+	v.barchart = renderControlBar( v );
+	//var center = seats.total / 2;
+	return T( 'controlPane', v );
 }
 
