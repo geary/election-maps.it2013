@@ -43,7 +43,7 @@
 			candidate.vsAll = candidate.votes / result.votes;
 			if( sortBy == 'electoralVotes' ) {
 				candidate.electoralVotes =
-					getCandidateElectoralVotes( result.state || stateUS, candidate );
+					getCandidateElectoralVotes( result.id, candidate );
 			}
 			//candidate.total = total;
 		});
@@ -67,14 +67,16 @@
 		return top;
 	}
 	
-	function getCandidateElectoralVotes( state, candidate ) {
-		if( state == stateUS ) {
-			var party = trends.president.parties.by.id[candidate.party];
-			return party ? party.electoralVote : 0;
+	function getCandidateElectoralVotes( stateName, candidate ) {
+		if( stateName ) {
+			var parties = trends.states[stateName].parties;
+			if( ! parties.by ) indexArray( parties, 'id' );
+			var party = parties.by.id[candidate.party];
+			return party && party.ev || 0;
 		}
 		else {
-			//debugger;
-			return 0;  // TEMP
+			var party = trends.president.parties.by.id[candidate.party];
+			return party ? party.electoralVote : 0;
 		}
 	}
 	
@@ -291,8 +293,8 @@
 			return;
 		}
 		
-		var state = State( eid.state );
 		var results = json.table;
+		var state = results.state = State( eid.state );
 /*
 		var isDelegates = ( json.electionid == state.electionidPrimaryDelegates );
 		if( isDelegates )

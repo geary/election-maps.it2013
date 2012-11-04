@@ -243,7 +243,7 @@ document.write(
 		'table.candidates td { border-top:1px solid #E7E7E7; }',
 		'#maptip table.candidates { width:100%; }',
 		'#maptip table.candidates tr.first td { border-top:none; }',
-		'#maptip div.candidate-delegates { font-size:130%; font-weight:bold; }',
+		'#maptip div.candidate-delegates { font-size:120%; }',
 		'#maptip div.candidate-percent { font-weight:bold; }',
 		'#maptip div.candidate-votes { font-size:80%; }',
 		'#maptip div.click-for-local { padding:4px; }',
@@ -1604,7 +1604,6 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var party = election.parties[candidate.party];
 		var color = party && party.color || '#FFFFFF';  // TEMP
-		var boldEV = candidate.electoralVotes ? 'font-weight:bold; ' : '';
 		return S(
 			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
 				//'<td class="left">',
@@ -1633,8 +1632,8 @@ function usEnabled() {
 					'</div>',
 				'</td>',
 				'<td class="right">',
-					'<div class="legend-candidate" style="font-size:110%; ', boldEV, 'text-align:right; color:', color, '">',
-						candidate.electoralVotes,
+					'<div class="legend-candidate" style="font-size:110%; text-align:right; color:', color, '">',
+						boldNonzero( candidate.electoralVotes ),
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1653,7 +1652,7 @@ function usEnabled() {
 					T('votes'),
 				'</th>',
 				'<th style="text-align:right; padding-bottom:4px;">',
-					state == stateUS  &&  view != 'county' ? T('delegatesAbbr') : '',
+					state == stateUS  &&  params.contest == 'president' ? T('electoralVotesAbbr') : '',
 				'</th>',
 			'</tr>'
 		) : '';
@@ -1706,7 +1705,7 @@ function usEnabled() {
 				'<td class="right" style="text-align:right; padding-left:6px;">',
 					state == stateUS  &&  view != 'county' ? S(
 						'<div class="candidate-delegates">',
-							candidate.delegates,
+							boldNonzero( candidate.electoralVotes ),
 						'</div>'
 					) : '',
 				'</td>',
@@ -1756,7 +1755,12 @@ function usEnabled() {
 		if( mayHaveResults(result) ) {
 			result.fips = fips;
 			result.state = st;
-			top = getTopCandidates( results, result, 'votes', /*useSidebar ? 0 :*/ 4 );
+			var sortBy = (
+				state == stateUS  &&  params.contest == 'president' ?
+				'electoralVotes' :
+				'votes'
+			);
+			top = getTopCandidates( results, result, sortBy, /*useSidebar ? 0 :*/ 4 );
 			var content = S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, true ),
@@ -1883,6 +1887,10 @@ function usEnabled() {
 	
 	function formatPercent( n ) {
 		return percent1( n, T('decimalSep') );
+	}
+	
+	function boldNonzero( n ) {
+		return n ? S( '<b>', n, '</b>' ) : n;
 	}
 	
 	function setState( s, why ) {
