@@ -1479,7 +1479,7 @@ function usEnabled() {
 		var results = state.getResults();
 		if( results ) {
 			var test = testFlag( results );
-			var viewUSA = usEnabled() ? S(
+			var viewUSA = viewUsEnabled() ? S(
 				'<div style="padding-bottom:6px;">',
 					'<a href="#" id="viewUSA" title="', T('titleViewUSA'), '" style="">',
 						T('viewUSA'),
