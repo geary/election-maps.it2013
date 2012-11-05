@@ -291,7 +291,7 @@ document.write(
 	'</div>',
 	'<div id="maptip">',
 	'</div>',
-	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/apelections" title="', 'dataAttribTitle'.T(), '">',
+	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/associatedpress" title="', 'dataAttribTitle'.T(), '">',
 	'</a>',
 	'<a id="gop-logo" class="logo" target="_blank" href="http://www.nvgopcaucus.com/" title="', 'dataAttribTitleGOP'.T(), '">',
 	'</a>',
