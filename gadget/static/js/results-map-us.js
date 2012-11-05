@@ -733,6 +733,7 @@ function usEnabled() {
 		// TODO: refactor with duplicate code in resizeViewNow()
 		setSidebar();
 		setLegend();
+		showHiddenCandidatesIfToggled();
 		resizeViewOnly();
 		if( geoMoveNext ) {
 			geoMoveNext = false;
@@ -751,6 +752,13 @@ function usEnabled() {
 		if( ! didGeoReady ) {
 			setPlayback();
 			didGeoReady = true;
+		}
+	}
+
+	// Shows all tr.zero Candidate rows if params.showall is 'true'.
+	function showHiddenCandidatesIfToggled() {
+		if (params.showall == 'true') {
+			$('tr.zero').show();
 		}
 	}
 	
@@ -1568,8 +1576,8 @@ function usEnabled() {
 					),
 					getElectoralVotesFlavorTextHTML(params.contest, state),
 					'<div style="padding:4px;">',
-						'<a href="#" id="showAllCandidates">',
-							T('showAllCandidates'),
+						'<a href="#" id="toggleShowAllCandidates">',
+							formatToggleCandidatesText(),
 						'</a>',
 					'</div>'
 				);
@@ -1620,6 +1628,17 @@ function usEnabled() {
 		return '';
 	}
 	
+	// Returns 'Show all candidates' or 'Show fewer candidates' based on current
+	// state of params.
+	function formatToggleCandidatesText() {
+		if (params.showall == 'true') {
+			return T('showFewerCandidates');
+		} else {
+			// Also catches undefined (initial state of params.showall)
+			return T('showAllCandidates');
+		}
+	}
+
 	function formatSidebarTopCandidates( topCandidates ) {
 		//var colors = _.map( topCandidates, function( candidate ) {
 		//	var party = election.parties[candidate.party];
@@ -1657,8 +1676,7 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var party = election.parties[candidate.party];
 		var color = party && party.color || '#FFFFFF';  // TEMP
-		var zero =
-			params.showall || (
+		var zero = (
 				candidate.electoralVotes  ||
 				candidate.party == 'GOP'  ||
 				candidate.party == 'Dem'
@@ -2118,11 +2136,16 @@ function usEnabled() {
 			}
 		});
 		
-		$legend.delegate( '#showAllCandidates', {
+		$legend.delegate( '#toggleShowAllCandidates', {
 			click: function( event ) {
-				params.showall = 'true';
-				$(this).hide();
-				$('table.candidates tr.zero').show();
+				if (params.showall == 'true') {
+					params.showall = 'false';
+					$('table.candidates tr.zero').hide();
+				} else {
+					params.showall = 'true';
+					$('table.candidates tr.zero').show();
+				}
+				$(this).html(formatToggleCandidatesText());
 				event.preventDefault();
 			}
 		});
