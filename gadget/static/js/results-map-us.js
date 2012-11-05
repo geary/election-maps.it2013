@@ -55,7 +55,7 @@ states.by.nameEN = states.by.name;
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
 	state.name = T( 'state-' + state.abbr );
-	//state.electionTitle = state.name + ' 2012';
+	state.electionTitle = state.name + ' 2012';
 	state.results = {};
 }
 
@@ -161,7 +161,7 @@ document.body.scroll = 'no';
 document.write(
 	'<style type="text/css">',
 		'html, body { width:', ww, 'px; height:', wh, 'px; margin:0; padding:0; overflow:hidden; color:#222; background-color:white; }',
-		'#sidebar, #maptip, #testlabel { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
+		'#sidebar, #maptip, #testlabel, a.button { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
 		'a { font-size:13px; text-decoration:none; color:#1155CC; }',
 		'a:hover { text-decoration:underline; }',
 		//'a:visited { color:#6611CC; }',
@@ -214,6 +214,7 @@ document.write(
 		'#maptip { position:absolute; z-index:10; border:1px solid #333; background:white; color:#222; white-space: nowrap; display:none; width:300px; }',
 		'div.candidate-name { line-height:1em; }',
 		'div.first-name { font-size:85%; }',
+		'#election-title { padding-left:3px; }',
 		'body.tv #election-title { font-size:24px; font-weight:bold; }',
 		'body.tv #election-date { font-size:16px; color:#222; }',
 		'body.tv #percent-reporting { font-size:20px; }',
@@ -342,34 +343,48 @@ document.write(
 );
 
 function contentTable() {
+	function button( contest ) {
+		return S(
+			'<a class="button',
+				params.contest == contest ? ' selected' : '',
+				'" id="btn-', contest,
+			'">',
+				T( contest + 'Button' ),
+			'</a>'
+		);
+	}
 	return S(
 		'<div>',
 			'<div id="selectors">',
 				'<div style="margin:0; padding:6px;">',
-					//'<label for="stateSelector">',
-					//	T('stateLabel'),
-					//'</label>',
-					'<select id="stateSelector">',
-						option( 'US00', T('state-US') ),
-						mapjoin(
-							sortArrayBy( stateUS.geo.state.features, 'name' ),
-							function( s, i ) {
-								return stateOption(
-									s, i + 1, s.abbr == state.abbr
-								);
-							}),
-					'</select>',
-					'&nbsp;&nbsp;',
-					//'&nbsp;&nbsp;&nbsp;',
-					'<select id="contestSelector">',
-						contestOption( 'president', T('president') ),
-						contestOption( 'senate', T('senate') ),
-						contestOption( 'house', T('house') ),
-						contestOption( 'governor', T('governor') ),
-					'</select>',
-					//'<input type="checkbox" id="chkCounties">',
-					//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
+					[ 'president', 'senate', 'house', 'governor' ]
+						.map( button ).join( '&nbsp;&nbsp;&nbsp;' ),
 				'</div>',
+				//'<div style="margin:0; padding:6px;">',
+				//	//'<label for="stateSelector">',
+				//	//	T('stateLabel'),
+				//	//'</label>',
+				//	//'<select id="stateSelector">',
+				//	//	option( 'US00', T('state-US') ),
+				//	//	mapjoin(
+				//	//		sortArrayBy( stateUS.geo.state.features, 'name' ),
+				//	//		function( s, i ) {
+				//	//			return stateOption(
+				//	//				s, i + 1, s.abbr == state.abbr
+				//	//			);
+				//	//		}),
+				//	//'</select>',
+				//	//'&nbsp;&nbsp;',
+				//	////'&nbsp;&nbsp;&nbsp;',
+				//	//'<select id="contestSelector">',
+				//	//	contestOption( 'president', T('president') ),
+				//	//	contestOption( 'senate', T('senate') ),
+				//	//	contestOption( 'house', T('house') ),
+				//	//	contestOption( 'governor', T('governor') ),
+				//	//'</select>',
+				//	//'<input type="checkbox" id="chkCounties">',
+				//	//'<label for="chkCounties">', T('countiesCheckbox'), '</label>',
+				//'</div>',
 			'</div>',
 			'<div id="legend">',
 				formatLegendTable( [] ),
@@ -1573,11 +1588,9 @@ function usEnabled() {
 		return S(
 			'<div id="sidebar">',
 				'<div class="sidebar-header">',
-					//'<div style="float:left;">',
-					//	'<div id="election-title" class="title-text">',
-					//		state.electionTitle,
-					//	'</div>',
-					//'</div>',
+					'<div id="election-title" class="title-text">',
+						state.electionTitle,
+					'</div>',
 					'<div id="sidebar-results-header">',
 						headerHTML,
 					'</div>',
@@ -1930,8 +1943,8 @@ function usEnabled() {
 		stopCycle();
 		if( s == stateUS ) currentCandidate = 0;
 		state = s;
-		var select = $('#stateSelector')[0];
-		if( select ) select.selectedIndex = state.selectorIndex;
+		//var select = $('#stateSelector')[0];
+		//if( select ) select.selectedIndex = state.selectorIndex;
 		//opt.state = state.abbr.toLowerCase();
 		geoMoveNext = true;
 		//setCounties( state.fips != '00' );
@@ -2013,34 +2026,44 @@ function usEnabled() {
 		//}
 	}
 	
-	function enableStateContests() {
-		var okSelection = true;
-		$('#stateSelector option').each( function( i, option ) {
-			if( ! option.value ) return;
-			var enable = params.contest == 'house'  ||
-				!! electionids.byStateContest( option.value, params.contest );
-			enableOption( option, enable );
-			if( ! enable  &&  option.selected ) {
-				okSelection = false;
-			}
-		});
-		if( ! okSelection ) {
-			setState( '00', 'select' );
-		}
-	}
+	//function enableStateContests() {
+	//	var okSelection = true;
+	//	$('#stateSelector option').each( function( i, option ) {
+	//		if( ! option.value ) return;
+	//		var enable = params.contest == 'house'  ||
+	//			!! electionids.byStateContest( option.value, params.contest );
+	//		enableOption( option, enable );
+	//		if( ! enable  &&  option.selected ) {
+	//			okSelection = false;
+	//		}
+	//	});
+	//	if( ! okSelection ) {
+	//		setState( '00', 'select' );
+	//	}
+	//}
 	
 	function initSelectors() {
 		
 		//setState( opt.state );
 		
-		$('#stateSelector').bindSelector( 'change keyup', function() {
-			setState( this.value, 'select' );
-		});
+		//$('#stateSelector').bindSelector( 'change keyup', function() {
+		//	setState( this.value, 'select' );
+		//});
 		
 		$('#contestSelector').bindSelector( 'change keyup', function() {
 			params.contest = this.value;
-			enableStateContests();
+			//enableStateContests();
 			loadView();
+		});
+		
+		var $selectors = $('#selectors');
+		$selectors.delegate( 'a.button', {
+			click: function( event ) {
+				params.contest = this.id.split('-')[1];
+				$selectors.find('a.button').removeClass( 'selected' );
+				$(this).addClass( 'selected' );
+				loadView();
+			}
 		});
 		
 		//$('#chkCounties').click( function() {
