@@ -755,9 +755,21 @@ function usEnabled() {
 		}
 	}
 
+	function shouldShowToggleShowAllCandidatesLink() {
+		return params.contest == 'president' && state.abbr == 'US';
+	}
+
+	// Returns true if user toggled show all candidates, or if race is not
+	// presidential race.
+	function shouldShowAllCandidates() {
+		return params.showall == 'true' ||
+				params.contest != 'president' ||
+				(params.contest == 'president' && state.abbr.toLowerCase() != 'us');
+	}
+
 	// Shows all tr.zero Candidate rows if params.showall is 'true'.
 	function showHiddenCandidatesIfToggled() {
-		if (params.showall == 'true') {
+		if (shouldShowAllCandidates()) {
 			$('tr.zero').show();
 		}
 	}
@@ -1575,11 +1587,7 @@ function usEnabled() {
 						false
 					),
 					formatElectoralVotesFlavorTextHTML(params.contest, state),
-					'<div style="padding:4px;">',
-						'<a href="#" id="toggleShowAllCandidates">',
-							formatToggleCandidatesText(),
-						'</a>',
-					'</div>'
+					formatToggleCandidatesLinkHTML()
 				);
 			}
 		}
@@ -1630,15 +1638,25 @@ function usEnabled() {
 		return '';
 	}
 	
-	// Returns 'Show all candidates' or 'Show fewer candidates' based on current
-	// state of params.
-	function formatToggleCandidatesText() {
-		if (params.showall == 'true') {
-			return T('showFewerCandidates');
-		} else {
-			// Also catches undefined (initial state of params.showall)
-			return T('showAllCandidates');
+	// Returns HTML for toggle show all candidates link, using text 
+	// 'Show all candidates' or 'Show fewer candidates' based on current
+	// state of params.  If we shouldn't show the link, hides it.
+	function formatToggleCandidatesLinkHTML() {
+		if (shouldShowToggleShowAllCandidatesLink()) {
+			console.log(params.showall);
+			return S(
+				'<div style="padding:4px;">',
+					'<a href="#" id="toggleShowAllCandidates">',
+						formatToggleCandidatesText(),
+					'</a>',
+				'</div>'
+			);
 		}
+		return '';
+	}
+
+	function formatToggleCandidatesText() {
+		return params.showall == 'true' ? T('showFewerCandidates') : T('showAllCandidates');
 	}
 
 	function formatSidebarTopCandidates( topCandidates ) {
