@@ -70,6 +70,7 @@ loadStrings({
 "municipality": "Municipality", 
 "national": "National", 
 "neverVotesHere": "This location does not report voting results", 
+"noElectionHere": "No election this year", 
 "noLocal": "Detailed results not available", 
 "noVotesHere": "This location has not reported voting results", 
 "oneDistrict": "{{name}} (one district)", 
