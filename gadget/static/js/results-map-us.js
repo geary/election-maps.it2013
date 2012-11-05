@@ -1064,27 +1064,15 @@ function usEnabled() {
 		var candidates = results && results.candidates;
 		if( !( candidates && currentCandidate ) ) {
 			// Multi-candidate view
-			var hatches =
-				state == stateUS  &&  (
-					params.contest == 'senate'  ||  params.contest == 'governor'
-				);
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var result = featureResult( results, feature );
 				var candidate = result && result.candidates[result.iMaxVotes];
-				var hatched = false;
-				if( hatches ) {
-					var seats = election.seats[params.contest];
-					var notElecting = seats && seats.notElecting;
-					if( notElecting ) {
-						var party = notElecting.states[ State(feature.fips).abbr ];
-						if( party ) {
-							feature.fillColor = { image: pattern[ party.toLowerCase() ] };
-							feature.fillOpacity = .6;
-							hatched = true;
-						}
-					}
+				var party = noElectionParty( feature.fips );
+				if( party ) {
+					feature.fillColor = { image: pattern[ party.toLowerCase() ] };
+					feature.fillOpacity = .6;
 				}
-				if( ! hatches ) {
+				else {
 					if( candidate ) {
 						var party = election.parties[candidate.party];
 						feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
@@ -1133,6 +1121,19 @@ function usEnabled() {
 				feature.strokeWidth = strokeWidth;
 			}
 		}
+	}
+	
+	function noElectionParty( fips ) {
+		if( state != stateUS )
+			return null;
+		if( params.contest != 'senate'  &&  params.contest != 'governor' )
+			return null;
+		var seats = election.seats[params.contest];
+		if( ! seats )
+			return null;
+		if( ! seats.notElecting )
+			return null;
+		return seats.notElecting.states[ State(fips).abbr ];
 	}
 	
 	function useInset() {
