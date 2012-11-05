@@ -1565,7 +1565,7 @@ function usEnabled() {
 						},
 						false
 					),
-					'<div class="small-text" style="padding:8px 4px 4px 4px;">',
+					'<div class="small-text faint-text" style="padding:8px 4px 4px 4px;">',
 						T( 'electoralVotesToWin', { count: election.seats.electoralVotesToWin } ),
 					'</div>',
 					'<div style="padding:4px;">',
