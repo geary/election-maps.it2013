@@ -4,7 +4,7 @@
 # By Michael Geary - http://mg.to/
 # See UNLICENSE or http://unlicense.org/ for public domain notice.
 
-import logging, pprint
+import logging, pprint, re
 from urlparse import urlparse
 
 from google.appengine.api import urlfetch
@@ -17,6 +17,7 @@ import private
 
 FT_URL = 'http://fusiontables.googleusercontent.com/fusiontables/api/query?'
 
+TLD = re.compile( r'\w+$' )
 
 def dumpRequest( req ):
 	return pprint.pformat({
@@ -28,9 +29,9 @@ def dumpRequest( req ):
 
 def checkReferer( req, required ):
 	ver = req.environ['CURRENT_VERSION_ID'].split('.')[0]
-	if ver == 'nv2012': return True
-	if ver == 'fr2012': return True
-	if ver == 'nl2012': return True
+	#if ver == 'nv2012': return True
+	#if ver == 'fr2012': return True
+	#if ver == 'nl2012': return True
 	return checkRefererURL( req.headers.get('Referer'), required )
 
 
@@ -53,15 +54,23 @@ def checkRefererURL( referer, required ):
 
 
 def checkParsedURL( good, url ):
-	return(
-		( good.scheme == ''  or  url.scheme == good.scheme )
-			and
-		( good.hostname is None  or  url.hostname.endswith(good.hostname) )
-			and
-		( good.port is None  or  url.port == good.port )
-			and
-		( good.path is None  or  url.path.startswith(good.path) )
-	)
+	if good.scheme:
+		if url.scheme != good.scheme:
+			return False
+	if good.hostname:
+		if good.hostname.endswith( '.' ):
+			if not re.sub( TLD, '', url.hostname ).endswith( good.hostname ):
+				return False
+		else:
+			if not url.hostname.endswith( good.hostname ):
+				return False
+	if good.port:
+		if url.port != good.port:
+			return False
+	if good.path:
+		if not url.path.startswith( good.path ):
+			return False
+	return True
 
 
 class VoteDataHandler( webapp.RequestHandler ):
