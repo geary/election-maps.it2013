@@ -85,6 +85,7 @@ loadStrings({
 "round1": "Ronda 1", 
 "round2": "Ronda 2", 
 "senate": "Senado", 
+"showAllCandidates": "Mostrar todos los candidatos", 
 "state-AK": "Alaska", 
 "state-AL": "Alabama", 
 "state-AR": "Arkansas", 

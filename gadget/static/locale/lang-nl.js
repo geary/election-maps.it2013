@@ -85,6 +85,7 @@ loadStrings({
 "round1": "Eerste ronde", 
 "round2": "Tweede ronde", 
 "senate": "", 
+"showAllCandidates": "", 
 "state-AK": "Alaska", 
 "state-AL": "Alabama", 
 "state-AR": "Arkansas", 

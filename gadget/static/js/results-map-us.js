@@ -239,6 +239,7 @@ document.write(
 		'body.sidebar #selectors, body.sidebar #legend { width:', sidebarWidth, 'px; }',
 		'#sidebar table.candidates { width:100%; }',
 		'table.candidates td { border-top:1px solid #E7E7E7; }',
+		'table.candidates tr.zero { display:none; }',
 		'#maptip table.candidates { width:100%; }',
 		'#maptip table.candidates tr.first td { border-top:none; }',
 		'#maptip div.candidate-delegates { font-size:120%; }',
@@ -1533,7 +1534,12 @@ function usEnabled() {
 							return candidate;
 						},
 						false
-					)
+					),
+					'<div style="padding:4px;">',
+						'<a href="#" id="showAllCandidates">',
+							T('showAllCandidates'),
+						'</a>',
+					'</div>'
 				);
 			}
 		}
@@ -1613,8 +1619,14 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var party = election.parties[candidate.party];
 		var color = party && party.color || '#FFFFFF';  // TEMP
+		var zero =
+			params.showall || (
+				candidate.electoralVotes  ||
+				candidate.party == 'GOP'  ||
+				candidate.party == 'Dem'
+			) ? '' : ' zero';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '">',
+			'<tr class="legend-candidate', selected, zero, '" id="legend-candidate-', candidate.id, '">',
 				//'<td class="left">',
 				//	'<div class="legend-candidate">',
 				//		formatSpanColorPatch( color, 8 ),
@@ -2056,6 +2068,15 @@ function usEnabled() {
 		$legend.delegate( '#viewUSA', {
 			click: function( event ) {
 				setState( '00', 'return' );
+				event.preventDefault();
+			}
+		});
+		
+		$legend.delegate( '#showAllCandidates', {
+			click: function( event ) {
+				params.showall = 'true';
+				$(this).hide();
+				$('table.candidates tr.zero').show();
 				event.preventDefault();
 			}
 		});
