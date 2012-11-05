@@ -128,8 +128,8 @@ _.extend( templates, {
 						</div>\
 					</td>\
 				</tr>\
-			</tr>\
-		</table>',
+			</table>\
+		</div>',
 	_: ''
 });
 
