@@ -412,17 +412,54 @@
 		delete results.rows;
 		features.didMissingCheck = true;
 		
-		gotResultsTable( json.electionid );
-		
 		if( missing.length  &&  debug  &&  debug != 'quiet' ) {
-			alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
+			if( debug == 'fulltest' ) {
+				allMissing += S(
+					'\n',
+					'Missing locations for ',
+					state.abbr, ' ', params.contest, '\n',
+					missing.sort().join( '\n' ), '\n'
+				);
+			}
+			else {
+				alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
+			}
 		}
+		
+		gotResultsTable( json.electionid );
 	}
 	
 	function gotResultsTable( electionid ) {
 		logResultsTimes( electionid );
-		if( electionsPending.length == 0 )
-			geoReady();
+		if( electionsPending.length == 0 ) {
+			if( params.debug == 'fulltest' )
+				nextElection();
+			else
+				geoReady();
+		}
+	}
+	
+	var eidIndex = 0, allMissing = '';
+	function nextElection() {
+		var eid = electionidlist[++eidIndex];
+		if( eid == '2919|trends|US' ) {
+			finishFullTest();
+		}
+		else {
+			console.log( S(
+				'Loading ', eidIndex+1, ' of ', electionidlist.length - 2
+			) );
+			var f = eid.split('|'), c = f[1], s = f[2];
+			params.contest = c;
+			state = null;
+			setState( s, 'fulltest' );
+		}
+	}
+	
+	function finishFullTest() {
+		console.log( S(
+			allMissing,  '\n\nTest complete!\n'
+		) );
 	}
 	
 	function logResultsTimes( electionid ) {
