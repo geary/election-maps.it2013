@@ -1683,7 +1683,7 @@ function usEnabled() {
 					'</div>',
 				'</td>',
 				'<td class="right">',
-					'<div class="legend-candidate" style="font-size:70%; white-space:pre;">',
+					'<div class="legend-candidate" style="font-size:70%; white-space:pre; text-align: right;">',
 						T('electoral'),
 					'</div>',
 				'</td>',
