@@ -356,9 +356,9 @@ function contentTable() {
 	return S(
 		'<div>',
 			'<div id="selectors">',
-				'<div style="margin:0; padding:6px;">',
+				'<div style="margin:0; padding:4px;">',
 					[ 'president', 'senate', 'house', 'governor' ]
-						.map( button ).join( '&nbsp;&nbsp;&nbsp;' ),
+						.map( button ).join( '&nbsp;&nbsp;' ),
 				'</div>',
 				//'<div style="margin:0; padding:6px;">',
 				//	//'<label for="stateSelector">',
