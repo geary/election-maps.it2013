@@ -764,7 +764,7 @@ function usEnabled() {
 	function shouldShowAllCandidates() {
 		return params.showall == 'true' ||
 				params.contest != 'president' ||
-				(params.contest == 'president' && state.abbr.toLowerCase() != 'us');
+				(params.contest == 'president' && state.abbr != 'US');
 	}
 
 	// Shows all tr.zero Candidate rows if params.showall is 'true'.
@@ -1643,7 +1643,6 @@ function usEnabled() {
 	// state of params.  If we shouldn't show the link, hides it.
 	function formatToggleCandidatesLinkHTML() {
 		if (shouldShowToggleShowAllCandidatesLink()) {
-			console.log(params.showall);
 			return S(
 				'<div style="padding:4px;">',
 					'<a href="#" id="toggleShowAllCandidates">',
