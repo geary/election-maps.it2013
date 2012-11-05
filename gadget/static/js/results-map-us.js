@@ -1565,9 +1565,7 @@ function usEnabled() {
 						},
 						false
 					),
-					'<div class="small-text faint-text" style="padding:8px 4px 4px 4px;">',
-						T( 'electoralVotesToWin', { count: election.seats.electoralVotesToWin } ),
-					'</div>',
+					getElectoralVotesFlavorTextHTML(params.contest, state),
 					'<div style="padding:4px;">',
 						'<a href="#" id="showAllCandidates">',
 							T('showAllCandidates'),
@@ -1606,6 +1604,19 @@ function usEnabled() {
 				'</div>',
 			'</div>'
 		);
+	}
+
+	// Returns flavor text about electoral college votes if we're looking at
+	// presidential race and national map.  Otherwise, blank.
+	function getElectoralVotesFlavorTextHTML(contest, state) {
+		if (contest == 'president' && state == stateUS) {
+			return S(
+				'<div class="small-text faint-text" style="padding:8px 4px 4px 4px;">',
+				T( 'electoralVotesToWin', { count: election.seats.electoralVotesToWin } ),
+				'</div>'
+			);
+		}
+		return '';
 	}
 	
 	function formatSidebarTopCandidates( topCandidates ) {
