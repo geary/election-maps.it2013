@@ -1588,7 +1588,9 @@ function usEnabled() {
 			params.hide_links ||
 			params.embed_state
 		) ? S(
-			'<a href="http://www.google.com/elections/ed/us/results/2012/gop-primary/',
+			'<a href="http://www.google.com/elections/ed/us/results/2012/',
+					params.contest,
+					'/',
 					state.abbr.toLowerCase(),
 					'" target="_parent" id="linkToMap" class="small-text" title="',
 					T('linkToMapTitle'), '">',
