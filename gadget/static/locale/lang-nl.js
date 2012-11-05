@@ -70,6 +70,7 @@ loadStrings({
 "municipality": "", 
 "national": "", 
 "neverVotesHere": "Deze locatie geeft geen stemresultaten door", 
+"noElectionHere": "", 
 "noLocal": "Geen gedetailleerde resultaten beschikbaar", 
 "noVotesHere": "Deze locatie heeft geen stemresultaten doorgegeven", 
 "oneDistrict": "", 

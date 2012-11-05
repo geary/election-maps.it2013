@@ -70,6 +70,7 @@ loadStrings({
 "municipality": "", 
 "national": "", 
 "neverVotesHere": "Ce lieu ne transmet pas de r\u00e9sultats de vote", 
+"noElectionHere": "", 
 "noLocal": "R\u00e9sultats d\u00e9taill\u00e9s non disponibles", 
 "noVotesHere": "Ce lieu n'a pas transmis de r\u00e9sultats de vote", 
 "oneDistrict": "", 

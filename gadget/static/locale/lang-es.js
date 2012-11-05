@@ -70,6 +70,7 @@ loadStrings({
 "municipality": "", 
 "national": "Nacional", 
 "neverVotesHere": "Esta ubicaci\u00f3n no notifica los resultados electorales", 
+"noElectionHere": "No las elecciones de este a\u00f1o\n", 
 "noLocal": "Resultados detallados no est\u00e1 disponible", 
 "noVotesHere": "Esta ubicaci\u00f3n no ha notificado los resultados electorales", 
 "oneDistrict": "{{name}} (un distrito)", 

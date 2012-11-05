@@ -893,6 +893,10 @@ function usEnabled() {
 */
 	}
 	
+	function featureClickOK( feature ) {
+		return feature  &&  ! noElectionParty( feature.fips );
+	}
+	
 	var touch;
 	if( params.touch ) touch = { mouse: true };
 	var polysThrottle = throttle(200), showTipThrottle = throttle(200);
@@ -918,7 +922,11 @@ function usEnabled() {
 					var feature = where && where.feature;
 					if( feature == mouseFeature ) return;
 					mouseFeature = feature;
-					map.setOptions({ draggableCursor: feature ? 'pointer' : null });
+					map.setOptions({
+						draggableCursor: featureClickOK(feature) ?
+							'pointer' :
+							null
+					});
 					outlineFeature( where );
 					showTipThrottle( function() { showTip(feature); });
 				});
@@ -935,6 +943,8 @@ function usEnabled() {
 			},
 			touchend: function( event, where ) {
 				var feature = touch.where && touch.where.feature;
+				if( ! featureClickOK(feature) )
+					feature = null;
 				if( feature != mouseFeature ) {
 					mouseFeature = feature;
 					outlineFeature( touch.where );
@@ -961,13 +971,13 @@ function usEnabled() {
 				events.mousemove( event, where );
 				if( didDrag ) return;
 				var feature = where && where.feature;
-				if( ! feature ) return;
 				if( touch && touch.mouse ) {
 					touch.where = where;
 					this.touchend( event, where );
 				}
 				else {
 					//if( feature.type == 'state'  || feature.type == 'cd' )
+					if( featureClickOK(feature) )
 						setState( feature, 'click' );
 				}
 			}
@@ -1769,8 +1779,6 @@ function usEnabled() {
 		if( ! feature ) return null;
 		var fips = feature.fips;
 		var st = State( feature.fips.slice(0,2) );
-		var diff = now() + times.offset - st.dateUTC;
-		var future = ( diff < 0 );
 		var results = state.getResults();
 		var result = featureResult( results, feature );
 		var top = [];
@@ -1800,8 +1808,8 @@ function usEnabled() {
 				total: boxes,
 				kind: ''
 			}) :
-			future ? longDateFromYMD(st.date) :
-			( state == stateUS  &&  view != 'county' )  ||  ! results ? T('waitingForVotes') :
+			noElectionParty( fips ) ? T('noElectionHere') :
+			state == stateUS  ||  ! results ? T('waitingForVotes') :
 			result ? T('noVotesHere') :
 			T('neverVotesHere');
 		
