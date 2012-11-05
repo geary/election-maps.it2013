@@ -58,7 +58,7 @@ _.extend( templates, {
 		div.hclear {\
 			clear: left;\
 		}\
-		div.control-pane-title, div.control-pane-subtitle, div.control-pane-delta {\
+		div.control-pane-title, div.control-pane-subtitle {\
 			color: #777;\
 		}\
 		div.control-pane-title {\
@@ -83,9 +83,6 @@ _.extend( templates, {
 		}\
 		div.control-pane-gop {\
 			color: {{gop}};\
-		}\
-		div.control-pane-delta {\
-			font-size: 12px;\
 		}\
 		td.control-pane-barchart {\
 			margin-top: 3px;\
@@ -120,9 +117,6 @@ _.extend( templates, {
 						<div class="control-pane-total control-pane-dem">\
 							{{dem.seats}}\
 						</div>\
-						<div class="control-pane-delta">\
-							({{dem.delta}})\
-						</div>\
 					</td>\
 					<td class="control-pane-barchart">\
 						{{{barchart}}}\
@@ -130,9 +124,6 @@ _.extend( templates, {
 					<td class="control-pane-side">\
 						<div class="control-pane-total control-pane-gop">\
 							{{gop.seats}}\
-						</div>\
-						<div class="control-pane-delta">\
-							({{gop.delta}})\
 						</div>\
 					</td>\
 				</tr>\
