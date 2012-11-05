@@ -1574,7 +1574,7 @@ function usEnabled() {
 						},
 						false
 					),
-					getElectoralVotesFlavorTextHTML(params.contest, state),
+					formatElectoralVotesFlavorTextHTML(params.contest, state),
 					'<div style="padding:4px;">',
 						'<a href="#" id="toggleShowAllCandidates">',
 							formatToggleCandidatesText(),
@@ -1617,7 +1617,7 @@ function usEnabled() {
 
 	// Returns flavor text about electoral college votes if we're looking at
 	// presidential race and national map.  Otherwise, blank.
-	function getElectoralVotesFlavorTextHTML(contest, state) {
+	function formatElectoralVotesFlavorTextHTML(contest, state) {
 		if (contest == 'president' && state == stateUS) {
 			return S(
 				'<div class="small-text faint-text" style="padding:8px 4px 4px 4px;">',
