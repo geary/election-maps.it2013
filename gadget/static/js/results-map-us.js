@@ -1506,7 +1506,7 @@ function usEnabled() {
 	}
 	
 	function testFlag( results ) {
-		return debug && results && ( results.mode == 'test'  ||  opt.randomized );
+		return !!( debug && results && ( results.mode == 'test'  ||  opt.randomized ) );
 	}
 	
 	function viewUsEnabled() {
