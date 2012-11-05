@@ -239,8 +239,6 @@ function renderControlPane( contest, seats, trend ) {
 		partyLegend( 'GOP', true, 'legendNotUp' );
 		if( params.contest == 'governor' )
 			partyLegend( 'Ind', true, 'legendNotUp' );
-		else
-			partyLegend( 'DemGOP', true, 'legendNotUp' );
 	}
 	legends.push( T( 'barLegend', {
 		party: 'undecided',

@@ -348,6 +348,7 @@ function contentTable() {
 			'<a class="button',
 				params.contest == contest ? ' selected' : '',
 				'" id="btn-', contest,
+				'" title="', T( 'clickFor-' + contest ),
 			'">',
 				T( contest + 'Button' ),
 			'</a>'
@@ -1616,7 +1617,7 @@ function usEnabled() {
 		//});
 		var selected = currentCandidate ? '' : ' selected';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-top">',
+			'<tr class="legend-candidate', selected, '" id="legend-candidate-top" title="', T('clickForAllCandidatesMap'), '">',
 				//'<td class="left">',
 				//	'<div class="legend-candidate">',
 				//		formatSpanColorPatch( colors, 2 ),
@@ -1652,7 +1653,7 @@ function usEnabled() {
 				candidate.party == 'Dem'
 			) ? '' : ' zero';
 		return S(
-			'<tr class="legend-candidate', selected, zero, '" id="legend-candidate-', candidate.id, '">',
+			'<tr class="legend-candidate', selected, zero, '" id="legend-candidate-', candidate.id, '" title="', T('clickForHeatMap'), '">',
 				//'<td class="left">',
 				//	'<div class="legend-candidate">',
 				//		formatSpanColorPatch( color, 8 ),
