@@ -25,6 +25,11 @@ _.extend( templates, {
 			height: 5px;\
 			background-image: url(images/notch.png);\
 		}\
+		div.hbox {\
+			width:13px;\
+			height:13px;\
+			border: 1px solid white;\
+		}\
 		div.hseg {\
 			border-right: 1px solid white;\
 			float: left;\
@@ -40,6 +45,9 @@ _.extend( templates, {
 		}\
 		div.hseg-gop {\
 			background-color: {{gop}};\
+		}\
+		div.hseg-demgop {\
+			background-color: {{demgop}};\
 		}\
 		div.hseg-undecided {\
 			background-color: #E0E0E0;\
@@ -129,7 +137,24 @@ _.extend( templates, {
 					</td>\
 				</tr>\
 			</table>\
+			<div style="margin:16px 0 4px 8px;">\
+				{{{legends}}}\
+			</div>\
+			<div class="small-text faint-text" style="margin:8px 0 4px 8px;">\
+				{{lighterColors}}\
+			</div>\
 		</div>',
+	barLegend: '\
+		<div style="position:relative; margin-bottom:3px;">\
+			<div class="hbox hseg-{{party}} {{pattern}}" style="float:left; margin-right:4px;">\
+			</div>\
+			<div class="small-text faint-text" style="float:left;">\
+				{{label}}\
+			</div>\
+			<div style="clear:left;">\
+			</div>\
+		</div>\
+	',
 	_: ''
 });
 
@@ -198,6 +223,30 @@ function renderControlPane( contest, seats, trend ) {
 			keep: notElecting(id),
 		};
 	}
+	function partyLegend( party, pattern, label ) {
+		legends.push( T( 'barLegend', {
+			party: party.toLowerCase(),
+			pattern: pattern ? 'hseg-pattern' : '',
+			label: T( label, { party: T( 'partyPlural-' + party ) } )
+		}) );
+	}
+	var legends = [];
+	partyLegend( 'Dem', false, 'wonBy' );
+	partyLegend( 'GOP', false, 'wonBy' );
+	//partyLegend( 'Ind', false, 'wonBy' ),
+	if( params.contest == 'senate'  ||  params.contest == 'governor' ) {
+		partyLegend( 'Dem', true, 'legendNotUp' );
+		partyLegend( 'GOP', true, 'legendNotUp' );
+		if( params.contest == 'governor' )
+			partyLegend( 'Ind', true, 'legendNotUp' );
+		else
+			partyLegend( 'DemGOP', true, 'legendNotUp' );
+	}
+	legends.push( T( 'barLegend', {
+		party: 'undecided',
+		pattern: '',
+		label: T('undecided')
+	}) );
 	var v = {
 		title: title,
 		subtitle: subtitle,
@@ -206,7 +255,9 @@ function renderControlPane( contest, seats, trend ) {
 		ind: partyStuff( 'Ind' ),
 		undecided: trend.undecided,
 		width: 165,
-		notch: contest != 'governor'
+		notch: contest != 'governor',
+		legends: legends.join(''),
+		lighterColors: T('lighterColors')
 	};
 	v.barchart = renderControlBar( v );
 	//var center = seats.total / 2;
