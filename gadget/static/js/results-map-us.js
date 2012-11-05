@@ -326,7 +326,7 @@ document.write(
 	'</div>',
 	'<div id="maptip">',
 	'</div>',
-	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/apelections" title="', T('dataAttribTitle'), '">',
+	'<a id="ap-logo" class="logo" target="_blank" href="http://www.youtube.com/associatedpress" title="', T('dataAttribTitle'), '">',
 	'</a>',
 	'<a id="gop-logo" class="logo" target="_blank" href="http://www.nvgopcaucus.com/" title="', T('dataAttribTitleGOP'), '">',
 	'</a>',
