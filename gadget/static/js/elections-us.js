@@ -148,6 +148,7 @@ var elections = {
 				// Parties for balance of power chart (Ind includes others)
 				validPartiesForBalance: [ 'Dem', 'GOP', 'Ind' ],
 				maxElectoralVotes: 538,
+				electoralVotesToWin: 270,
 				thirdPartyId: "Ind"
 			},
 			parties: {
