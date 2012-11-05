@@ -55,7 +55,7 @@ states.by.nameEN = states.by.name;
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
 	state.name = T( 'state-' + state.abbr );
-	state.electionTitle = T( state.type || 'primary', { name: state.name } );
+	//state.electionTitle = state.name + ' 2012';
 	state.results = {};
 }
 
@@ -161,7 +161,7 @@ document.body.scroll = 'no';
 document.write(
 	'<style type="text/css">',
 		'html, body { width:', ww, 'px; height:', wh, 'px; margin:0; padding:0; overflow:hidden; color:#222; background-color:white; }',
-		'#sidebar, #maptip { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
+		'#sidebar, #maptip, #testlabel { font-family: Arial,sans-serif; font-size: ', opt.fontsize, '; }',
 		'a { font-size:13px; text-decoration:none; color:#1155CC; }',
 		'a:hover { text-decoration:underline; }',
 		//'a:visited { color:#6611CC; }',
@@ -178,6 +178,7 @@ document.write(
 		'div.small-text, a.small-text { font-size:11px; }',
 		'div.topbar-delegates { font-size:21px; line-height:21px; font-weight:bold; }',
 		'body.narrow #topbar div.candidate-name { display:none; }',
+		'#auto-update, #percent-reporting { margin: 0px 0px 8px 2px; }',
 		'.content table { xwidth:100%; }',
 		'.content .contentboxtd { width:7%; }',
 		'.content .contentnametd { xfont-size:24px; xwidth:18%; }',
@@ -232,7 +233,7 @@ document.write(
 		//'#selectors { background-color:#D0E3F8; }',
 		'#selectors, #selectors * { font-size:14px; }',
 		'#selectors label { font-weight:bold; }',
-		'#selectors, #legend { width:100%; border-bottom:1px solid #C2C2C2; }',
+		'#selectors, #legend { width:100%; }',
 		'#selectors option.disabled { color:#BBB; }',
 		'body.sidebar { background-color:white; }',
 		'body.tv #legend { margin-top:8px; }',
@@ -279,6 +280,7 @@ document.write(
 		'body.hidelogo #google-logo { display:none; }',
 		'body.ie7 #gop-logo, body.ie7 #ap-logo { right:4px; }',
 		'body.ie7 #google-logo, body.ie7 #linkToMap { display:none; }',
+		'#testlabel { position:absolute; left: ', sidebarWidth + 32, 'px; top: 2px; font-size: 24px; font-weight:bold; color:red; text-shadow: 0 0 4px white, 0 0 8px white, 0 0 12px white, 0 0 12px white; }',
 		renderBarStyles(),
 	'</style>'
 );
@@ -330,6 +332,9 @@ document.write(
 	'<a id="google-logo" class="logo" target="_blank" href="http://www.google.com/elections/ed/us/home" title="', T('googlePoliticsTitle'), '">',
 	'</a>',
 	'<div id="error" style="display:none;">',
+	'</div>',
+	'<div id="testlabel" style="display:none;">',
+		T('testData'),
 	'</div>',
 	'<div id="spinner">',
 		'<img border="0" style="width:128px; height:128px;" src="', imgUrl('spinner-124.gif'), '" />',
@@ -1500,6 +1505,7 @@ function usEnabled() {
 		var results = state.getResults();
 		if( results ) {
 			var test = testFlag( results );
+			$('#testlabel').css({ color:'red' }).toggle( test );
 			var viewUSA = viewUsEnabled() ? S(
 				'<div style="padding-bottom:6px;">',
 					'<a href="#" id="viewUSA" title="', T('titleViewUSA'), '" style="">',
@@ -1514,10 +1520,8 @@ function usEnabled() {
 					state != stateUS ? T( 'percentReporting', reporting ) :
 					'',
 				'</div>',
-				'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
-					test ? 'color:red; font-weight:bold;' : '',
-				'">',
-					test ? T('testData') : T('automaticUpdate'),
+				'<div id="auto-update" class="subtitle-text">',
+					T('automaticUpdate'),
 				'</div>',
 				viewUSA
 			);
@@ -1569,25 +1573,20 @@ function usEnabled() {
 		return S(
 			'<div id="sidebar">',
 				'<div class="sidebar-header">',
-					'<div id="election-title" class="title-text">',
-						state.electionTitle,
-					'</div>',
-					'<div id="election-date-row" class="" style="margin-bottom:8px; position:relative;">',
-						'<div id="election-date" class="subtitle-text" style="float:left;">',
-							longDateFromYMD( state.date ),
-						'</div>',
-						'<div id="map-link" class="small-text" style="float:right; padding-right:3px;">',
-							linkHTML,
-						'</div>',
-						'<div style="clear:both;">',
-						'</div>',
-					'</div>',
+					//'<div style="float:left;">',
+					//	'<div id="election-title" class="title-text">',
+					//		state.electionTitle,
+					//	'</div>',
+					//'</div>',
 					'<div id="sidebar-results-header">',
 						headerHTML,
 					'</div>',
 				'</div>',
 				'<div class="scroller" id="sidebar-scroll">',
 					scrollingHTML,
+					'<div id="map-link" class="small-text" style="padding:8px 4px 4px 4px;">',
+						linkHTML,
+					'</div>',
 				'</div>',
 			'</div>'
 		);
