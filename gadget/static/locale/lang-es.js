@@ -42,6 +42,7 @@ loadStrings({
 "electoral": "Electorales", 
 "electoralVotes": "Votos electorales", 
 "electoralVotesAbbr": "EVs", 
+"electoralVotesToWin": "{{count}} votos electorales para ganar", 
 "electoralVotesUndecided": "Votos electorales ({{undecided}} indecisos)", 
 "featureSelect": "", 
 "finalResults": "Resultados Finales", 
