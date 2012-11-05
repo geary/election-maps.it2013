@@ -6,6 +6,7 @@ var color = {
 	dem: '#0000EE',
 	gop: '#EE0000',
 	ind: '#592B02',
+	demgop: '#9900FF'
 };
 
 var elections = {
@@ -66,8 +67,51 @@ var elections = {
 				governor: {
 					total: 50,
 					beforeElection: { Dem: 20, GOP: 29, Ind: 1 },
-					notElecting: { Dem: 12, GOP: 26, Ind: 1 },
-					electing: 11
+					electing: 11,
+					notElecting: {
+						parties: { Dem: 12, GOP: 26, Ind: 1 },
+						states: {
+							AK: 'GOP',
+							AL: 'Dem',
+							AR: 'Dem',
+							AZ: 'GOP',
+							CA: 'Dem',
+							CO: 'Dem',
+							CT: 'Dem',
+							FL: 'GOP',
+							GA: 'GOP',
+							HI: 'Dem',
+							IA: 'GOP',
+							ID: 'GOP',
+							IL: 'Dem',
+							KS: 'GOP',
+							KY: 'Dem',
+							LA: 'GOP',
+							MA: 'Dem',
+							MD: 'Dem',
+							ME: 'GOP',
+							MI: 'GOP',
+							MN: 'Dem',
+							MS: 'Dem',
+							MT: 'Dem',
+							NJ: 'GOP',
+							NM: 'GOP',
+							NV: 'GOP',
+							NY: 'Dem',
+							OH: 'GOP',
+							OK: 'GOP',
+							OR: 'Dem',
+							PA: 'GOP',
+							RI: 'Ind',
+							SC: 'GOP',
+							SD: 'GOP',
+							TN: 'GOP',
+							TX: 'GOP',
+							VA: 'GOP',
+							WI: 'GOP',
+							WY: 'GOP'
+						}
+					}
 				},
 				house: {
 					total: 435,
@@ -77,8 +121,29 @@ var elections = {
 				senate: {
 					total: 100,
 					beforeElection: { Dem: 51, GOP: 47, Ind: 2 },
-					notElecting: { Dem: 30, GOP: 37 },
-					electing: 33
+					electing: 33,
+					notElecting: {
+						parties: { Dem: 30, GOP: 37 },
+						states: {
+							AK: 'DemGOP',
+							AL: 'GOP',
+							AR: 'DemGOP',
+							CO: 'Dem',
+							GA: 'GOP',
+							IA: 'DemGOP',
+							ID: 'GOP',
+							IL: 'DemGOP',
+							KS: 'GOP',
+							KY: 'GOP',
+							LA: 'DemGOP',
+							NC: 'DemGOP',
+							NH: 'DemGOP',
+							OK: 'GOP',
+							OR: 'Dem',
+							SC: 'GOP',
+							SD: 'DemGOP'
+						}
+					}
 				},
 				// Parties for balance of power chart (Ind includes others)
 				validPartiesForBalance: [ 'Dem', 'GOP', 'Ind' ],

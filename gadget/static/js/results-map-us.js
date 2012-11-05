@@ -133,20 +133,18 @@ var zoom;
 
 //indexArray( election.candidates, 'id' );
 
-var candidateZero = { id: '0' };
-//loadCandidatePatterns();
+var pattern = {};
+preloadPartyPatterns();
 
-function loadCandidatePatterns( callback ) {
-	var loading = 0;
-	_.each( election.candidates, loadPattern );
-	loadPattern( candidateZero );
-	function loadPattern( candidate ) {
-		++loading;
-		var pattern = candidate.pattern = new Image();
-		pattern.src = imgUrl( 'pattern-' + candidate.id + '.png' );
-		pattern.onload = function() {
-			if( --loading == 0 ) callback && callback();
-		};
+function preloadPartyPatterns( callback ) {
+	//var loading = 0;
+	for( party in color ) {
+		//++loading;
+		var p = pattern[party] = new Image();
+		p.src = imgUrl( 'pattern-' + party + '.png' );
+		//p.onload = function() {
+		//	if( --loading == 0 ) callback && callback();
+		//};
 	}
 }
 
@@ -1061,28 +1059,37 @@ function usEnabled() {
 	}
 	
 	function colorVotes( features, strokeColor, strokeOpacity, strokeWidth ) {
-		var time = now() + times.offset;
 		var results = state.getResults();
 		var candidates = results && results.candidates;
 		if( !( candidates && currentCandidate ) ) {
 			// Multi-candidate view
+			var hatches =
+				state == stateUS  &&  (
+					params.contest == 'senate'  ||  params.contest == 'governor'
+				);
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var result = featureResult( results, feature );
-				var diff = feature && feature.state ? time - feature.state.dateUTC : -1;
-				var hatch = state == stateUS  &&  diff >= 0  &&  diff <= (24+9) * 60 * 60 * 1000;
 				var candidate = result && result.candidates[result.iMaxVotes];
-				if( candidate ) {
-					//feature.fillColor = hatch ? { image: candidate.pattern } : candidate.color;
-					var party = election.parties[candidate.party];
-					feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
-					feature.fillOpacity =
-						candidate.winner ? .6 :
-						.1 + .3 * result.counted / result.precincts;
+				var hatched = false;
+				if( hatches ) {
+					var seats = election.seats[params.contest];
+					var notElecting = seats && seats.notElecting;
+					if( notElecting ) {
+						var party = notElecting.states[ State(feature.fips).abbr ];
+						if( party ) {
+							feature.fillColor = { image: pattern[ party.toLowerCase() ] };
+							feature.fillOpacity = .6;
+							hatched = true;
+						}
+					}
 				}
-				else {
-					if( hatch ) {
-						feature.fillColor = { image: candidateZero.pattern };
-						feature.fillOpacity = .6;
+				if( ! hatches ) {
+					if( candidate ) {
+						var party = election.parties[candidate.party];
+						feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
+						feature.fillOpacity =
+							candidate.winner ? .6 :
+							.1 + .3 * result.counted / result.precincts;
 					}
 					else {
 						feature.fillColor = '#FFFFFF';

@@ -188,7 +188,9 @@ function renderControlPane( contest, seats, trend ) {
 	function partyGet( id, prop ) { return party[id] && party[id][prop] || 0; }
 	function partySeats( id ) { return partyGet( id, 'seats' ); }
 	function partyDelta( id ) { return partyGet( id, 'delta' ); }
-	function notElecting( id ) { return seats.notElecting && seats.notElecting[id] || 0 }
+	function notElecting( id ) {
+		return seats.notElecting && seats.notElecting.parties[id] || 0
+	}
 	function partyStuff( id ) {
 		return {
 			delta: partyDelta(id),
