@@ -157,6 +157,7 @@ loadStrings({
 "state-WI": "Wisconsin", 
 "state-WV": "West Virginia", 
 "state-WY": "Wyoming", 
+"stateAbbr-US": "", 
 "tapForLocal": "Appuyez de nouveau pour obtenir des r\u00e9sultats d\u00e9taill\u00e9s", 
 "testData": "DONN\u00c9ES DE TEST", 
 "theNetherlands": "Nederland", 
