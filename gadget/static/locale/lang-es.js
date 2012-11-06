@@ -170,7 +170,7 @@ loadStrings({
 "topbarSubtitle": "1144 para ganar la nominaci\u00f3n", 
 "topbarTitle": "Delegados del GOP", 
 "tseCopyright": "", 
-"undecided": "Indecisos o independientes", 
+"undecided": "Indecisos o Independientes", 
 "viewNational-br": "&laquo; Volver al mapa general de Brazil", 
 "viewNational-fr": "&laquo; Volver al mapa general de France", 
 "viewNational-us": "&laquo; Volver al mapa general de EE.UU.", 
