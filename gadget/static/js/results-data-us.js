@@ -340,7 +340,10 @@
 			var votes = row[cols.TabTotal];
 			var precincts = row[cols.NumBallotBoxes];
 			var counted = row[cols.NumCountedBallotBoxes];
-			var winner = !! row[cols.Winner];
+			var winnerIndex = -1;
+                        if ( row[cols.Winner] ) {
+                          winnerIndex = row[cols.Winner];
+                        }
 			if( state.geo ) {
 				var feature = features.by[id];
 				if( ! feature ) {
@@ -373,7 +376,7 @@
 				var candidate = {
 					id: id,
 					votes: votes,
-					winner: winner,
+					winner: winnerIndex == iCol/4,
 					firstName: firstName,
 					lastName: lastName,
 					party: party
