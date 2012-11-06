@@ -2197,8 +2197,9 @@ function usEnabled() {
 				$(this).addClass( 'selected' );
 
 				// If a user is focused on a state, and they switch to house view,
-				// zoom out to show the US.
-				if (params.contest == 'house') {
+				// or a contest that's not happening in that state, zoom out to show
+				// the US.
+				if (params.contest == 'house' || notElecting(params.contest)) {
 					zoomOutToUSView();
 				}
 
@@ -2397,5 +2398,17 @@ function usEnabled() {
 	) );
 	
 	analytics( 'map', 'load' );
+
+	function notElecting( office ) {
+		if(!(election.seats && election.seats[office] &&
+				election.seats[office].notElecting &&
+				election.seats[office].notElecting.states)) {
+			return false;
+		}
+		if(election.seats[office].notElecting.states[state.abbr]) {
+			return true;
+		}
+		return false;
+	}
 	
 //})( jQuery );
