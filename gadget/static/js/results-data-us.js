@@ -68,7 +68,9 @@
 		var sorter = sortBy;
 		if( sortBy != 'votes' ) {
 			sorter = function( candidate ) {
-				return ( candidate[sortBy] * 1000000000 ) + candidate.votes ;
+				var ev = candidate[sortBy] || 0;
+				if( isNaN(ev) ) ev = 0;  // temp workaround it should not be NaN
+				return ( ev * 1000000000 ) + candidate.votes ;
 			};
 		}
 		top = sortArrayBy( top, sorter, { numeric:true } );
