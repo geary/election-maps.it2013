@@ -55,7 +55,14 @@ states.by.nameEN = states.by.name;
 for( var state, i = -1;  state = states[++i]; ) {
 	state.dateUTC = dateFromYMD( state.date, election.tzHour, election.tzMinute );
 	state.name = T( 'state-' + state.abbr );
-	state.electionTitle = state.name + ' 2012';
+        var stateAbbr = state.abbr;
+        if( state.abbr == 'US' ) {
+          stateAbbr = T( 'stateAbbr-US' );
+        }
+	state.electionTitle = T( 'generalElection', { abbr: stateAbbr } );
+	state.electionSubTitle = T( 'dateFormat', { year: 2012,
+                                                    monthName: T( 'monthName11' ),
+                                                    dayOfMonth: 6 } );
 	state.results = {};
 }
 
@@ -1010,7 +1017,7 @@ function usEnabled() {
 			},
 			click: function( event, where ) {
 				if( params.contest == 'house' ) return;  // TEMP
-				event.stopPropagation();
+				event.stopPropagation && event.stopPropagation();
 				if( touch  &&  ! touch.mouse ) return;
 				mousedown = false;
 				var didDrag = dragged;
@@ -1126,8 +1133,8 @@ function usEnabled() {
 				var candidate = result && result.candidates[result.iMaxVotes];
 				var party = noElectionParty( feature.fips );
 				if( party ) {
-					feature.fillColor = { image: pattern[ party.toLowerCase() ] };
-					feature.fillOpacity = .6;
+					feature.fillColor = { image: pattern.gray };
+					feature.fillOpacity = .3;
 				}
 				else {
 					if( candidate ) {
@@ -1616,6 +1623,9 @@ function usEnabled() {
 				'<div class="sidebar-header">',
 					'<div id="election-title" class="title-text">',
 						state.electionTitle,
+					'</div>',
+					'<div id="auto-update" class="subtitle-text">',
+						state.electionSubTitle,
 					'</div>',
 					'<div id="sidebar-results-header">',
 						headerHTML,
