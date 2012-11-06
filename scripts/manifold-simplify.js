@@ -42,8 +42,8 @@ function ForAllShapes( callback ) {
 	go( '500k', 'county15', '4096' );
 */
 
-	go( '500k', 'gop2012nat', '4096', '32768' );
-	go( '500k', 'gop2012loc', '512', '4096' );
+	go( '500k', 'state', '4096', '32768' );
+	go( '500k', 'county', '512', '4096' );
 }
 
 function RemoveDrawing( shpName ) {
@@ -54,6 +54,7 @@ function RemoveDrawing( shpName ) {
 function ImportShape( shpName ) {
 	var imp = Document.NewImport( 'SHP' );
 	imp.ConvertPolicy = Manifold.ConvertAll;
+	var p = ShapePath(shpName);
 	imp.Import( ShapePath(shpName), PromptNone );
 }
 

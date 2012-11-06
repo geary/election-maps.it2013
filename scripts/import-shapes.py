@@ -30,17 +30,19 @@ def process():
 	db = openDatabase( database )
 	#addSimplificationFunction( db )
 	createSchema( db )
-	loadCongressional( db )
-	#loadStates( db, resolution )
-	#loadCounties( db, resolution )
+	#loadCongressional( db )
+	loadStates( db, resolution )
+	loadCounties( db, resolution )
 	#loadCongressionalPrimaries( db, resolution )
 	#loadCountySubdivisions( db, resolution )
 	#loadCustom( db, resolution )
 	#makeGopNationalTable( db )
 	#makeGopLocalTable( db )
+	saveShapefile( db, resolution, 'state', 'select * from carto2010.state' )
+	saveShapefile( db, resolution, 'county', 'select * from carto2010.county' )
 	#saveShapefile( db, resolution, 'gop2012nat' )
 	#saveShapefile( db, resolution, 'gop2012loc' )
-	saveShapefile( db, resolution, 'house2012', 'select * from carto2010.house2012' )
+	#saveShapefile( db, resolution, 'house2012', 'select * from carto2010.house2012' )
 	closeDatabase( db )
 
 
@@ -281,7 +283,7 @@ def makeGopNationalTable( db ):
 	db.connection.commit()
 
 
-def saveShapefile( db, resolution, table, select ):
+def saveShapefile( db, resolution, table, select=None ):
 	shpfile = 'us2012-%s-%s-full' %( table, resolution )
 	#table = schema + '.' + table
 	db.saveShapefile(

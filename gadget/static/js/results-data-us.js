@@ -266,13 +266,15 @@
 	function featureResult( results, feature ) {
 		if( !( results && feature ) ) return null;
 		var id = feature.id, fips = feature.fips, state = feature.state;
+		var split = fips && fips.split('US');
+		if( split && split[1] ) fips = split[1];
 		//var state = fips.length == 2  &&  states.by.fips[fips];  // TEMP
 		//var abbr = state && state.abbr;  // TEMP
 		//feature.state = state || states.by.fips[ fips.slice(0,2) ];
 		return (
 			results.places[ id ] ||
 			results.places[ fips ] ||
-			results.places[ state.abbr ] ||  // TEMP
+			results.places[ state && state.abbr || '~' ] ||  // TEMP
 			results.places[ feature.name ]  ||
 			results.places[ feature.name + (
 				lsadSuffixes[ ( feature.lsad || '' ).toLowerCase() ]
