@@ -740,7 +740,7 @@ var electionidlist = [
 	'2908|governor|DE',
 	'2909|governor|IN',
 	'2910|governor|MO',
-	'2911|governor|MN',
+	'2911|governor|MT',
 	'2912|governor|NH',
 	'2913|governor|NC',
 	'2914|governor|ND',
