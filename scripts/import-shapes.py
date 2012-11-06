@@ -105,10 +105,11 @@ def loadCongressional( db ):
 	db.loadKML(
 		schema + '.house2012',
 		
-		'../shapes/kml/2012 US Congressional Districts.kml',
+		#'../shapes/kml/2012 US Congressional Districts.kml',
+		'../shapes/kml/us2012-house2012-full-cleaned.kml',
 		#'../shapes/kml/congress-test.kml',
 		
-		'Fusiontables folder', fixCongressionalKML,
+		'Fusiontables folder', None, #fixCongressionalKML,
 		#'''select *, substr(Description,1,2) as 'gov_id', substr(Description,4) as 'dist_id' '''
 		'''select *, Description as 'dist_id' ''',
 		None

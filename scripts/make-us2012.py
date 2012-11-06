@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import pg, private
 
 #import cProfile
@@ -74,7 +75,8 @@ def makeGopDetail():
 def makeHouseNational():
 	db = pg.Database( database = 'usageo_500k' )
 	#level = '4096'
-	for level in '512', '4096':
+	#for level in '512', '4096':
+	for level in ( '2048', ):
 		table = 'house2012_' + level
 		fulltable = schema + '.' + table
 		shpname = 'us2012-house2012-%s' % level
@@ -85,13 +87,40 @@ def makeHouseNational():
 		db.dropTable( fulltable )
 		db.loadShapefile(
 			shpfile, private.TEMP_PATH, fulltable,
-			googGeom, '3857', 'LATIN1', True
+			googGeom, '3857', 'LATIN1', True #, None, tweakHouseSQL
 		)
 		#mergeStates( db, table, level )
 		#writeEachState( db, table, level )
 		writeAllStatesHouse( db, fulltable, level )
 		#db.connection.commit()
 		#db.connection.close()
+
+
+def tweakHouseSQL( sqlfile ):
+	sql = file( sqlfile ).read()
+	sql = re.sub(
+		'"descriptio" varchar\(80\)',
+		'"descriptio" varchar(254)',
+		sql, 1
+	)
+	sql = re.sub(
+		'"dist_id" varchar\(80\)',
+		'"dist_id" varchar(254)',
+		sql, 1
+	)
+	#sql = re.sub(
+	#	'"goog_geom" varchar\(254\)',
+	#	'"not_geom" varchar(254)',
+	#	sql, 1
+	#)
+	#sql = re.sub(
+	#	'"goog_geom",goog_geom',
+	#	'"not_geom",goog_geom',
+	#	sql
+	#)
+	newfile = re.sub( '\.sql$', '-tweak.sql', sqlfile )
+	file( newfile, 'w' ).write( sql )
+	return newfile
 
 
 def makeGopDetail():
@@ -267,9 +296,7 @@ def writeAllStates( db, table, level ):
 
 
 def writeAllStatesHouse( db, fulltable, level ):
-	where = '''
-		substr( dist_id, 1, 2 ) <> 'AS'
-	'''
+	where = 'true'
 	name = 'United States House of Representatives'
 	fips = '00-house'
 	#geoState = db.makeFeatureCollection(

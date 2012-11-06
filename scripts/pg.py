@@ -145,6 +145,15 @@ class Database:
 	def dropTable( self, name ):
 		return self.drop( 'TABLE', name )
 	
+	def dropColumn( self, schema, table, column ):
+		return self.executeCommit('''
+			ALTER TABLE %(schema)s.%(table)s DROP COLUMN IF EXISTS %(column)s;
+		''' % {
+			'schema': schema,
+			'table': table,
+			'column': column
+		})
+	
 	def drop( self, kind, name ):
 		self.executeCommit('''
 			DROP %(kind)s IF EXISTS %(name)s;
@@ -232,6 +241,7 @@ class Database:
 				fixTable()
 			self.addGoogleGeometry( fulltable, fullGeom, googGeom )
 			self.indexGeometryColumn( fulltable, googGeom )
+			self.dropColumn( schema, table, fullGeom )
 		
 		shutil.rmtree( tempdir )
 	
@@ -371,9 +381,7 @@ class Database:
 		if self.columnExists( table, geom ):
 			if not always:
 				return
-			self.execute('''
-				ALTER TABLE %(schema)s.%(table)s DROP COLUMN IF EXISTS %(geom)s;
-			''' % vars )
+			self.dropColumn( schema, table, geom );
 		self.execute('''
 			SELECT
 				AddGeometryColumn(
