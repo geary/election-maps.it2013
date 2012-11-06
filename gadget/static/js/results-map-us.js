@@ -1780,10 +1780,11 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var cls = i === 0 ? ' first' : '';
 		var pct = formatPercent( candidate.vsAll );
-		var star = candidate.winner ? '*' : '';
+		var star = candidate.winner ? '&#10004;' : '';
 		return S(
 			'<tr class="legend-candidate', cls, '" id="legend-candidate-', candidate.id, '">',
 				'<td class="left">',
+					star,
 					election.photos ? S(
 						'<div style="margin:6px 0;">',
 							formatCandidateIcon( candidate, 32 ),
@@ -1799,7 +1800,6 @@ function usEnabled() {
 						'</div>',
 						'<div class="last-name" style="font-weight:bold;">',
 							candidate.lastName,
-							star,
 						'</div>',
 					'</div>',
 				'</td>',
