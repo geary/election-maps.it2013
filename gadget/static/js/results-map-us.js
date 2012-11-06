@@ -2403,12 +2403,9 @@ function usEnabled() {
 		if(!(election.seats && election.seats[office] &&
 				election.seats[office].notElecting &&
 				election.seats[office].notElecting.states)) {
-			return false;
-		}
-		if(election.seats[office].notElecting.states[state.abbr]) {
 			return true;
 		}
-		return false;
+		return !!election.seats[office].notElecting.states[state.abbr];
 	}
 	
 //})( jQuery );
