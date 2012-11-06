@@ -94,6 +94,7 @@ var elections = {
 							MI: 'GOP',
 							MN: 'Dem',
 							MS: 'Dem',
+							NE: 'GOP',
 							NJ: 'GOP',
 							NM: 'GOP',
 							NV: 'GOP',
