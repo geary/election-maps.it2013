@@ -7,6 +7,7 @@ loadStrings({
 "balanceOfPower": "", 
 "br": "Br\u00e9sil", 
 "brSource": "Source: Cour Supr\u00eame \u00c9lectoral", 
+"calledRaceLegend": "", 
 "candidate": "Candidat", 
 "candidates": "Candidats", 
 "caucus": "{{name}} Comit\u00e9 \u00e9lectoral", 

@@ -27,57 +27,84 @@
 		};
 	}
 	
-	function getTopCandidates( results, result, sortBy, max ) {
+	// Return a new array of cloned candidate objects, sorted by a given
+	// key (e.g. electoralVotes) and then by votes, or just by votes. Sort
+	// the result top down and trim to a max length.
+	function getTopCandidates( result, sortBy, max ) {
 		max = max || Infinity;
 		if( ! result ) return [];
-		if( result == -1 ) {
-			var votes = 0, candidates = [];
-			_.each( results.candidates, function( candidate ) {
-				votes += candidate.votes;
-				candidates.push( candidate );
-			});
-			result = { candidates: candidates, votes: votes };
+		
+		// Clone the candidate list
+		var top = [];
+		for( var name in result.candidates ) {
+			// experimenting with clone vs. shallow reference
+			top.push( _.clone( result.candidates[name] ) );
+			//top.push( result.candidates[name] );
 		}
-		var top = result.candidates.slice();
-		_.each( top, function( candidate, i ) {
-			candidate.vsAll = candidate.votes / result.votes;
-			if( sortBy == 'electoralVotes' ) {
-				candidate.electoralVotes =
-					getCandidateElectoralVotes( result.id, candidate );
-			}
-			//candidate.total = total;
+		var total = { votes: 0, electoralVotes: 0 };
+		
+		// Use trends data if applicable, and calculate total votes
+		_.each( top, function( candidate ) {
+			if( state == stateUS  &&  params.contest == 'president' )
+				setCandidateTrendsVotes( result.id, candidate, sortBy );
+			total.votes += candidate.votes;
 		});
+		
+		// Calculate the relative fractions now that the total is available
+		_.each( top, function( candidate ) {
+			candidate.vsAll = candidate.votes / total.votes;
+		});
+		
+		
+		// Sort by a specified property and then by votes, or just by votes
 		var sorter = sortBy;
 		if( sortBy != 'votes' ) {
 			sorter = function( candidate ) {
-				return candidate.votes + ( candidate[sortBy] * 1000000000 );
+				return ( candidate[sortBy] * 1000000000 ) + candidate.votes ;
 			};
 		}
 		top = sortArrayBy( top, sorter, { numeric:true } );
+		
+		// Sort in descending order and trim
 		top = top.reverse().slice( 0, max );
 		while( top.length  &&  ! top[top.length-1].votes )
 			top.pop();
+		
+		// Finally can compare each candidate with the topmost
 		if( top.length ) {
 			var most = top[0].votes;
-			for( var i = -1;  ++i < top.length; ) {
-				var candidate = top[i];
+			_.each( top, function( candidate ) {
 				candidate.vsTop = candidate.votes / most;
-			}
+			});
 		}
+		
 		return top;
 	}
 	
-	function getCandidateElectoralVotes( stateName, candidate ) {
+	function setCandidateTrendsVotes( stateName, candidate, sortBy ) {
+		candidate.electoralVotes = 0;
 		if( ! stateName  &&  state != stateUS ) stateName = state.name;
 		if( stateName ) {
+			// State
 			var parties = trends.states[stateName].parties;
 			if( ! parties.by ) indexArray( parties, 'id' );
 			var party = parties.by.id[candidate.party];
-			return party && party.ev || 0;
+			if( party ) {
+				//console.log( candidate.lastName, candidate.votes, party.pv, party.ev );
+				candidate.votes = party.pv || 0;
+				if( sortBy == 'electoralVotes' )
+					candidate.electoralVotes = party.ev || 0;
+			}
 		}
 		else {
+			// Nationwide
 			var party = trends.president.parties.by.id[candidate.party];
-			return party ? party.electoralVote : 0;
+			if( party ) {
+				//console.log( candidate.lastName, candidate.votes, party.popularVote, party.electoralVote );
+				candidate.votes = party.popularVote;
+				if( sortBy == 'electoralVotes' )
+					candidate.electoralVotes = party.electoralVote;
+			}
 		}
 	}
 	

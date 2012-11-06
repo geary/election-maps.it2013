@@ -7,6 +7,7 @@ loadStrings({
 "balanceOfPower": "", 
 "br": "Brazili\u00eb", 
 "brSource": "Bron: TSE", 
+"calledRaceLegend": "", 
 "candidate": "Kandidaat", 
 "candidates": "Kandidaten", 
 "caucus": "{{name}} Kiescommissie", 
