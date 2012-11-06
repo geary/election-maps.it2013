@@ -964,24 +964,17 @@ function usEnabled() {
 	}
 	
 	function featureClickOK( feature ) {
-		return feature  &&  ! noElectionParty( feature.fips );
+		if( state != stateUS )
+			return false;
+		if( params.contest == 'house' )
+			return false;
+		if( ! feature )
+			return false;
+		if( noElectionParty( feature.fips ) )
+			return false;
+		return true;
 	}
 
-	function isCountyOrCity( where ) {
-		return (where !== null &&
-			where.feature !== null &&
-			where.feature.lsad !== null &&
-			(where.feature.lsad.toLowerCase() == 'county' ||
-				where.feature.lsad.toLowerCase() == 'city'));
-	}
-
-	function shouldIgnoreMapClick( where ) {
-		return ((params.contest == 'president' || params.contest == 'senate') &&
-			isCountyOrCity(where)) ||
-			params.contest == 'house' ||
-			(params.contest == 'governor' && isCountyOrCity(where));
-	}
-	
 	var touch;
 	if( params.touch ) touch = { mouse: true };
 	var polysThrottle = throttle(200), showTipThrottle = throttle(200);
@@ -1047,7 +1040,8 @@ function usEnabled() {
 				showTip( false );
 			},
 			click: function( event, where ) {
-				if( shouldIgnoreMapClick( where )) return;
+				if( ! featureClickOK( where && where.feature ) )
+					return;
 				event.stopPropagation && event.stopPropagation();
 				if( touch  &&  ! touch.mouse ) return;
 				mousedown = false;
