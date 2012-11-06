@@ -170,7 +170,7 @@ loadStrings({
 "topbarSubtitle": "1144 to win the nomination", 
 "topbarTitle": "GOP Delegate Count", 
 "tseCopyright": "", 
-"undecided": "Undecided or independent", 
+"undecided": "Undecided or Independent", 
 "viewNational-br": "&laquo; Back to Brazil Overview Map", 
 "viewNational-fr": "&laquo; Back to France Overview Map", 
 "viewNational-us": "&laquo; Back to U.S. Overview Map", 
