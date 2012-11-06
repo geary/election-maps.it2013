@@ -616,7 +616,7 @@ function usEnabled() {
 			setup: function() {
 			},
 			tick: function() {
-				var topCandidates = getTopCandidates( state.getResults(), -1, 'votes' );
+				var topCandidates = getTopCandidates( state.getResults(), 'votes' );
 				if( ! currentCandidate ) {
 					i = 0;
 				}
@@ -1442,7 +1442,7 @@ function usEnabled() {
 		var candidatesHTML = '';
 		var results = state.delegates;
 		if( results ) {
-			var topCandidates = getTopCandidates( results, -1, 'delegates', 4 );
+			var topCandidates = getTopCandidates( results, 'delegates', 4 );
 			//var top = formatTopbarTopCandidates( topCandidates );
 			var candidates =
 				topCandidates.length ? _.map( topCandidates, formatTopbarCandidate ) :
@@ -1588,7 +1588,7 @@ function usEnabled() {
 			}
 			else {
 				var sortBy = ( params.contest == 'president' ? 'electoralVotes' : 'votes' );
-				var topCandidates = getTopCandidates( results, -1, sortBy );
+				var topCandidates = getTopCandidates( results, sortBy );
 				var none = ! topCandidates.length;
 				var candidates = _.map( topCandidates, formatSidebarCandidate );
 				var top = none ? '' : formatSidebarTopCandidates( topCandidates.slice( 0, 4 ) );
@@ -1876,7 +1876,7 @@ function usEnabled() {
 				'electoralVotes' :
 				'votes'
 			);
-			top = getTopCandidates( results, result, sortBy, /*useSidebar ? 0 :*/ 4 );
+			top = getTopCandidates( result, sortBy, /*useSidebar ? 0 :*/ 4 );
 			var content = S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, true ),
