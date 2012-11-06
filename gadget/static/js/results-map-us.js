@@ -1781,6 +1781,9 @@ function usEnabled() {
 		var cls = i === 0 ? ' first' : '';
 		var pct = formatPercent( candidate.vsAll );
 		var star = candidate.winner ? '&#10004;' : '';
+		var lastName = candidate.lastName == "None of these candidates" ?
+				"None of these" : candidate.lastName;
+
 		return S(
 			'<tr class="legend-candidate', cls, '" id="legend-candidate-', candidate.id, '">',
 				'<td class="left">',
@@ -1799,7 +1802,7 @@ function usEnabled() {
 							candidate.firstName,
 						'</div>',
 						'<div class="last-name" style="font-weight:bold;">',
-							candidate.lastName,
+							lastName,
 						'</div>',
 					'</div>',
 				'</td>',
