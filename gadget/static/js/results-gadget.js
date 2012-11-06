@@ -50,9 +50,9 @@ function setLanguage() {
 	var defaultLanguage = 'en';
 	var supportedLanguages = {
 		en: true,
-		es: true,
+		es: true/*,
 		fr: true,
-		nl: true
+		nl: true*/
 	};
 	var hl = ( params.hl || '' ).toLowerCase();
 	if( ! hl  &&  acceptLanguageHeader != '{{acceptLanguageHeader}}' ) {
