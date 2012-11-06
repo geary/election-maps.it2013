@@ -1836,10 +1836,10 @@ function usEnabled() {
 		if( ! feature ) return '';
 		var s = State( feature );
 		if( params.contest == 'house' ) {
-			// TODO: localize
-			return feature.district == 'AL' ?
-				S( s.name, ' (one district)' ) :
-				S( s.name, ' district ', feature.district );
+			return T( feature.district == 'AL' ? 'oneDistrict' : 'district', {
+				state: s.name,
+				number: feature.district
+			});
 		}
 		var lsad = ( feature.lsad || '' ).toLowerCase();
 		var format = ( s.formats || lsadFormats )[lsad] || 'name';
