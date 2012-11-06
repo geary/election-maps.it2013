@@ -819,8 +819,8 @@ function usEnabled() {
 		//d.county.geo.hittest = false;
 		return [
 			/*state.geo.town,*/
-			state.geo.county,
-			state.geo.state
+			state.geo.county/*,
+			state.geo.state*/
 			/*stateUS.geo.state */
 		];
 	}
@@ -1095,6 +1095,11 @@ function usEnabled() {
 				kind = 'cousub';
 			}
 			if(
+				kind == 'county_512'
+			) {
+				kind = 'county';
+			}
+			if(
 			   kind == 'state00'
 			) {
 				kind = 'state';
@@ -1113,7 +1118,7 @@ function usEnabled() {
 						colorSimple( features, '#FFFFFF', '#444444', 1, 1.5 );
 				},
 				county: function() {
-					colorSimple( features, '#FFFFFF', '#444444', .5, .5 );
+					colorVotes( features, '#666666', 1, 1.5 );
 				},
 				cousub: function() {
 					colorVotes( features, '#666666', .5, .5 );
