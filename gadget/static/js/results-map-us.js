@@ -1904,7 +1904,7 @@ function usEnabled() {
 				'electoralVotes' :
 				'votes'
 			);
-			top = getTopCandidates( result, sortBy, /*useSidebar ? 0 :*/ 4 );
+			top = getTopCandidates( result, sortBy, /*useSidebar ? 0 :*/ 3 );
 			var content = S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, true ),
