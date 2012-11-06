@@ -157,6 +157,7 @@ loadStrings({
 "state-WI": "Wisconsin", 
 "state-WV": "West Virginia", 
 "state-WY": "Wyoming", 
+"stateAbbr-US": "", 
 "tapForLocal": "Tik nogmaals voor gedetailleerde resultaten", 
 "testData": "TESTGEGEVENS", 
 "theNetherlands": "Nederland", 
