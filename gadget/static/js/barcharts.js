@@ -168,8 +168,6 @@ function renderControlBar( a ) {
 		segs: [
 			{ classes: 'hseg-dem hseg-pattern', value: a.dem.keep || 0 },
 			{ classes: 'hseg-dem', value: a.dem.seats || 0 },
-			{ classes: 'hseg-ind hseg-pattern', value: a.ind.keep || 0 },
-			{ classes: 'hseg-ind', value: a.ind.seats || 0 },
 			{ classes: 'hseg-undecided', value: a.undecided || 0 },
 			{ classes: 'hseg-gop', value: a.gop.seats || 0 },
 			{ classes: 'hseg-gop hseg-pattern', value: a.gop.keep || 0 }
@@ -238,8 +236,6 @@ function renderControlPane( contest, seats, trend ) {
 	if( params.contest == 'senate'  ||  params.contest == 'governor' ) {
 		partyLegend( 'Dem', true, 'legendNotUp' );
 		partyLegend( 'GOP', true, 'legendNotUp' );
-		if( params.contest == 'governor' )
-			partyLegend( 'Ind', true, 'legendNotUp' );
 	}
 	legends.push( T( 'barLegend', {
 		party: 'undecided',
@@ -254,7 +250,6 @@ function renderControlPane( contest, seats, trend ) {
 		subtitle: subtitle,
 		dem: partyStuff( 'Dem' ),
 		gop: partyStuff( 'GOP' ),
-		ind: partyStuff( 'Ind' ),
 		undecided: trend.undecided,
 		width: 165,
 		notch: contest != 'governor',
