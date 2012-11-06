@@ -1120,8 +1120,8 @@ function usEnabled() {
 				var candidate = result && result.candidates[result.iMaxVotes];
 				var party = noElectionParty( feature.fips );
 				if( party ) {
-					feature.fillColor = { image: pattern[ party.toLowerCase() ] };
-					feature.fillOpacity = .6;
+					feature.fillColor = { image: pattern.gray };
+					feature.fillOpacity = .3;
 				}
 				else {
 					if( candidate ) {

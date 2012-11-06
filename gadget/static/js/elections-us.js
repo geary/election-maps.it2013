@@ -6,7 +6,8 @@ var color = {
 	dem: '#0000EE',
 	gop: '#EE0000',
 	ind: '#592B02',
-	demgop: '#9900FF'
+	demgop: '#9900FF',
+	gray: '#808080'
 };
 
 var elections = {
