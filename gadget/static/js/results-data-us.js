@@ -36,9 +36,9 @@
 		
 		// Clone the candidate list
 		var top = [];
-		for( var name in result.candidates ) {
+		for( var i = 0; i < result.candidates.length; i++ ) {
 			// experimenting with clone vs. shallow reference
-			top.push( _.clone( result.candidates[name] ) );
+			top.push( _.clone( result.candidates[i] ) );
 			//top.push( result.candidates[name] );
 		}
 		var total = { votes: 0, electoralVotes: 0 };
