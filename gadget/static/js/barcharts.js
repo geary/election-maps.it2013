@@ -211,7 +211,7 @@ function renderControlPane( contest, seats, trend ) {
 		return {
 			delta: partyDelta(id),
 			seats: partySeats(id),
-			keep: notElecting(id),
+			keep: notElecting(id)
 		};
 	}
 	function partyLegend( party, pattern, label ) {
