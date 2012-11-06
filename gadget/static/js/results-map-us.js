@@ -1641,20 +1641,20 @@ function usEnabled() {
 				);
 			}
 		}
-		var linkHTML = !(
-			params.usa ||
-			params.hide_links ||
-			params.embed_state
-		) ? S(
-			'<a href="http://www.google.com/elections/ed/us/results/2012/',
-					params.contest,
-					'/',
-					state.abbr.toLowerCase(),
-					'" target="_parent" id="linkToMap" class="small-text" title="',
-					T('linkToMapTitle'), '">',
-				T('linkToMap'),
-			'</a>'
-		) : '';
+		//var linkHTML = !(
+		//	params.usa ||
+		//	params.hide_links ||
+		//	params.embed_state
+		//) ? S(
+		//	'<a href="http://www.google.com/elections/ed/us/results/2012/',
+		//			params.contest,
+		//			'/',
+		//			state.abbr.toLowerCase(),
+		//			'" target="_parent" id="linkToMap" class="small-text" title="',
+		//			T('linkToMapTitle'), '">',
+		//		T('linkToMap'),
+		//	'</a>'
+		//) : '';
 		return S(
 			'<div id="sidebar">',
 				'<div class="sidebar-header">',
@@ -1670,9 +1670,9 @@ function usEnabled() {
 				'</div>',
 				'<div class="scroller" id="sidebar-scroll">',
 					scrollingHTML,
-					'<div id="map-link" class="small-text" style="padding:8px 4px 4px 4px;">',
-						linkHTML,
-					'</div>',
+					//'<div id="map-link" class="small-text" style="padding:8px 4px 4px 4px;">',
+					//	linkHTML,
+					//'</div>',
 				'</div>',
 			'</div>'
 		);
