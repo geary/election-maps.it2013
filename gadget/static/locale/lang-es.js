@@ -7,7 +7,7 @@ loadStrings({
 "balanceOfPower": "{{count}} Equilibrio de poder", 
 "br": "Brasil", 
 "brSource": "Fuente: Tribunal Supremo Electoral", 
-"calledRaceLegend": "Resultados llamado por AP", 
+"calledRaceLegend": "Resultados declarados por AP", 
 "candidate": "Candidato", 
 "candidates": "Candidatos", 
 "caucus": "Asamblea Partidista de {{name}}", 
