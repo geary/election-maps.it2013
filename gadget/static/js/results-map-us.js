@@ -358,8 +358,8 @@ function contentTable() {
 		'<div>',
 			'<div id="selectors">',
 				'<div style="margin:0; padding:4px;">',
-					[ 'president', 'senate', 'house', 'governor' ]
-						.map( button ).join( '&nbsp;&nbsp;' ),
+					_.map( [ 'president', 'senate', 'house', 'governor' ], button )
+						.join( '&nbsp;&nbsp;' ),
 				'</div>',
 				//'<div style="margin:0; padding:6px;">',
 				//	//'<label for="stateSelector">',
@@ -1004,7 +1004,7 @@ function usEnabled() {
 			},
 			click: function( event, where ) {
 				if( params.contest == 'house' ) return;  // TEMP
-				event.stopPropagation();
+				event.stopPropagation && event.stopPropagation();
 				if( touch  &&  ! touch.mouse ) return;
 				mousedown = false;
 				var didDrag = dragged;
