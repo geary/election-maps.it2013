@@ -2136,6 +2136,7 @@ function usEnabled() {
 				$selectors.find('a.button').removeClass( 'selected' );
 				$(this).addClass( 'selected' );
 				loadView();
+				analytics( 'button', 'contest', params.contest );
 			}
 		});
 		
