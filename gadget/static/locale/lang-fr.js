@@ -53,6 +53,7 @@ loadStrings({
 "featureSelect": "", 
 "finalResults": "R\u00e9sultats Finaux", 
 "frSource": "Source: Minist\u00e8re de l'Int\u00e9rieur", 
+"generalElection": "", 
 "googlePoliticsTitle": "Google\u00a0Politics\u00a0&\u00a0Elections", 
 "governor": "", 
 "governorButton": "", 
