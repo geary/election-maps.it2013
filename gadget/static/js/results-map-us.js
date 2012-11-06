@@ -478,6 +478,7 @@ function usEnabled() {
 			'county'
 		);
 		if( kind == 'county' ) level = '512';  // TEMP
+		if( kind == 'house' ) level = '2048';  // TEMP
 		var fips = s.fips;
 		var json = jsonRegion[fips+kind];
 		if( json ) {
@@ -1088,7 +1089,7 @@ function usEnabled() {
 			}
 			if(
 				kind == 'house2012_512'  ||
-				kind == 'house2012_4096'
+				kind == 'house2012_2048'
 			) {
 				kind = 'house';
 			}
