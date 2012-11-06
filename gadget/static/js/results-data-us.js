@@ -201,11 +201,15 @@
 		electionsPending = [].concat( electionids );
 		_.each( electionids, function( electionid ) {
 			resultsTimer[electionid] = { start: now() };
-			var url = S(
-				'https://pollinglocation.googleapis.com/results?',
-				'electionid=', electionid,
-				'&_=', Math.floor( now() / opt.resultCacheTime )
-			);
+			var url = ( params.results == 'static' ) ?
+				S(
+					'http://election-maps.appspot.com/results/results/', electionid, '.js'
+				) :
+				S(
+					'https://pollinglocation.googleapis.com/results?',
+					'electionid=', electionid,
+					'&_=', Math.floor( now() / opt.resultCacheTime )
+				);
 			getScript( url );
 		});
 	}

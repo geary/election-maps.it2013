@@ -121,6 +121,8 @@ var $window = $(window), ww = $window.width(), wh = $window.height();
 
 var mapPixBounds;
 
+if( params.results == 'static'  &&  ! params.debug )
+	params.debug = 'true';
 var debug = params.debug;
 //opt.state = params.state;
 //opt.counties = !! opt.state;
