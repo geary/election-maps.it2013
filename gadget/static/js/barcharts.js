@@ -156,6 +156,15 @@ _.extend( templates, {
 			</div>\
 		</div>\
 	',
+        electoralVoteBar: '\
+          <div class="legend-candidate-bar">\
+            <div class="legend-candidate-bar-outline">\
+              <div class="legend-candidate-bar-fill"\
+                   style="background-color: {{color}}; width: {{percent}}%;">\
+              </div>\
+            </div>\
+          </div>\
+        ',
 	_: ''
 });
 
