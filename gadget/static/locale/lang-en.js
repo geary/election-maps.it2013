@@ -53,6 +53,7 @@ loadStrings({
 "featureSelect": "Select an area", 
 "finalResults": "Final Results", 
 "frSource": "Source: Ministry of the Interior", 
+"generalElection": "{{abbr}} General Election", 
 "googlePoliticsTitle": "Google Politics & Elections", 
 "governor": "Governor", 
 "governorButton": "Gov.", 
@@ -84,7 +85,7 @@ loadStrings({
 "noElectionHere": "No election this year", 
 "noLocal": "Detailed results not available", 
 "noVotesHere": "This location has not reported voting results", 
-"oneDistrict": "{{name}} (one district)", 
+"oneDistrict": "{{name}} - at large", 
 "partialResults": "Partial Results", 
 "party": "Party", 
 "partyPlural-Dem": "Democrats", 
@@ -156,6 +157,7 @@ loadStrings({
 "state-WI": "Wisconsin", 
 "state-WV": "West Virginia", 
 "state-WY": "Wyoming", 
+"stateAbbr-US": "US", 
 "tapForLocal": "Tap again for detailed results", 
 "testData": "TEST DATA", 
 "theNetherlands": "Netherlands", 
@@ -174,6 +176,6 @@ loadStrings({
 "viewUSA": "&laquo; Back to U.S. Overview Map", 
 "votes": "Votes", 
 "waitingForVotes": "Waiting for Results", 
-"wonBy": "Won by {{party}}", 
+"wonBy": "Called for {{party}}", 
 "wonRound1": "Elected in round 1"
 })
