@@ -165,9 +165,13 @@ document.write(
 		'a { font-size:13px; text-decoration:none; color:#1155CC; }',
 		'a:hover { text-decoration:underline; }',
 		//'a:visited { color:#6611CC; }',
-		'a.button { display:inline-block; cursor:default; background-color:whiteSmoke; background-image:linear-gradient(top,#F5F5F5,#F1F1F1); border:1px solid #DCDCDC; border:1px solid rgba(0,0,0,0.1); border-radius:2px; box-shadow:none; color:#444; font-weight:bold; font-size:11px; height:27px; line-height:27px; padding:0 7px; }',
-		'a.button.hover { background-color: #F6F6F6; background-image:linear-gradient(top,#F8F8F8,#F1F1F1); border:1px solid #C6C6C6; box-shadow:0px 1px 1px rgba(0,0,0,0.1); color:#222; }',
-		'a.button.selected { background-color: #DDD; background-image:linear-gradient(top,#DDD,#D0D0D0); border:1px solid #BBB; box-shadow:inset 0px 1px 2px rgba(0,0,0,0.1); color:#111; }',
+		'a.button { display:inline-block; cursor:default; background-color:whiteSmoke; background-image:linear-gradient(top,#F5F5F5,#F1F1F1); border:1px solid #DCDCDC; border:1px solid rgba(0,0,0,0.1); border-radius:2px; box-shadow:none; color:#444; font-weight:bold; font-size:11px; height:27px; line-height:27px; padding:0 8px; -webkit-transition: all .218s; -moz-transition: all .218s; transition: all .218s;}',
+		'a.button:hover { background-color: #F6F6F6; background-image:linear-gradient(top,#F8F8F8,#F1F1F1); border:1px solid #C6C6C6; box-shadow:0px 1px 1px rgba(0,0,0,0.1); color:#222; z-index: 2; text-decoration: none !important; }',
+		'a.button.selected { background-color: #EEE; background-image:linear-gradient(top,#EEE,#E0E0E0); border:1px solid #CCC; box-shadow:inset 0px 1px 2px rgba(0,0,0,0.1); color:#333; z-index: 2; }',
+                'a.segmented.button { border-radius: 0; padding: 0 16px; }',
+                'a.segmented.button.left { border-radius: 2px 0 0 2px; }',
+                'a.segmented.button.right { border-radius: 0 2px 2px 0; }',
+                'a.segmented.button.left + a.segmented.button, a.segmented.button + a.segmented.button, a.segmented.button.right { margin-left: -1px; }',
 		'#outer {}',
 		'.barvote { font-weight:bold; color:white; }',
 		'div.topbar-header, div.sidebar-header { padding:3px; }',
@@ -232,7 +236,7 @@ document.write(
 		'.tipcontent { padding:4px 8px 8px 8px; border-bottom:1px solid #AAA; }',
 		'.tipreporting { font-size:80%; padding:2px 0; }',
 		//'#selectors { background-color:#D0E3F8; }',
-		'#selectors, #selectors * { font-size:14px; }',
+		// '#selectors, #selectors * { font-size:14px; }',
 		'#selectors label { font-weight:bold; }',
 		'#selectors, #legend { width:100%; }',
 		'#selectors option.disabled { color:#BBB; }',
@@ -343,9 +347,11 @@ document.write(
 );
 
 function contentTable() {
-	function button( contest ) {
+	function button( contest, index, contests ) {
 		return S(
-			'<a class="button',
+			'<a class="segmented button',
+                                index == 0 ? ' left' : '',
+                                index == contests.length - 1 ? ' right' : '',
 				params.contest == contest ? ' selected' : '',
 				'" id="btn-', contest,
 				'" title="', T( 'clickFor-' + contest ),
@@ -359,7 +365,7 @@ function contentTable() {
 			'<div id="selectors">',
 				'<div style="margin:0; padding:4px;">',
 					[ 'president', 'senate', 'house', 'governor' ]
-						.map( button ).join( '&nbsp;&nbsp;' ),
+						.map( button ).join( '' ),
 				'</div>',
 				//'<div style="margin:0; padding:6px;">',
 				//	//'<label for="stateSelector">',
