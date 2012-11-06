@@ -217,7 +217,16 @@ var states = [
 		electionidPrimary: '2511',
 		electionidPrimaryCounties: '2508',
 		electionidPrimaryDelegates: '2510',
-		votesby: 'state'
+		votesby: 'state',
+		fix: {
+			"AK-01": "AK-AL",
+			"DE-01": "DE-AL",
+			"MT-01": "MT-AL",
+			"ND-01": "ND-AL",
+			"SD-01": "SD-AL",
+			"VT-01": "VT-AL",
+			"WY-01": "WY-AL"
+		}
 	},
 	{
 		fips: '01',
