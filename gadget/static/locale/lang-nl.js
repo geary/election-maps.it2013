@@ -53,6 +53,7 @@ loadStrings({
 "featureSelect": "", 
 "finalResults": "Definitieve Resultaten", 
 "frSource": "Bron: Ministerie van Binnenlandse Zaken", 
+"generalElection": "", 
 "googlePoliticsTitle": "Google Politics & Elections", 
 "governor": "", 
 "governorButton": "", 
