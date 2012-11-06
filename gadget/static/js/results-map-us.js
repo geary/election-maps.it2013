@@ -1899,6 +1899,7 @@ function usEnabled() {
 			});
 		}
 		var lsad = ( feature.lsad || '' ).toLowerCase();
+		if( lsad == 'city' ) return feature.name;
 		var format = ( s.formats || lsadFormats )[lsad] || 'name';
 		var name = T( format, { name: feature.name } );
 		return(
