@@ -967,17 +967,19 @@ function usEnabled() {
 		return feature  &&  ! noElectionParty( feature.fips );
 	}
 
-	function isCounty( where ) {
+	function isCountyOrCity( where ) {
 		return (where !== null &&
 			where.feature !== null &&
-			where.feature.lsad == 'County');
+			where.feature.lsad !== null &&
+			(where.feature.lsad.toLowerCase() == 'county' ||
+				where.feature.lsad.toLowerCase() == 'city'));
 	}
 
 	function shouldIgnoreMapClick( where ) {
 		return ((params.contest == 'president' || params.contest == 'senate') &&
-			isCounty(where)) ||
+			isCountyOrCity(where)) ||
 			params.contest == 'house' ||
-			(params.contest == 'governor' && isCounty(where));
+			(params.contest == 'governor' && isCountyOrCity(where));
 	}
 	
 	var touch;
