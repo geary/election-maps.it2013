@@ -7,6 +7,7 @@ loadStrings({
 "balanceOfPower": "", 
 "br": "Brasil", 
 "brSource": "Fonte: Tribunal Superior Eleitoral", 
+"calledRaceLegend": "", 
 "candidate": "Candidato", 
 "candidates": "Candidatos", 
 "caucus": "{{name}} Conven\u00e7\u00e3o partid\u00e1ria", 

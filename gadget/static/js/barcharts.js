@@ -146,6 +146,16 @@ _.extend( templates, {
 			</div>\
 		</div>\
 	',
+	calledRaceBarLegend: '\
+		<div style="position:relative; margin-bottom:3px;">\
+			<div style="float:left; margin-right:4px;"> &#10004;</div>\
+			<div class="small-text faint-text" style="float:left;">\
+				{{label}}\
+			</div>\
+			<div style="clear:left;">\
+			</div>\
+		</div>\
+	',
 	_: ''
 });
 
@@ -236,6 +246,9 @@ function renderControlPane( contest, seats, trend ) {
 		pattern: '',
 		label: T('undecided')
 	}) );
+	legends.push( T( 'calledRaceBarLegend', {
+		label: T('calledRaceLegend')
+	}) );
 	var v = {
 		title: title,
 		subtitle: subtitle,
@@ -252,4 +265,3 @@ function renderControlPane( contest, seats, trend ) {
 	//var center = seats.total / 2;
 	return T( 'controlPane', v );
 }
-
