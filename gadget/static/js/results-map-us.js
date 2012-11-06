@@ -973,7 +973,8 @@ function usEnabled() {
 	function shouldIgnoreMapClick( where ) {
 		return ((params.contest == 'president' || params.contest == 'senate') &&
 			isCounty(where)) ||
-			params.contest == 'house';
+			params.contest == 'house' ||
+			(params.contest == 'governor' && isCounty(where));
 	}
 	
 	var touch;
