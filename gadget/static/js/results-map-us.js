@@ -1718,6 +1718,7 @@ function usEnabled() {
 		//	return color;
 		//});
 		var selected = currentCandidate ? '' : ' selected';
+                var isPres = params.contest == 'president';
 		return S(
 			'<tr class="legend-candidate', /*selected,*/ '" id="legend-candidate-top" title="', T('clickForAllCandidatesMap'), '">',
 				//'<td class="left">',
@@ -1731,16 +1732,18 @@ function usEnabled() {
 						T('candidate'),
 					'</div>',
 				'</td>',
-				'<td>',
+				'<td', !isPres ? ' class="right"' : '', '>',
 					'<div class="legend-candidate" style="text-align:right; white-space:pre;">',
 						T('popularVote'),
 					'</div>',
 				'</td>',
-				'<td class="right">',
-					'<div class="legend-candidate" style="white-space:pre;">',
-						T('electoral'),
-					'</div>',
-				'</td>',
+                                isPres ? S(
+                                  '<td class="right">',
+                                          '<div class="legend-candidate" style="white-space:pre;">',
+                                                  T('electoral'),
+                                          '</div>',
+                                  '</td>'
+                                ) : '',
 			'</tr>'
 		);
 	}
@@ -1754,8 +1757,9 @@ function usEnabled() {
 				candidate.party == 'GOP'  ||
 				candidate.party == 'Dem'
 			) ? '' : ' zero';
-                var presUs = params.contest == 'president' && state == stateUS;
-                var electoralPercent = presUs ? 100 * candidate.electoralVotes / 538 : 0;
+                var isPres = params.contest == 'president';
+                var isPresUs = isPres && state == stateUS;
+                var electoralPercent = isPresUs ? 100 * candidate.electoralVotes / 538 : 0;
                 var winner = candidate.winner;
 		return S(
 			'<tr class="legend-candidate', selected, zero, '" id="legend-candidate-', candidate.id, '" title="', T('clickForHeatMap'), '">',
@@ -1782,7 +1786,7 @@ function usEnabled() {
 						'</div>',
 					'</div>',
 				'</td>',
-				'<td>',
+				'<td', !isPres ? ' class="right"' : '', '>',
 					'<div class="legend-candidate" style="text-align:right;">',
 						'<div class="legend-candidate-primary">',
 							formatPercent( candidate.vsAll ),
@@ -1792,14 +1796,16 @@ function usEnabled() {
 						'</div>',
 					'</div>',
 				'</td>',
-				'<td class="right">',
-					'<div class="legend-candidate">',
-                                          '<div class="legend-candidate-primary" style="color:', color, '">',
-                                                candidate.electoralVotes,
+                                isPres ? S(
+                                  '<td class="right">',
+                                          '<div class="legend-candidate">',
+                                            '<div class="legend-candidate-primary" style="color:', color, '">',
+                                                  candidate.electoralVotes,
+                                            '</div>',
+                                            isPresUs ? T( 'electoralVoteBar', {color: color, percent: electoralPercent} ) : '',
                                           '</div>',
-                                          presUs ? T( 'electoralVoteBar', {color: color, percent: electoralPercent} ) : '',
-					'</div>',
-				'</td>',
+                                  '</td>'
+                                ) : '',
 			'</tr>'
 		);
 	}
