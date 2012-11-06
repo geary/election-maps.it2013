@@ -963,6 +963,18 @@ function usEnabled() {
 	function featureClickOK( feature ) {
 		return feature  &&  ! noElectionParty( feature.fips );
 	}
+
+	function isCounty( where ) {
+		return (where !== null &&
+			where.feature !== null &&
+			where.feature.lsad == 'County');
+	}
+
+	function shouldIgnoreMapClick( where ) {
+		return ((params.contest == 'president' || params.contest == 'senate') &&
+			isCounty(where)) ||
+			params.contest == 'house';
+	}
 	
 	var touch;
 	if( params.touch ) touch = { mouse: true };
@@ -1029,7 +1041,7 @@ function usEnabled() {
 				showTip( false );
 			},
 			click: function( event, where ) {
-				if( params.contest == 'house' ) return;  // TEMP
+				if( shouldIgnoreMapClick( where )) return;
 				event.stopPropagation && event.stopPropagation();
 				if( touch  &&  ! touch.mouse ) return;
 				mousedown = false;
@@ -2042,7 +2054,6 @@ function usEnabled() {
 		if (state != stateUS) {
 			geoMoveNext = true;
 			state = stateUS;
-			loadView();
 		}
 	}
 
@@ -2178,7 +2189,6 @@ function usEnabled() {
 				// zoom out to show the US.
 				if (params.contest == 'house') {
 					zoomOutToUSView();
-					return;
 				}
 
 				loadView();
