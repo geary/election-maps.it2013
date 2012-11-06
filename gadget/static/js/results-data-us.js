@@ -33,7 +33,7 @@
 	function getTopCandidates( result, sortBy, max ) {
 		max = max || Infinity;
 		if( ! result ) return [];
-		
+
 		// Clone the candidate list
 		var top = [];
 		// TODO(mg): It's possible at this point that result.candidates is either
@@ -53,7 +53,7 @@
 		
 		// Use trends data if applicable, and calculate total votes
 		_.each( top, function( candidate ) {
-			if( state == stateUS  &&  params.contest == 'president' )
+			if( params.contest == 'president' )
 				setCandidateTrendsVotes( result.id, candidate, sortBy );
 			total.votes += candidate.votes;
 		});
@@ -96,12 +96,16 @@
 		if( ! stateName  &&  state != stateUS ) stateName = state.name;
 		if( stateName ) {
 			// State
+			// A most horrible kludge:
+			if (stateName - 0 == stateName) {
+				// We got a state ID instead, e.g. 25002.  Truncate to 2 chars and...
+				stateName = State( stateName.substring(0, 2)).name;
+			}
 			var parties = trends.states[stateName].parties;
 			if( ! parties.by ) indexArray( parties, 'id' );
 			var party = parties.by.id[candidate.party];
 			if( party ) {
 				//console.log( candidate.lastName, candidate.votes, party.pv, party.ev );
-				candidate.votes = party.pv || 0;
 				if( sortBy == 'electoralVotes' )
 					candidate.electoralVotes = party.ev || 0;
 			}
