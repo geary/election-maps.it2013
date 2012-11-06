@@ -210,7 +210,8 @@ function renderControlPane( contest, seats, trend ) {
 		T( 'balanceOfPower', { count: Math.ceil( seats.total / 2 ) } );
 	var party = trend.parties.by.id;
 	function partyGet( id, prop ) { return party[id] && party[id][prop] || 0; }
-	function partySeats( id ) { return partyGet( id, 'seats' ); }
+	// Seats in trends data is the total # of seats including those not up for election..
+	function partySeats( id ) { return partyGet( id, 'seats' ) - notElecting(id); }
 	function partyDelta( id ) { return partyGet( id, 'delta' ); }
 	function notElecting( id ) {
 		return seats.notElecting && seats.notElecting.parties[id] || 0
