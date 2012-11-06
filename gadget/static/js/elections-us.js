@@ -379,8 +379,8 @@ var states = [
 		name: 'Maine',
 		type: 'caucus',
 		date: '2012-02-11',
-		electionidPrimary: '2521',
-		votesby: 'state'
+		electionidPrimary: '2521'/*,
+		votesby: 'state'*/
 	},
 	{
 		fips: '24',
@@ -636,8 +636,8 @@ var states = [
 		name: 'Wyoming',
 		type: 'caucus',
 		date: '2012-03-10',
-		electionidPrimary: '2537',
-		votesby: 'state'
+		electionidPrimary: '2537'/*,
+		votesby: 'state'*/
 	}/*,
 	{
 		fips: '72',
