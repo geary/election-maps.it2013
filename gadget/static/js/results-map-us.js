@@ -2159,6 +2159,14 @@ function usEnabled() {
 				params.contest = this.id.split('-')[1];
 				$selectors.find('a.button').removeClass( 'selected' );
 				$(this).addClass( 'selected' );
+
+				// If a user is focused on a state, and they switch to house view,
+				// zoom out to show the US.
+				if (params.contest == 'house') {
+					setState( '00', 'house_from_state' );
+					return;
+				}
+
 				loadView();
 				analytics( 'button', 'contest', params.contest );
 			}
