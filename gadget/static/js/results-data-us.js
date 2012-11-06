@@ -36,10 +36,18 @@
 		
 		// Clone the candidate list
 		var top = [];
-		for( var i = 0; i < result.candidates.length; i++ ) {
-			// experimenting with clone vs. shallow reference
-			top.push( _.clone( result.candidates[i] ) );
-			//top.push( result.candidates[name] );
+		// TODO(mg): It's possible at this point that result.candidates is either
+		// an object, or an array.  This next bit is a total kludge.
+		// Note: experimenting with clone vs. shallow reference
+		if (result.candidates.length) {
+			for( var i = 0; i < result.candidates.length; i++ ) {
+				top.push( _.clone( result.candidates[i] ) );
+			}
+		} else {
+			// It's a map, treat it as such:
+			for( var name in result.candidates ) {
+				top.push( _.clone( result.candidates[name] ) );
+			}
 		}
 		var total = { votes: 0, electoralVotes: 0 };
 		

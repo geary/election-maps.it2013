@@ -167,11 +167,9 @@ function renderControlBar( a ) {
 	var n = {
 		segs: [
 			{ classes: 'hseg-dem hseg-pattern', value: a.dem.keep || 0 },
-			{ classes: 'hseg-dem', value: a.dem.seats || 0 },
-			{ classes: 'hseg-ind hseg-pattern', value: a.ind.keep || 0 },
-			{ classes: 'hseg-ind', value: a.ind.seats || 0 },
+			{ classes: 'hseg-dem', value: a.dem.seatsWon || 0 },
 			{ classes: 'hseg-undecided', value: a.undecided || 0 },
-			{ classes: 'hseg-gop', value: a.gop.seats || 0 },
+			{ classes: 'hseg-gop', value: a.gop.seatsWon || 0 },
 			{ classes: 'hseg-gop hseg-pattern', value: a.gop.keep || 0 }
 		],
 		notch: a.notch,
@@ -212,7 +210,9 @@ function renderControlPane( contest, seats, trend ) {
 		T( 'balanceOfPower', { count: Math.ceil( seats.total / 2 ) } );
 	var party = trend.parties.by.id;
 	function partyGet( id, prop ) { return party[id] && party[id][prop] || 0; }
+	// Seats in trends data is the total # of seats including those not up for election.
 	function partySeats( id ) { return partyGet( id, 'seats' ); }
+	function partySeatsWon( id ) { return partyGet( id, 'seats' ) - notElecting(id); }
 	function partyDelta( id ) { return partyGet( id, 'delta' ); }
 	function notElecting( id ) {
 		return seats.notElecting && seats.notElecting.parties[id] || 0
@@ -221,6 +221,7 @@ function renderControlPane( contest, seats, trend ) {
 		return {
 			delta: partyDelta(id),
 			seats: partySeats(id),
+			seatsWon: partySeatsWon(id),
 			keep: notElecting(id)
 		};
 	}
@@ -238,8 +239,6 @@ function renderControlPane( contest, seats, trend ) {
 	if( params.contest == 'senate'  ||  params.contest == 'governor' ) {
 		partyLegend( 'Dem', true, 'legendNotUp' );
 		partyLegend( 'GOP', true, 'legendNotUp' );
-		if( params.contest == 'governor' )
-			partyLegend( 'Ind', true, 'legendNotUp' );
 	}
 	legends.push( T( 'barLegend', {
 		party: 'undecided',
@@ -254,7 +253,6 @@ function renderControlPane( contest, seats, trend ) {
 		subtitle: subtitle,
 		dem: partyStuff( 'Dem' ),
 		gop: partyStuff( 'GOP' ),
-		ind: partyStuff( 'Ind' ),
 		undecided: trend.undecided,
 		width: 165,
 		notch: contest != 'governor',
