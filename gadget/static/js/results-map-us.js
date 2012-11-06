@@ -1641,20 +1641,20 @@ function usEnabled() {
 				);
 			}
 		}
-		var linkHTML = !(
-			params.usa ||
-			params.hide_links ||
-			params.embed_state
-		) ? S(
-			'<a href="http://www.google.com/elections/ed/us/results/2012/',
-					params.contest,
-					'/',
-					state.abbr.toLowerCase(),
-					'" target="_parent" id="linkToMap" class="small-text" title="',
-					T('linkToMapTitle'), '">',
-				T('linkToMap'),
-			'</a>'
-		) : '';
+		//var linkHTML = !(
+		//	params.usa ||
+		//	params.hide_links ||
+		//	params.embed_state
+		//) ? S(
+		//	'<a href="http://www.google.com/elections/ed/us/results/2012/',
+		//			params.contest,
+		//			'/',
+		//			state.abbr.toLowerCase(),
+		//			'" target="_parent" id="linkToMap" class="small-text" title="',
+		//			T('linkToMapTitle'), '">',
+		//		T('linkToMap'),
+		//	'</a>'
+		//) : '';
 		return S(
 			'<div id="sidebar">',
 				'<div class="sidebar-header">',
@@ -1670,9 +1670,9 @@ function usEnabled() {
 				'</div>',
 				'<div class="scroller" id="sidebar-scroll">',
 					scrollingHTML,
-					'<div id="map-link" class="small-text" style="padding:8px 4px 4px 4px;">',
-						linkHTML,
-					'</div>',
+					//'<div id="map-link" class="small-text" style="padding:8px 4px 4px 4px;">',
+					//	linkHTML,
+					//'</div>',
 				'</div>',
 			'</div>'
 		);
@@ -2203,8 +2203,9 @@ function usEnabled() {
 				$(this).addClass( 'selected' );
 
 				// If a user is focused on a state, and they switch to house view,
-				// zoom out to show the US.
-				if (params.contest == 'house') {
+				// or a contest that's not happening in that state, zoom out to show
+				// the US.
+				if (params.contest == 'house' || notElecting(params.contest)) {
 					zoomOutToUSView();
 				}
 
@@ -2403,5 +2404,14 @@ function usEnabled() {
 	) );
 	
 	analytics( 'map', 'load' );
+
+	function notElecting( office ) {
+		if(!(election.seats && election.seats[office] &&
+				election.seats[office].notElecting &&
+				election.seats[office].notElecting.states)) {
+			return true;
+		}
+		return !!election.seats[office].notElecting.states[state.abbr];
+	}
 	
 //})( jQuery );
