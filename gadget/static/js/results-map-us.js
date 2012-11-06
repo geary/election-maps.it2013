@@ -1238,16 +1238,19 @@ function usEnabled() {
 	
 	function insetFeatures( abbr, callback ) {
 		var sf = stateUS.geo.state.features.by;
-		var cf = ( view == 'county' ) && stateUS.geo.county.features.by;
+		//var cf = ( view == 'county' ) && stateUS.geo.county.features.by;
+		var hf = ( params.contest == 'house' ) && stateUS.geo.house.features.by;
 		if( abbr == 'AK' ) {
 			callback( sf.AK || sf['02'] );
-			cf && callback( cf['02'] );
+			//cf && callback( cf['02'] );
+			hf && callback( hf['AK-AL'] );
 		}
 		else {  // HI
 			callback( sf.HI || sf['15'] );
-			cf && eachWord( '15001 15003 15005 15007 15009', function( fips ) {
-				callback( cf[fips] );
-			});
+			//cf && eachWord( '15001 15003 15005 15007 15009', function( fips ) {
+			//	callback( cf[fips] );
+			//});
+			hf && ( callback( hf['HI-01'] ), callback( hf['HI-02'] ) );
 		}
 	}
 	
