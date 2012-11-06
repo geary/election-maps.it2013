@@ -2032,6 +2032,15 @@ function usEnabled() {
 		return n ? S( '<b>', n, '</b>' ) : n;
 	}
 	
+	// Used when zoomed in and user clicks on house view.
+	function zoomOutToUSView() {
+		if (state != stateUS) {
+			geoMoveNext = true;
+			state = stateUS;
+			loadView();
+		}
+	}
+
 	function setState( s, why ) {
 		if( ! s ) return;
 		s = State( s );
@@ -2163,7 +2172,7 @@ function usEnabled() {
 				// If a user is focused on a state, and they switch to house view,
 				// zoom out to show the US.
 				if (params.contest == 'house') {
-					setState( '00', 'house_from_state' );
+					zoomOutToUSView();
 					return;
 				}
 
