@@ -1770,6 +1770,7 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var cls = i === 0 ? ' first' : '';
 		var pct = formatPercent( candidate.vsAll );
+		var star = candidate.winner ? '*' : '';
 		return S(
 			'<tr class="legend-candidate', cls, '" id="legend-candidate-', candidate.id, '">',
 				'<td class="left">',
@@ -1788,6 +1789,7 @@ function usEnabled() {
 						'</div>',
 						'<div class="last-name" style="font-weight:bold;">',
 							candidate.lastName,
+							star,
 						'</div>',
 					'</div>',
 				'</td>',
