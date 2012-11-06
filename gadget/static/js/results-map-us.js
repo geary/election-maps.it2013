@@ -287,6 +287,7 @@ document.write(
                 'div.legend-candidate-primary + div.legend-candidate-secondary { margin-top: -2px; }',
                 'div.legend-candidate-secondary + div.legend-candidate-primary { margin-top: -2px; }',
                 '#sidebar td.right div.legend-candidate-primary { margin-top: -1px; padding-bottom: 2px; }',
+                '#sidebar td.winner div { padding: 0 };',
 		'span.legend-candidate-color { font-size:15px; }',
 		'#sidebar span.legend-candidate-color { font-size:16px; }',
 		'body.tv span.legend-candidate-color { font-size:18px; }',
@@ -1719,7 +1720,8 @@ function usEnabled() {
 				//		formatSpanColorPatch( colors, 2 ),
 				//	'</div>',
 				//'</td>',
-				'<td class="left">',
+                                // '<td class="left"></td>',
+				'<td class="left" colspan="2">',
 					'<div class="legend-candidate">',
 						T('candidate'),
 					'</div>',
@@ -1747,7 +1749,9 @@ function usEnabled() {
 				candidate.party == 'GOP'  ||
 				candidate.party == 'Dem'
 			) ? '' : ' zero';
-                var electoralPercent = 100 * candidate.electoralVotes / 538;
+                var presUs = params.contest == 'president' && state == stateUS;
+                var electoralPercent = presUs ? 100 * candidate.electoralVotes / 538 : 0;
+                var winner = candidate.winner;
 		return S(
 			'<tr class="legend-candidate', selected, zero, '" id="legend-candidate-', candidate.id, '" title="', T('clickForHeatMap'), '">',
 				//'<td class="left">',
@@ -1755,7 +1759,15 @@ function usEnabled() {
 				//		formatSpanColorPatch( color, 8 ),
 				//	'</div>',
 				//'</td>',
-				'<td class="left">',
+                                
+				'<td class="left winner">',
+                                  '<div class="legend-candidate">',
+                                    '<div class="legend-candidate-primary">',
+                                      winner ? '&#10004;' : '',
+                                    '</div>',
+                                  '</div>',
+                                '</td>',
+                                '<td>',
 					'<div class="legend-candidate">',
 						'<div class="legend-candidate-secondary" style="color: ', color, '">',
 							candidate.firstName,
@@ -1780,14 +1792,7 @@ function usEnabled() {
                                           '<div class="legend-candidate-primary" style="color:', color, '">',
                                                 candidate.electoralVotes,
                                           '</div>',
-                                          '<div class="legend-candidate-bar">',
-                                            '<div class="legend-candidate-bar-outline">',
-                                              '<div class="legend-candidate-bar-fill" ',
-                                                'style="background-color: ', color, '; ',
-                                                  'width: ', electoralPercent, '%;">',
-                                              '</div>',
-                                            '</div>',
-                                          '</div>',
+                                          presUs ? T( 'electoralVoteBar', {color: color, percent: electoralPercent} ) : '',
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1917,7 +1922,7 @@ function usEnabled() {
 				'electoralVotes' :
 				'votes'
 			);
-			top = getTopCandidates( result, sortBy, /*useSidebar ? 0 :*/ 4 );
+			top = getTopCandidates( result, sortBy, /*useSidebar ? 0 :*/ 3 );
 			var content = S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, true ),
