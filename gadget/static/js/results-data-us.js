@@ -388,9 +388,11 @@
 			var precincts = row[cols.NumBallotBoxes];
 			var counted = row[cols.NumCountedBallotBoxes];
 			var winnerIndex = -1;
-                        if ( row[cols.Winner] ) {
-                          winnerIndex = row[cols.Winner];
-                        }
+			// Note that this works only because the winner column is
+			// a string. If it were a number this would fail on a 0 value.
+			if ( row[cols.Winner] ) {
+				winnerIndex = row[cols.Winner];
+			}
 			if( state.geo ) {
 				var feature = features.by[id];
 				if( ! feature ) {
