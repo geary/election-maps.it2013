@@ -1167,19 +1167,11 @@ function usEnabled() {
 					feature.fillOpacity = .3;
 				}
 				else {
-					var hasWinner = false;
-					if( result.winnerParty ) {
-						party = election.parties[result.winnerParty];
-						hasWinner = true;
-					}
-					else if( candidate ) {
-						party = election.parties[candidate.party];
-						hasWinner = candidate.winner;
-					}
-					if( party ) {
+					if( candidate ) {
+						var party = election.parties[candidate.party];
 						feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
 						feature.fillOpacity =
-							hasWinner ? .6 :
+							candidate.winner ? .6 :
 							.1 + .3 * result.counted / result.precincts;
 					}
 					else {
@@ -1187,6 +1179,7 @@ function usEnabled() {
 						feature.fillOpacity = 0;
 					}
 				}
+				var complete = result  &&  result.counted == result.precincts;
 				feature.strokeColor = strokeColor;
 				feature.strokeOpacity = strokeOpacity;
 				feature.strokeWidth = strokeWidth;
@@ -1216,6 +1209,7 @@ function usEnabled() {
 				//feature.fillColor = hatch ? { image: candidate.pattern } : color;
 				feature.fillColor = color;
 				feature.fillOpacity = result && result.fract && max ? result.fract / max * .75 : 0;
+				var complete = result  &&  result.counted == result.precincts;
 				feature.strokeColor = strokeColor;
 				feature.strokeOpacity = strokeOpacity;
 				feature.strokeWidth = strokeWidth;
