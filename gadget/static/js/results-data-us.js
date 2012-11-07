@@ -411,6 +411,7 @@
 				row[cols.NumCountedBallotBoxes] = 0;
 			}
 			var candidates = [];
+			var winnerParty = null;
 			for( iCol = 0;  iCol < colsID;  iCol += 4 ) {
 				var party = row[iCol+3];
 				if( ! party ) break;
@@ -420,10 +421,13 @@
 				}
 				var firstName = row[iCol+1], lastName = row[iCol+2];
 				var id = firstName + ' ' + lastName, votes = row[iCol];
+				var winner = ( winnerIndex == iCol/4 );
+				if( winner )
+					winnerParty = party;
 				var candidate = {
 					id: id,
 					votes: votes,
-					winner: winnerIndex == iCol/4,
+					winner: winner,
 					firstName: firstName,
 					lastName: lastName,
 					party: party
@@ -451,7 +455,7 @@
 				precincts: row[cols.NumBallotBoxes],
 				counted: row[cols.NumCountedBallotBoxes],
 				votes: totalVotes,
-				//winner: /* needs to be calculated */,
+				winnerParty: winnerParty,
 				candidates: candidates,
 				iMaxVotes: iMaxVotes
 			};
