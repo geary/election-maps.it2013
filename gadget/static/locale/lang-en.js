@@ -93,7 +93,7 @@ loadStrings({
 "partyPlural-GOP": "Republicans", 
 "partyPlural-Ind": "Independents", 
 "percent": "Percent", 
-"percentReporting": "{{percent}} reporting ({{counted}}/{{total}}{{kind}})", 
+"percentReporting": "{{{percent}}} reporting ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "Popular Vote", 
 "president": "President", 
 "presidentButton": "Pres.", 
