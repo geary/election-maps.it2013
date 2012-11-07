@@ -1168,7 +1168,7 @@ function usEnabled() {
 				}
 				else {
 					var hasWinner = false;
-					if( result && result.winnerParty ) {
+					if( state == stateUS && result && result.winnerParty ) {
 						party = election.parties[result.winnerParty];
 						hasWinner = true;
 					}
@@ -1177,10 +1177,11 @@ function usEnabled() {
 						hasWinner = candidate.winner;
 					}
 					if( party ) {
+						var reporting = result.counted / result.precincts;
 						feature.fillColor = party && party.color || '#FFFFFF';  // TEMP
 						feature.fillOpacity =
-							hasWinner ? .6 :
-							.1 + .3 * result.counted / result.precincts;
+							hasWinner || reporting == 1 ? .6 :
+							.1 + .3 * reporting;
 					}
 					else {
 						feature.fillColor = '#FFFFFF';
@@ -1840,7 +1841,7 @@ function usEnabled() {
 		var selected = ( candidate.id == currentCandidate ) ? ' selected' : '';
 		var cls = i === 0 ? ' first' : '';
 		var pct = formatPercent( candidate.vsAll );
-		var star = candidate.winner ? '&#10004;' : '';
+		var star = state == stateUS && candidate.winner ? '&#10004;' : '';
 		var lastName = candidate.lastName == "None of these candidates" ?
 				"None of these" : candidate.lastName;
 
