@@ -2408,12 +2408,13 @@ function usEnabled() {
 	) );
 	
 	analytics( 'map', 'load' );
-
+	
+	// TODO: refactor with noElectionParty
 	function notElecting( office ) {
 		if(!(election.seats && election.seats[office] &&
 				election.seats[office].notElecting &&
 				election.seats[office].notElecting.states)) {
-			return true;
+			return false;
 		}
 		return !!election.seats[office].notElecting.states[state.abbr];
 	}
