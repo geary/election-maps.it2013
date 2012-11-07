@@ -1168,7 +1168,7 @@ function usEnabled() {
 				}
 				else {
 					var hasWinner = false;
-					if( result.winnerParty ) {
+					if( result && result.winnerParty ) {
 						party = election.parties[result.winnerParty];
 						hasWinner = true;
 					}
