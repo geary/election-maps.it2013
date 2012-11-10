@@ -361,7 +361,7 @@
 		
 		//var candidates = results.candidates = [];
 		//for( var i = 0, colID = col.ID;  i < colID;  ++i ) {
-		//	var id = cols[i].split('-')[1].toLowerCase(), candidate = election.candidates.by.id[id];
+		//	var idCandidate = cols[i].split('-')[1].toLowerCase(), candidate = election.candidates.by.id[idCandidate];
 		//	candidates.push( $.extend( {}, candidate ) );
 		//}
 		//indexArray( candidates, 'id' );
@@ -382,8 +382,8 @@
 		var allCandidates = results.candidates = {};
 		for( var iRow = 0, nRows = rows.length;  iRow < nRows;  ++iRow ) {
 			var row = rows[iRow];
-			var id = row[colsID];
-			id = fix[id] || id;
+			var idPlace = row[colsID];
+			idPlace = fix[idPlace] || idPlace;
 			var votes = row[cols.TabTotal];
 			var precincts = row[cols.NumBallotBoxes];
 			var counted = row[cols.NumCountedBallotBoxes];
@@ -394,16 +394,16 @@
 				winnerIndex = row[cols.Winner];
 			}
 			if( state.geo ) {
-				var feature = features.by[id];
+				var feature = features.by[idPlace];
 				if( ! feature ) {
 					var ok = missingOK[state.abbr];
-					if( !( ok  &&  id in ok ) )
+					if( !( ok  &&  idPlace in ok ) )
 						if( ! features.didMissingCheck )
-							missing.push( id );
+							missing.push( idPlace );
 				}
 			}
 			
-			//if( /^\d\d000$/.test(id) ) rowsByID[id.slice(0,2)] = row;
+			//if( /^\d\d000$/.test(idPlace) ) rowsByID[idPlace.slice(0,2)] = row;
 			//var nCandidates = candidates.length;
 			var totalVotes = 0, maxVotes = 0,  iMaxVotes = -1;
 			if( zero ) {
@@ -422,28 +422,28 @@
 					parties[party] = { color: '#808080' };
 				}
 				var firstName = row[iCol+1], lastName = row[iCol+2];
-				var id = firstName + ' ' + lastName, votes = row[iCol];
+				var idCandidate = firstName + ' ' + lastName, votes = row[iCol];
 				var winner = ( winnerIndex == iCol/4 );
 				if( winner )
 					winnerParty = party;
 				var candidate = {
-					id: id,
+					id: idCandidate,
 					votes: votes,
 					winner: winner,
 					firstName: firstName,
 					lastName: lastName,
 					party: party
 				};
-				if( ! allCandidates[id] ) {
-					allCandidates[id] = {
-						id: id,
+				if( ! allCandidates[idCandidate] ) {
+					allCandidates[idCandidate] = {
+						id: idCandidate,
 						votes: 0,
 						firstName: firstName,
 						lastName: lastName,
 						party: party
 					};
 				}
-				allCandidates[id].votes += votes;
+				allCandidates[idCandidate].votes += votes;
 				totalVotes += votes;
 				if( maxVotes < votes ) {
 					maxVotes = votes;
@@ -453,7 +453,7 @@
 			}
 			indexArray( candidates, 'id' );
 			var result = {
-				id: row[colsID],
+				id: idPlace,
 				precincts: row[cols.NumBallotBoxes],
 				counted: row[cols.NumCountedBallotBoxes],
 				votes: totalVotes,
