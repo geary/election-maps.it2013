@@ -461,6 +461,15 @@
 				candidates: candidates,
 				iMaxVotes: iMaxVotes
 			};
+			if( params.debug == 'zero'  &&  result.precincts == 0 ) {
+				console.log( S( 'Zero precincts: ', idPlace ) );
+			}
+			if( params.debug == 'incomplete'  &&  result.counted < result.precincts ) {
+				console.log( S(
+					'Incomplete: ', idPlace, ' ',
+					result.counted + '/' + result.precincts
+				) );
+			}
 			places[result.id] = result;
 		}
 		results.oldtemp = { cols: results.cols, rows: results.rows };  // TEMP debugging
