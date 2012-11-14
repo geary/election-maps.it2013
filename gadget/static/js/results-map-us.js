@@ -508,10 +508,22 @@ function usEnabled() {
 	}
 	
 	function getScript( url ) {
+		var timeout = 15 * 1000;
 		$.ajax({
 			url: url,
 			dataType: 'script',
-			cache: true
+			cache: true,
+			timeout: timeout,
+			error: function( jqXHR, textStatus, errorThrown ) {
+				if( textStatus == 'timeout' ) {
+					getScript( url );
+				}
+				else {
+					setTimeout( function() {
+						getScript( url );
+					}, timeout );
+				}
+			}
 		});
 	}
 	
