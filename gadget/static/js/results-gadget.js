@@ -47,10 +47,10 @@ function loadStrings( strings ) {
 }
 
 function setLanguage() {
-	var defaultLanguage = 'en';
+	var defaultLanguage = 'cz';
 	var supportedLanguages = {
 		en: true,
-		es: true/*,
+		cz: true/*,
 		fr: true,
 		nl: true*/
 	};
@@ -104,12 +104,14 @@ opt.writeScript(
 
 //if( params.randomize ) opt.writeScript( 'js/names-1000.js', opt.nocache );
 
+var cc = 'cz';
+
 opt.writeScript( 'js/underscore.js', opt.nocache );
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
 opt.writeScript( 'js/scriptino.js', opt.nocache );
-opt.writeScript( 'js/elections-us.js', opt.nocache );
+opt.writeScript( 'js/elections-'+cc+'.js', opt.nocache );
 opt.writeScript( 'js/results-templates-us.js', opt.nocache );
 opt.writeScript( 'js/barcharts.js', opt.nocache );
 opt.writeScript( 'locale/lang-' + params.hl + '.js', opt.nocache );
-opt.writeScript( 'js/results-map-us.js', opt.nocache );
-opt.writeScript( 'js/results-data-us.js', opt.nocache );
+opt.writeScript( 'js/results-map-'+cc+'.js', opt.nocache );
+//opt.writeScript( 'js/results-data-'+cc+'.js', opt.nocache );
