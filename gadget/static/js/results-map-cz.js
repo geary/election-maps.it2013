@@ -546,29 +546,54 @@ function nationalEnabled() {
 	
 	var tweakGeoJSON = {
 		CZ: function( json, geoid ) {
-			var features = json.district.features;
-			addLivingAbroad( features );
+			addContinents( json );
 		}
 	}
 	
-	function addLivingAbroad( features ) {
-		var width = 210000, height = 150000;
-		var env = envelope( width, height );
-		var feature = {
-			bbox: env.bbox,
-			centroid: [ 0, 0 ],
-			click: false,
-			draw: true,
-			geometry: {
-				coordinates: env.coordinates,
-				type: 'MultiPolygon'
-			},
-			id: 'GM0998',
-			name: "Briefstemmers",
-			type: 'Feature'
-		};
-		features.push( feature );
-		features.by['GM0998'] = feature;
+	function addContinents( json ) {
+		var features = json.district.features;
+		function addContinent( id, name, idContinent ) {
+			var continentFeature = json.continent.features.by[idContinent];
+			var feature = features.by[id];
+			if( ! feature ) {
+				feature = continentFeature;
+				features.push( feature );
+				features.by[id] = feature;
+				feature.id = id;
+				feature.name = name;
+			}
+			else {
+				feature.geometry.coordinates =
+					feature.geometry.coordinates.concat(
+						continentFeature.geometry.coordinates 
+					);
+			}
+		}
+		addContinent( 'AF', 'Africa', 'Africa' );
+		addContinent( 'AM', 'North and South America', 'North America' );
+		addContinent( 'AM', 'North and South America', 'South America' );
+		addContinent( 'AO', 'Australia and Oceania', 'Australia' );
+//		addContinent( 'AO', 'Australia/Oceania', 'Oceania' );
+		addContinent( 'AS', 'Asia', 'Asia' );
+		addContinent( 'EV', 'Europe', 'Europe' );
+		
+//		var width = 210000, height = 150000;
+//		var env = envelope( width, height );
+//		var feature = {
+//			bbox: env.bbox,
+//			centroid: [ 0, 0 ],
+//			click: false,
+//			draw: true,
+//			geometry: {
+//				coordinates: env.coordinates,
+//				type: 'MultiPolygon'
+//			},
+//			id: 'GM0998',
+//			name: "Briefstemmers",
+//			type: 'Feature'
+//		};
+//		features.push( feature );
+//		features.by['GM0998'] = feature;
 	}
 	
 	function envelope( width, height ) {
@@ -1149,12 +1174,10 @@ function nationalEnabled() {
 	}
 	
 	function useInset() {
-		return false;
-		//return true;
+		return true;
 	}
 	
 	function getInsetUnderlay() {
-		return null;
 		var zoom = map.getZoom();
 		var extra = zoom - 5;
 		var pow = Math.pow( 2, extra );
@@ -1162,34 +1185,28 @@ function nationalEnabled() {
 			delete feature.zoom;
 			delete feature.offset;
 		}
-		function set( feature, z, x, y, centroidFeature ) {
-			var centroid = ( centroidFeature || feature ).centroid;
-			var p = PolyGonzo.Mercator.coordToPixel( centroid, z );
+		function set( feature, id ) {
+			var z = -2.9, x = 412, y = -1339;
+			var p = PolyGonzo.Mercator.coordToPixel( [0, 0 ], z );
 			feature.zoom = z + extra;
 			feature.offset = { x: ( x - p[0] ) * pow, y: ( y - p[1] ) * pow };
 		}
 		function insetAll( action ) {
-			function inset( id, z, x, y, hide2010 ) {
-				var feature = featuresMuni[id];
+			function continent( id ) {
+				var feature = geo.district.features.by[id];
 				if( feature ) {
-					action( feature, z, x, y );
-					if( hide2010 ) {
-						feature.draw = feature.hittest = ( params.year != 2010 );
-					}
-					//var featureRgn = featuresRgn[ '0' + feature.code_reg ];
-					//if( featureRgn )
-					//	action( featureRgn, z, x, y, feature );
+					action( feature, id );
 				}
 			}
-			inset( 'GM9003', 5.8, 85, -1427, true );  // Saba
-			inset( 'GM9002', 5.8, 89, -1423, true );  // Sint Eustatius
-			inset( 'GM9001', 5.0, 84, -1416.5, true );  // Bonaire
-			inset( 'GM0998', 2.1, 95, -1415 );  // Overseas
+
+			continent( 'AF' );
+			continent( 'AM' );
+			continent( 'AO' );
+			continent( 'AS' );
+			continent( 'EV' );
 		}
 		var geo = geoJSON[current.geoid];
 		if( ! geo ) return null;
-		var featuresMuni = geo.muni.features.by;
-		//var featuresRgn = geo.region.features.by;
 		if( ! useInset() ) {
 			insetAll( clear );
 			return null;
@@ -1199,9 +1216,7 @@ function nationalEnabled() {
 	}
 	
 	function insetGeo() {
-		var bbox = params.year == 2010 ?
-			[ 438000, 6900000, 491000, 6945000 ] :
-			[ 385000, 6900000, 491000, 7000000 ];
+		var bbox = [ 1932000, 6515000, 2110000, 6631000 ];
 		var geo = makeBboxGeo( bbox, {
 			fillColor: '#F8F8F8',
 			fillOpacity: 1,
