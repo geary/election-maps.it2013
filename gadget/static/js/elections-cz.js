@@ -4,15 +4,15 @@
 
 var candidatesCZ2013 = _.map([
 	// "color|id|firstName|lastName|fullName"
-	"#2A4BD7|Bobo\u0161\u00EDkov\u00E1|Jana|Bobo\u0161\u00EDkov\u00E1|Jana Bobo\u0161\u00EDkov\u00E1",
-   "#1D6914|Dienstbier|Ji\u0159\u00ED|Dienstbier|Ji\u0159\u00ED Dienstbier Jr.",
-   "#814A19|Fischer|Jan|Fischer|Jan Fischer",
-   "#8126C0|Fischerov\u00E1|T\u00E1\u0148a|Fischerov\u00E1|T\u00E1\u0148a Fischerov\u00E1",
-   "#9DAFFF|Franz|Vladim\u00EDr|Franz|Vladim\u00EDr Franz",
-   "#81C57A|Roithov\u00E1|Zuzana|Roithov\u00E1|Zuzana Roithov\u00E1",
-   "#AD2323|Schwarzenberg|Karel|Schwarzenberg|Karel Schwarzenberg",
-   "#29D0D0|Sobotka|P\u0159emysl|Sobotka|P\u0159emysl Sobotka",
-   "#FF9233|Zeman|Milo\u0161|Zeman|Milo\u0161 Zeman"
+	"#81C57A|1|Zuzana|Roithov\u00E1|Zuzana Roithov\u00E1",
+	"#814A19|2|Jan|Fischer|Jan Fischer",
+	"#2A4BD7|3|Jana|Bobo\u0161\u00EDkov\u00E1|Jana Bobo\u0161\u00EDkov\u00E1",
+	"#8126C0|4|T\u00E1\u0148a|Fischerov\u00E1|T\u00E1\u0148a Fischerov\u00E1",
+	"#29D0D0|5|P\u0159emysl|Sobotka|P\u0159emysl Sobotka",
+	"#FF9233|6|Milo\u0161|Zeman|Milo\u0161 Zeman",
+	"#9DAFFF|7|Vladim\u00EDr|Franz|Vladim\u00EDr Franz",
+	"#1D6914|8|Ji\u0159\u00ED|Dienstbier|Ji\u0159\u00ED Dienstbier Jr.",
+	"#AD2323|9|Karel|Schwarzenberg|Karel Schwarzenberg"
 ], function( s ) {
 	s = s.split('|');
 	return {
@@ -33,7 +33,7 @@ var elections = {
 		candidates: candidatesCZ2013,
 		parties: candidatesCZ2013,
 		electionids: {
-			'CZ': 9999
+			'CZ': 3001
 		}
 	}
 };

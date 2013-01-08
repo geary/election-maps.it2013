@@ -1563,7 +1563,7 @@ function nationalEnabled() {
 		});
 		var selected = current.party ? '' : ' selected';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-top">',
+			'<tr class="legend-candidate', selected, '" id="legend-candidate-top" title="', T('clickForAllCandidatesMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( colors, 2 ),
@@ -1581,7 +1581,7 @@ function nationalEnabled() {
 	function formatSidebarCandidate( candidate ) {
 		var selected = ( candidate.id == current.party ) ? ' selected' : '';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, ' (', candidate.id, ')">',
+			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForHeatMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( candidate.color, 8 ),
@@ -1589,7 +1589,7 @@ function nationalEnabled() {
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate">',
-						candidate.id,  // candidate.fullName || candidate.lastName,
+						/*candidate.fullName ||*/ candidate.lastName,
 					'</div>',
 				'</td>',
 				'<td>',
@@ -1667,8 +1667,7 @@ function nationalEnabled() {
 							candidate.firstName,
 						'</div>',
 						'<div class="last-name" style="font-weight:bold;">',
-							//candidate.lastName,
-							candidate.id,
+							candidate.lastName,
 						'</div>',
 					'</div>',
 				'</td>',
@@ -2347,31 +2346,13 @@ function nationalEnabled() {
 	};
 	
 	function fixup( geoid, id ) {
-		if( id === null )
-			return null;
 		switch( geoid ) {
-			case '013':
-				if( id == '055' )
-					return null;
-				if( id.match( /^055SR(\d\d)$/ ) )
-					return null;
-				var m = id.match( /^055AR(\d\d)$/ );
-				if( m )
-					return '2' + m[1];
-				break;
-			case '069':
-				if( id == '123' )
-					return null;
-				var m = id.match( /^123AR0(\d)$/ );
-				if( m )
-					return '38' + m[1];
-				break;
-			case '075':
-				if( id == '056' )
-					return null;
-				var m = id.match( /^056AR(\d\d)$/ );
-				if( m )
-					return '1' + m[1];
+			case 'CZ':
+				switch( id ) {
+					// Confusion over Prague: region or district?
+					case 'CZ010':
+						return 'CZ0100';
+				}
 				break;
 		}
 		return id;
