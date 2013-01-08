@@ -8,10 +8,22 @@ database = 'cz2013'
 schema = 'cz'
 geom = 'goog_geom'
 boxGeom = geom
+continentLevel = '99'
 
 
-def makeRegions():
-	db = pg.Database( database = database )
+def loadContinents( db ):
+	continentTable = schema + '.continent' + continentLevel
+	srcfile = 'continents-%s' % continentLevel
+	filename = '../shapes/shp/%s/%s.shp' %( srcfile, srcfile )
+	print 'Loading %s' % filename
+	db.loadShapefile(
+		filename, private.TEMP_PATH, continentTable,
+		geom, '3857', 'LATIN1', True
+	)
+	
+
+
+def makeRegions( db ):
 	for level in (
 		'full',
 		'75',
@@ -58,8 +70,6 @@ def makeRegions():
 			'districtTable': districtTable,
 			})
 		writeAllDistricts( db, level )
-	db.connection.commit()
-	db.connection.close()
 
 
 def mergeGeometries( db, sourceTable, targetTable, cols, columns, whereGroupBy ):
@@ -87,10 +97,16 @@ def writeAllDistricts( db, level ):
 		boxGeom, geom, geoid, 'Czech Republic',
 		'nation', 'nation', 'nation', where
 	)
+	geoContinent = db.makeFeatureCollection(
+		schema + '.continent' + continentLevel,
+		boxGeom, geom, geoid, 'World',
+		'continent', 'continent', 'continent', where
+	)
 	geo = {
 		'nation': geoNation,
 		'region': geoRegion,
 		'district': geoDistrict,
+	    'continent': geoContinent,
 	}
 	writeGeoJSON( db, geoid, level, geo )
 
@@ -104,7 +120,11 @@ def writeGeoJSON( db, geoid, level, geo ):
 
 
 def main():
-	makeRegions()
+	db = pg.Database( database = database )
+	loadContinents( db )
+	makeRegions( db )
+	db.connection.commit()
+	db.connection.close()
 
 
 if __name__ == "__main__":
