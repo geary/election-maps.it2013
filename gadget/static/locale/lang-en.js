@@ -29,6 +29,7 @@ loadStrings({
 "countdownMinute": "1 minute", 
 "countdownMinutes": "{{minutes}} minutes", 
 "county": "{{name}} County", 
+"czechRepublic": "Czech Republic", 
 "dataAttribTitle": "Data from the Associated Press", 
 "dataAttribTitleGOP": "Data from the Nevada GOP", 
 "dateFormat": "{{monthName}} {{dayOfMonth}}, {{year}}", 

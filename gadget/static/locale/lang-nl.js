@@ -29,6 +29,7 @@ loadStrings({
 "countdownMinute": "1 minuut", 
 "countdownMinutes": "{{minutes}} minuten", 
 "county": "{{name}} Gemeente", 
+"czechRepublic": "Czech Republic", 
 "dataAttribTitle": "Gegevens van Associated Press", 
 "dataAttribTitleGOP": "Gegevens van de Republikeinse Partij in Nevada", 
 "dateFormat": "{{dayOfMonth}} {{monthName}}, {{year}}", 
