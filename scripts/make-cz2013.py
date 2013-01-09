@@ -20,7 +20,6 @@ def loadContinents( db ):
 		filename, private.TEMP_PATH, continentTable,
 		geom, '3857', 'LATIN1', True
 	)
-	
 
 
 def makeRegions( db ):
@@ -45,6 +44,9 @@ def makeRegions( db ):
 			filename, private.TEMP_PATH, districtTable,
 			geom, '3857', 'LATIN1', True
 		)
+		
+		updateDistrictNames( db, districtTable )
+		
 		mergeGeometries( db, districtTable, regionTable,
 			'region',
 			'''
@@ -57,6 +59,7 @@ def makeRegions( db ):
 			''' % {
 				'districtTable': districtTable,
 		})
+		
 		mergeGeometries( db, districtTable, nationTable,
 			'nation',
 			'''
@@ -69,6 +72,7 @@ def makeRegions( db ):
 			''' % {
 			'districtTable': districtTable,
 			})
+		
 		writeAllDistricts( db, level )
 
 
@@ -109,6 +113,29 @@ def writeAllDistricts( db, level ):
 	    'continent': geoContinent,
 	}
 	writeGeoJSON( db, geoid, level, geo )
+
+
+def updateDistrictNames( db, districtTable ):
+	nutsTable = schema + '.' + 'district_nuts'
+	vars = {
+	    'districtTable': districtTable,
+	    'nutsTable': nutsTable,
+	}
+	vars['fromWhere'] = '''
+		FROM %(nutsTable)s
+		WHERE (
+			%(districtTable)s.district = %(nutsTable)s.nuts
+		)
+	''' % vars
+	db.executeCommit( '''
+		UPDATE %(districtTable)s
+		SET name = (
+			SELECT name %(fromWhere)s
+		)	
+		WHERE EXISTS (
+			SELECT NULL %(fromWhere)s
+		);
+	''' % vars )
 
 
 def writeGeoJSON( db, geoid, level, geo ):
