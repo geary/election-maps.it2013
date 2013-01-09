@@ -569,13 +569,13 @@ function nationalEnabled() {
 					);
 			}
 		}
-		addContinent( 'AF', 'Africa', 'Africa' );
-		addContinent( 'AM', 'North and South America', 'North America' );
-		addContinent( 'AM', 'North and South America', 'South America' );
-		addContinent( 'AO', 'Australia and Oceania', 'Australia' );
-//		addContinent( 'AO', 'Australia/Oceania', 'Oceania' );
-		addContinent( 'AS', 'Asia', 'Asia' );
-		addContinent( 'EV', 'Europe', 'Europe' );
+		addContinent( 'AF', T('continentAfrica'), 'Africa' );
+		addContinent( 'AM', T('continentAmerica'), 'North America' );
+		addContinent( 'AM', T('continentAmerica'), 'South America' );
+		addContinent( 'AO', T('continentAustraliaOceania'), 'Australia' );
+		//addContinent( 'AO', T('continentAustraliaOceania'), 'Oceania' );
+		addContinent( 'AS', T('continentAsia'), 'Asia' );
+		addContinent( 'EV', T('continentEurope'), 'Europe' );
 		
 //		var width = 210000, height = 150000;
 //		var env = envelope( width, height );
