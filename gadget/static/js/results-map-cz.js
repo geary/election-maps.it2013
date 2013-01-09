@@ -1543,7 +1543,7 @@ function nationalEnabled() {
 				'<div class="sidebar-header">',
 					'<div id="election-title" class="title-text">',
 						'<div style="font-weight:bold; padding:5px 0 0 2px; float:left;">',
-							T('theNetherlands'),
+							T('czechRepublic'),
 						'</div>',
 
 						//'<div style="margin:0; padding:3px; float:right;">',

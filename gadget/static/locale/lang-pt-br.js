@@ -29,6 +29,7 @@ loadStrings({
 "countdownMinute": "1 minuto", 
 "countdownMinutes": "{{minutes}} minutos", 
 "county": "{{name}} Condado", 
+"czechRepublic": "Czech Republic", 
 "dataAttribTitle": "Dados da Associated Press", 
 "dataAttribTitleGOP": "Dados do Partido Republicano de Nevada", 
 "dateFormat": "{{dayOfMonth}} de {{monthName}} de {{year}}", 
