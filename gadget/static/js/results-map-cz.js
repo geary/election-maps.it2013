@@ -1356,6 +1356,12 @@ function nationalEnabled() {
 	}
 	
 	function formatSidebarReporting( results ) {
+		//return formatSidebarReportingGroups( results );
+		return formatSidebarReportingPercent( results );
+	}
+	
+	function formatSidebarReportingGroups( results ) {
+		return T( 'percentReporting', totalReporting(results) );
 		var totals = results.totals,
 			col = totals.colsById.NumCountedBallotBoxes,
 			counts = totals.row[col],
@@ -1378,6 +1384,27 @@ function nationalEnabled() {
 				formatRow( 0, 'waitingForVotes' ),
 			'</table>'
 		);
+	}
+	
+	function formatSidebarReportingPercent( results ) {
+		return T( 'percentReporting', totalReporting(results) );
+	}
+	
+	function totalReporting( results ) {
+		var col = results.colsById;
+		var rows = results.rows;
+		var counted = 0, total = 0;
+		for( var row, i = -1;  row = rows[++i]; ) {
+			//if( row.wonRound1 ) continue;
+			counted += row[col.NumCountedBallotBoxes];
+			total += row[col.NumBallotBoxes];
+		}
+		return {
+			counted: counted,
+			total: total,
+			percent: formatPercent( counted / total ),
+			kind: ''  // TODO
+		};
 	}
 	
 	function getTopCandidates( results, row, sortBy, max, force ) {
