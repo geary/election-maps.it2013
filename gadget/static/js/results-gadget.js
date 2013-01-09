@@ -47,10 +47,10 @@ function loadStrings( strings ) {
 }
 
 function setLanguage() {
-	var defaultLanguage = 'cz';
+	var defaultLanguage = 'cs';
 	var supportedLanguages = {
 		en: true,
-		cz: true/*,
+		cs: true/*,
 		fr: true,
 		nl: true*/
 	};
