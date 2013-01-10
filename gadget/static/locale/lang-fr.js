@@ -38,6 +38,7 @@ loadStrings({
 "countdownMinute": "1\u00a0minute", 
 "countdownMinutes": "{{minutes}}\u00a0minutes", 
 "county": "{{name}} Comt\u00e9", 
+"czSource": "Source: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
 "czechRepublic": "Czech Republic", 
 "dataAttribTitle": "Donn\u00e9es de l'Associated Press", 
 "dataAttribTitleGOP": "Donn\u00e9es du Parti r\u00e9publicain du Nevada", 

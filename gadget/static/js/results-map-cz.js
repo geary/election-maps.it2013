@@ -1563,9 +1563,9 @@ function nationalEnabled() {
 				'</div>',
 				'<div class="scroller" id="sidebar-scroll">',
 					resultsScrollingHTML,
-					//'<div id="sidebar-attrib" class="faint-text" style="padding:4px 8px 0; border-top:1px solid #C2C2C2;">',
-					//	T('frSource'),
-					//'</div>',
+					'<div id="sidebar-attrib" class="faint-text" style="padding:4px 8px 0 4px; border-top:1px solid #C2C2C2;">',
+						T('czSource'),
+					'</div>',
 				'</div>',
 			'</div>'
 		);

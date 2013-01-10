@@ -38,6 +38,7 @@ loadStrings({
 "countdownMinute": "1 Minute", 
 "countdownMinutes": "{{minutes}} Minuten", 
 "county": "Bezirk {{name}}", 
+"czSource": "Source: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
 "czechRepublic": "Czech Republic", 
 "dataAttribTitle": "", 
 "dataAttribTitleGOP": "", 

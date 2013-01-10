@@ -38,6 +38,7 @@ loadStrings({
 "countdownMinute": "Un minuto", 
 "countdownMinutes": "{{minutes}} minuti", 
 "county": "Contea di {{name}}", 
+"czSource": "Source: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
 "czechRepublic": "Czech Republic", 
 "dataAttribTitle": "", 
 "dataAttribTitleGOP": "", 
