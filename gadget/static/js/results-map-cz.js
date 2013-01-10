@@ -552,30 +552,17 @@ function nationalEnabled() {
 	
 	function addContinents( json ) {
 		var features = json.district.features;
-		function addContinent( id, name, idContinent ) {
-			var continentFeature = json.continent.features.by[idContinent];
-			var feature = features.by[id];
-			if( ! feature ) {
-				feature = continentFeature;
-				features.push( feature );
-				features.by[id] = feature;
-				feature.id = id;
-				feature.name = name;
-			}
-			else {
-				feature.geometry.coordinates =
-					feature.geometry.coordinates.concat(
-						continentFeature.geometry.coordinates 
-					);
-			}
+		function addContinent( id, name ) {
+			var feature = features.by[id] = json.continent.features.by[id];
+			feature.id = id;
+			feature.name = name;
+			features.push( feature );
 		}
-		addContinent( 'AF', T('continentAfrica'), 'Africa' );
-		addContinent( 'AM', T('continentAmerica'), 'North America' );
-		addContinent( 'AM', T('continentAmerica'), 'South America' );
-		addContinent( 'AO', T('continentAustraliaOceania'), 'Australia' );
-		//addContinent( 'AO', T('continentAustraliaOceania'), 'Oceania' );
-		addContinent( 'AS', T('continentAsia'), 'Asia' );
-		addContinent( 'EV', T('continentEurope'), 'Europe' );
+		addContinent( 'AF', T('continentAfrica') );
+		addContinent( 'AM', T('continentAmerica') );
+		addContinent( 'AO', T('continentAustraliaOceania') );
+		addContinent( 'AS', T('continentAsia') );
+		addContinent( 'EV', T('continentEurope') );
 		
 //		var width = 210000, height = 150000;
 //		var env = envelope( width, height );
@@ -1186,7 +1173,7 @@ function nationalEnabled() {
 			delete feature.offset;
 		}
 		function set( feature, id ) {
-			var z = -2.9, x = 412, y = -1339;
+			var z = -2.9, x = 409.5, y = -1341.5;
 			var p = PolyGonzo.Mercator.coordToPixel( [0, 0 ], z );
 			feature.zoom = z + extra;
 			feature.offset = { x: ( x - p[0] ) * pow, y: ( y - p[1] ) * pow };
@@ -1216,7 +1203,7 @@ function nationalEnabled() {
 	}
 	
 	function insetGeo() {
-		var bbox = [ 1932000, 6515000, 2110000, 6631000 ];
+		var bbox = [ 1920000, 6524000, 2098000, 6629000 ];
 		var geo = makeBboxGeo( bbox, {
 			fillColor: '#F8F8F8',
 			fillOpacity: 1,

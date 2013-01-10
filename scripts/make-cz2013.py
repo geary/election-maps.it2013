@@ -8,7 +8,7 @@ database = 'cz2013'
 schema = 'cz'
 geom = 'goog_geom'
 boxGeom = geom
-continentLevel = '99'
+continentLevel = '97'
 
 
 def loadContinents( db ):
@@ -16,6 +16,7 @@ def loadContinents( db ):
 	srcfile = 'continents-%s' % continentLevel
 	filename = '../shapes/shp/%s/%s.shp' %( srcfile, srcfile )
 	print 'Loading %s' % filename
+	db.dropTable( continentTable )
 	db.loadShapefile(
 		filename, private.TEMP_PATH, continentTable,
 		geom, '3857', 'LATIN1', True
