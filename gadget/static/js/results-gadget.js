@@ -95,7 +95,7 @@ T.templates = {};
 opt.writeScript( '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery' + ( opt.debug ? '.js' : '.min.js' ) );
 
 opt.writeScript(
-	'//maps.google.com/maps/api/js?v=3&sensor=false&language=' + params.hl + (
+	'//maps.google.com/maps/api/js?v=3.9&sensor=false&language=' + params.hl + (
 	/(^|\.)election-maps.appspot.com/.test(location.hostname) ?
 		'&key=AIzaSyBbwxmNf1Sz3ORtmt4SFy5ltFqIFGd2QQg' :
 		''
