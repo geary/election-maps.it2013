@@ -1585,7 +1585,7 @@ function nationalEnabled() {
 				'</td>',
 				'<td colspan="3" class="right">',
 					'<div class="legend-candidate">',
-						T('allParties'),
+						T('allCandidates'),
 					'</div>',
 				'</td>',
 			'</tr>'
