@@ -38,6 +38,7 @@ loadStrings({
 "countdownMinute": "1 min", 
 "countdownMinutes": "{{minutes}} min", 
 "county": "Okres: {{name}}", 
+"czSource": "Zdrojov\u00e1 data \u010cSU (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
 "czechRepublic": "\u010cesk\u00e1 republika", 
 "dataAttribTitle": "", 
 "dataAttribTitleGOP": "", 
