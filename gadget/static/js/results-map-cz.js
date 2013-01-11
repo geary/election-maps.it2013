@@ -1862,7 +1862,9 @@ function nationalEnabled() {
 	}
 	
 	function formatPercent( n ) {
-		return percent1( n, T('decimalSep') );
+		return T( 'percentFormat', {
+			n: percentNum1( n, T('decimalSep') )
+		});
 	}
 	
 	function getLeaders( locals ) {

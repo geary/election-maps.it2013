@@ -104,6 +104,7 @@ loadStrings({
 "partyPlural-GOP": "", 
 "partyPlural-Ind": "", 
 "percent": "Procento", 
+"percentFormat": "{{n}} %", 
 "percentReporting": "{{{percent}}} \u2013 ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "V\u0161elidov\u00e9 hlasov\u00e1n\u00ed", 
 "president": "Prezident", 

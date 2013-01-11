@@ -104,6 +104,7 @@ loadStrings({
 "partyPlural-GOP": "", 
 "partyPlural-Ind": "", 
 "percent": "Prozent", 
+"percentFormat": "{{n}}%", 
 "percentReporting": "{{{percent}}} gez\u00e4hlter Stimmen ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "Stimmen bei Direktwahl", 
 "president": "Pr\u00e4sident", 

@@ -104,6 +104,7 @@ loadStrings({
 "partyPlural-GOP": "", 
 "partyPlural-Ind": "", 
 "percent": "Asilimia", 
+"percentFormat": "{{n}}%", 
 "percentReporting": "Kuripoti {{{percent}}} ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "Kura Maarufu", 
 "president": "Rais", 
