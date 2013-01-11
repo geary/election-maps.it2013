@@ -252,20 +252,28 @@ function htmlUnescape( html ) {
 }
 
 function percent0( n ) {
+	return percentNum0( n ) + '%';
+}
+
+function percentNum0( n ) {
 	var p = Math.round( n * 100 );
 	if( p == 100  &&  n < 1 ) p = 99;
 	if( p == 0  && n > 0 ) p = '&lt;1';
-	return p + '%';
+	return p;
 }
 
 function percent1( n, decimal ) {
+	return percentNum1( n, decimal ) + '%';
+}
+
+function percentNum1( n, decimal ) {
 	decimal = decimal || '.';
-	if( n == 1 ) return '100%';
+	if( n == 1 ) return '100';
 	var p = Math.round( n * 1000 );
 	if( p == 1000  &&  n < 1 ) p = 999;
-	if( p == 0  && n > 0 ) return S( '&lt;0', decimal, '1%' );
+	if( p == 0  && n > 0 ) return S( '&lt;0', decimal, '1' );
 	p = ( p < 10 ? '0' : '' ) + p;
-	return S( p.slice(0,-1), decimal, p.slice(-1), '%' );
+	return S( p.slice(0,-1), decimal, p.slice(-1) );
 }
 
 function randomColor() {
