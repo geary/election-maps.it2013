@@ -1737,7 +1737,7 @@ function nationalEnabled() {
 			row.geoid = geoid;
 			row.geo = geo;
 			var forced = election.parties && current.party;
-			top = getTopCandidates( results, row, 'votes', 8, forced );
+			top = getTopCandidates( results, row, 'votes', 6, forced );
 			var content = ! top.length ? '' : S(
 				'<div class="tipcontent">',
 					formatCandidateList( top, formatListCandidate, false ),
