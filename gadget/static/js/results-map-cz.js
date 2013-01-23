@@ -337,7 +337,7 @@ document.write(
 	//'</a>',
 //	'<a id="anp-logo" class="logo" target="_blank" href="http://www.anp.nl/" title="', T('anpCopyright'), '">',
 //	'</a>',
-	'<a id="google-logo" class="logo" target="_blank" href="http://www.google.cz/elections/ed/cz" title="', T('googlePoliticsTitle'), '">',
+	'<a id="google-logo" class="logo" target="_blank" href="http://www.google.cz/elections/ed/cz?hl=', params.hl, '" title="', T('googlePoliticsTitle'), '">',
 	'</a>',
 	'<div id="error" style="display:none;">',
 	'</div>',
