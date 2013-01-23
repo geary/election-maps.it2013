@@ -41,7 +41,7 @@ opt.writeScript = function( url, nocache ) {
 function loadStrings( strings ) {
 	// There are more strings than templates, so copy templates to strings
 	// but let strings override templates
-	_.defaults( strings, templates );
+	_.defaults( strings, window.templates );
 	templates = strings;
 	_.templateSettings.variable = 'v';
 }
@@ -110,8 +110,8 @@ opt.writeScript( 'js/underscore.js', opt.nocache );
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
 opt.writeScript( 'js/scriptino.js', opt.nocache );
 opt.writeScript( 'js/elections-'+cc+'.js', opt.nocache );
-opt.writeScript( 'js/results-templates-us.js', opt.nocache );
-opt.writeScript( 'js/barcharts.js', opt.nocache );
+//opt.writeScript( 'js/results-templates-us.js', opt.nocache );
+//opt.writeScript( 'js/barcharts.js', opt.nocache );
 opt.writeScript( 'locale/lang-' + params.hl + '.js', opt.nocache );
 opt.writeScript( 'js/results-map-'+cc+'.js', opt.nocache );
 //opt.writeScript( 'js/results-data-'+cc+'.js', opt.nocache );
