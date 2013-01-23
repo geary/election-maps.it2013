@@ -8,9 +8,10 @@ var times = {
 };
 
 // Default params
-var defaultElectionKey = '2013';
+var defaultElectionKey = '2013-pres-2';
 params.year = params.year || '2013';
 params.click = ( params.click != 'false' );
+params.contest = 'pres';
 params.round = params.round || '2';
 
 var $body = $('body');
@@ -30,7 +31,7 @@ var electionKey, election;
 setElection();
 
 function setElection() {
-	electionKey = [ params.year, /*params.contest,*/ params.round ].join( '-' );
+	electionKey = [ params.year, params.contest, params.round ].join( '-' );
 	election = elections[electionKey] || elections[defaultElectionKey];
 }
 
@@ -2464,6 +2465,7 @@ function nationalEnabled() {
 		//		rowsByID[id] = row;
 		//	}
 		//}
+		var round2 = ( params.round == '2' );
 		for( var row, iRow = -1;  row = rows[++iRow]; ) {
 			var id = row[colID];
 			row[colID] = id = fixup( geoid, id );
@@ -2487,7 +2489,11 @@ function nationalEnabled() {
 				var candidates = row.candidates = [];
 				for( var iCol = 0;  iCol < colID;  ++iCol ) {
 					var idCol = cols[iCol], id = idCol.replace( 'TabCount-', '' );
-					candidates.push( election.candidates.by.id[id] );
+					var candidate = election.candidates.by.id[id];
+					if( round2  &&  ! candidate.round2 ) {
+						row[iCol] = 0;
+					}
+					candidates.push( candidate );
 					var count = row[iCol];
 					rowT[ colT[idCol] ] += count;
 					if( count > max ) {
