@@ -9,10 +9,10 @@ var candidatesCZ2013 = _.map([
 	"3|#D0B4FF|Jana|Bobo\u0161\u00EDkov\u00E1|Jana Bobo\u0161\u00EDkov\u00E1",
 	"4|#B6C431|T\u00E1\u0148a|Fischerov\u00E1|T\u00E1\u0148a Fischerov\u00E1",
 	"5|#52A0FF|P\u0159emysl|Sobotka|P\u0159emysl Sobotka",
-	"6|#782727|Milo\u0161|Zeman|Milo\u0161 Zeman",
+	"6|#9A0E48|Milo\u0161|Zeman|Milo\u0161 Zeman",
 	"7|#84B3B0|Vladim\u00EDr|Franz|Vladim\u00EDr Franz",
 	"8|#E08E21|Ji\u0159\u00ED|Dienstbier|Ji\u0159\u00ED Dienstbier Jr.",
-	"9|#A2289C|Karel|Schwarzenberg|Karel Schwarzenberg"
+	"9|#3F21D9|Karel|Schwarzenberg|Karel Schwarzenberg"
 ], function( s ) {
 	s = s.split('|');
 	return {
