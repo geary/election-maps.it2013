@@ -11,6 +11,7 @@ var times = {
 var defaultElectionKey = '2013';
 params.year = params.year || '2013';
 params.click = ( params.click != 'false' );
+params.round = params.round || '2';
 
 var $body = $('body');
 //$body.addClass( 'source-anp' );
@@ -29,7 +30,7 @@ var electionKey, election;
 setElection();
 
 function setElection() {
-	electionKey = params.year;
+	electionKey = [ params.year, /*params.contest,*/ params.round ].join( '-' );
 	election = elections[electionKey] || elections[defaultElectionKey];
 }
 
@@ -376,9 +377,6 @@ function contentTable() {
 			'<div id="sidebar">',
 				formatSidebarTable( [] ),
 			'</div>',
-			'<div id="topbar">',
-				formatTopbar(),
-			'</div>',
 			'<div style="width:100%;">',
 				'<div id="map" style="width:100%; height:100%;">',
 				'</div>',
@@ -412,10 +410,10 @@ function formatSidebarTable( cells ) {
 	);
 }
 
-	function formatTopbar() {
+	function formatButtons() {
 		return S(
-			'<div id="topbar-content" style="position:relative;">',
-				//'<div style="margin:0; padding:3px; float:right;">',
+			'<div id="buttons" style="position:relative;">',
+				'<div style="margin:0; padding:3px; float:right;">',
 				//	//'<a class="button', params.year == 2007 ? ' selected' : '', '" id="btn2007">',
 				//	//	2007,
 				//	//'</a>',
@@ -432,17 +430,18 @@ function formatSidebarTable( cells ) {
 				//	//	T('legislative'),
 				//	//'</a>',
 				//	//'&nbsp;&nbsp;&nbsp;&nbsp;',
-				//	//'<a class="button', params.round == 1 ? ' selected' : '', '" id="btnRound1">',
-				//	//	T('round1'),
-				//	//'</a>',
-				//	//'&nbsp;',
-				//	//'<a class="button',
-				//	//			params.round == 2 ? ' selected' : '', '" id="btnRound2">',
-				//	//	T('round2'),
-				//	//'</a>',
-				//'</div>',
-				//'<div style="clear:both;">',
-				//'</div>',
+					'<a class="button', params.round == 1 ? ' selected' : '', '" id="btnRound1">',
+						T('round1'),
+					'</a>',
+					'&nbsp;',
+					'<a class="button',
+						params.round == 2 ? ' selected' : '',
+						'" id="btnRound2">',
+						T('round2'),
+					'</a>',
+				'</div>',
+				'<div style="clear:both;">',
+				'</div>',
 			'</div>'
 		);
 	}
@@ -1447,7 +1446,6 @@ function nationalEnabled() {
 	
 	function setLegend() {
 		makeCurrentCandidateValid();
-		$('#topbar').html( formatTopbar() );
 		$('#sidebar').html( formatSidebar() );
 	}
 	
@@ -1532,6 +1530,7 @@ function nationalEnabled() {
 						'<div style="font-weight:bold; padding:5px 0 0 2px; float:left;">',
 							T('czechRepublic'),
 						'</div>',
+						formatButtons(),
 
 						//'<div style="margin:0; padding:3px; float:right;">',
 						//	'<a class="button', params.year == 2010 ? ' selected' : '', '" id="btn2010">',
@@ -1999,7 +1998,7 @@ function nationalEnabled() {
 			return id;
 		}
 		
-		var $topbar = $('#topbar');
+//		var $topbar = $('#topbar');
 		var $sidebar = $('#sidebar');
 		var sidebarOneshot = oneshot();
 		$sidebar.delegate( 'tr.legend-candidate', {
@@ -2030,7 +2029,7 @@ function nationalEnabled() {
 			}
 		});
 		
-		$topbar.delegate( 'a', {
+		$sidebar.delegate( 'a', {
 			mouseover: function( event ) {
 				if( ! $(this).hasClass('disabled') )
 					$(this).addClass( 'hover' );
@@ -2055,13 +2054,13 @@ function nationalEnabled() {
 		//	}
 		//});
 		
-		//$topbar.delegate( '#btnRound1,#btnRound2', {
-		//	click: function( event ) {
-		//		if( ! $(this).hasClass('disabled') )
-		//			setRound( this.id.replace(/^btnRound/, '' ) );
-		//		event.preventDefault();
-		//	}
-		//});
+		$sidebar.delegate( '#btnRound1,#btnRound2', {
+			click: function( event ) {
+				if( ! $(this).hasClass('disabled') )
+					setRound( this.id.replace(/^btnRound/, '' ) );
+				event.preventDefault();
+			}
+		});
 		
 		//$sidebar.delegate( '#viewNational', {
 		//	click: function( event ) {
