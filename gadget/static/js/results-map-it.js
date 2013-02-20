@@ -1609,7 +1609,7 @@ function nationalEnabled() {
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate">',
-						/*candidate.fullName ||*/ candidate.lastName,
+						candidate.fullName || candidate.lastName,
 					'</div>',
 				'</td>',
 				'<td>',
@@ -1684,10 +1684,10 @@ function nationalEnabled() {
 								election.photos ? '' : 'margin-top:4px; margin-bottom:4px;',
 							'">',
 						'<div class="first-name">',
-							candidate.firstName,
+							candidate.firstName || '',
 						'</div>',
 						'<div class="last-name" style="font-weight:bold;">',
-							candidate.lastName,
+							candidate.fullName || candidate.lastName,
 						'</div>',
 					'</div>',
 				'</td>',
@@ -2370,11 +2370,7 @@ function nationalEnabled() {
 	function fixup( geoid, id ) {
 		switch( geoid ) {
 			case 'IT':
-				switch( id ) {
-					//// Confusion over Prague: region or district?
-					//case 'CZ010':
-					//	return 'CZ0100';
-				}
+				id = id.split('-')[2];
 				break;
 		}
 		return id;
