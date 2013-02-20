@@ -47,11 +47,12 @@ function loadStrings( strings ) {
 }
 
 function setLanguage() {
-	var defaultLanguage = 'cs';
+	var defaultLanguage = 'it';
 	var supportedLanguages = {
 		en: true,
-		cs: true/*,
-		fr: true,
+		//cs: true,
+		//fr: true,
+		it: true/*,
 		nl: true*/
 	};
 	var hl = ( params.hl || '' ).toLowerCase();
@@ -95,7 +96,7 @@ T.templates = {};
 opt.writeScript( '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery' + ( opt.debug ? '.js' : '.min.js' ) );
 
 opt.writeScript(
-	'//maps.google.com/maps/api/js?v=3.9&sensor=false&language=' + params.hl + (
+	'//maps.google.com/maps/api/js?v=3&sensor=false&language=' + params.hl + (
 	/(^|\.)election-maps.appspot.com/.test(location.hostname) ?
 		'&key=AIzaSyBbwxmNf1Sz3ORtmt4SFy5ltFqIFGd2QQg' :
 		''
@@ -104,7 +105,7 @@ opt.writeScript(
 
 //if( params.randomize ) opt.writeScript( 'js/names-1000.js', opt.nocache );
 
-var cc = 'cz';
+var cc = 'it';
 
 opt.writeScript( 'js/underscore.js', opt.nocache );
 opt.writeScript( 'js/polygonzo.js', opt.nocache );
