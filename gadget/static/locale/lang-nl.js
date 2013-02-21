@@ -115,6 +115,7 @@ loadStrings({
 "presidential": "Presidentieel", 
 "primaries": "{{name}} Voorverkiezingen", 
 "primary": "{{name}} Voorverkiezing", 
+"provinces": "Provincies", 
 "round1": "Eerste ronde", 
 "round2": "Tweede ronde", 
 "senate": "", 

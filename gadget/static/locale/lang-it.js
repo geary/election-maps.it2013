@@ -115,6 +115,7 @@ loadStrings({
 "presidential": "Presidenziali", 
 "primaries": "", 
 "primary": "", 
+"provinces": "Province", 
 "round1": "Primo turno", 
 "round2": "Secondo turno", 
 "senate": "Senato", 

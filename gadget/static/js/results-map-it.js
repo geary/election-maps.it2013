@@ -13,6 +13,7 @@ params.year = params.year || '2013';
 params.click = ( params.click != 'false' );
 params.contest = params.contest || 'senate';
 params.round = /*params.round ||*/ '1';
+params.province = ( params.province == 'true' );
 
 var $body = $('body');
 //$body.addClass( 'source-anp' );
@@ -412,7 +413,10 @@ function formatSidebarTable( cells ) {
 				//	//'<a class="button', params.year == 2013 ? ' selected' : '', '" id="btn2013">',
 				//	//	2013,
 				//	//'</a>',
-				//	//'&nbsp;&nbsp;&nbsp;&nbsp;',
+					'<a class="button', params.province ? ' selected' : '', '" id="btnProvince">',
+						T('provinces'),
+					'</a>',
+					'&nbsp;&nbsp;&nbsp;',
 					'<a class="button', params.contest == 'senate' ? ' selected' : '', '" id="btnContest-senate">',
 						T('senate'),
 					'</a>',
@@ -792,9 +796,11 @@ function nationalEnabled() {
 	
 	function currentGeos() {
 		var json = geoJSON[current.geoid];
-		return params.contest == 'senate' ?
-			[ json.province, json.region, json.nation ] :
-			[ json.province, json.deputy, json.nation ];
+		var geos = [];
+		if( params.province ) geos.push( json.province );
+		geos.push( params.contest == 'senate' ? json.region : json.deputy );
+		geos.push( json.nation );
+		return geos;
 	}
 	
 	function moveToGeo() {
@@ -2044,6 +2050,13 @@ function nationalEnabled() {
 			}
 		});
 		
+		$sidebar.delegate( '#btnProvince', {
+			click: function( event ) {
+				toggleProvince();
+				event.preventDefault();
+			}
+		});
+		
 		$sidebar.delegate( '#btnContest-senate,#btnContest-chamber', {
 			click: function( event ) {
 				setContest( this.id.replace(/^btnContest-/, '' ) );
@@ -2051,13 +2064,13 @@ function nationalEnabled() {
 			}
 		});
 		
-		$sidebar.delegate( '#btnRound1,#btnRound2', {
-			click: function( event ) {
-				if( ! $(this).hasClass('disabled') )
-					setRound( this.id.replace(/^btnRound/, '' ) );
-				event.preventDefault();
-			}
-		});
+		//$sidebar.delegate( '#btnRound1,#btnRound2', {
+		//	click: function( event ) {
+		//		if( ! $(this).hasClass('disabled') )
+		//			setRound( this.id.replace(/^btnRound/, '' ) );
+		//		event.preventDefault();
+		//	}
+		//});
 		
 		//$sidebar.delegate( '#viewNational', {
 		//	click: function( event ) {
@@ -2079,6 +2092,11 @@ function nationalEnabled() {
 			}
 			if( why ) analytics( why, 'candidate', id || 'all' );
 		}
+	}
+	
+	function toggleProvince() {
+		params.province = ! params.province;
+		loadView();
 	}
 	
 	function setContest( contest ) {

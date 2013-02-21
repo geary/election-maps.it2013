@@ -115,6 +115,7 @@ loadStrings({
 "presidential": "Presidential", 
 "primaries": "{{name}} Primaries", 
 "primary": "{{name}} Primary", 
+"provinces": "Provinces", 
 "round1": "Round 1", 
 "round2": "Round 2", 
 "senate": "Senate", 

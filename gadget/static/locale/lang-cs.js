@@ -115,6 +115,7 @@ loadStrings({
 "presidential": "Prezidentsk\u00e9", 
 "primaries": "", 
 "primary": "", 
+"provinces": "Provincie", 
 "round1": "1. kolo", 
 "round2": "2. kolo", 
 "senate": "", 
