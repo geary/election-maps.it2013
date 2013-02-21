@@ -115,6 +115,7 @@ loadStrings({
 "presidential": "Urais", 
 "primaries": "", 
 "primary": "", 
+"provinces": "Mikoa", 
 "round1": "Awamu ya 1", 
 "round2": "Awamu ya 2", 
 "senate": "", 
