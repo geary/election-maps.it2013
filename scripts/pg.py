@@ -687,12 +687,13 @@ class Database:
 				continue
 			geometry = json.loads( geomjson )
 			centroid = json.loads( centroidjson )
+			extraName = extraCol.split( ' AS ' )[-1]
 			feature = {
 				'type': 'Feature',
 				'bbox': geometry['bbox'],
 				'id': featuregeoidfix,
 				'name': featurename,
-				extraCol: featureextra,
+				extraName: featureextra,
 				'centroid': centroid['coordinates'],
 				'geometry': geometry,
 			}
