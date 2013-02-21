@@ -197,7 +197,7 @@ def writeNation( db, level, provinceTable, regionTable, deputyTable, nationTable
 	geoid = 'IT'
 	geoDistrict = db.makeFeatureCollection(
 		provinceTable, boxGeom, geom, geoid, 'Italia',
-		'cod_pro', 'nome_pro', 'cod_pro', where
+		'cod_pro', 'nome_pro', "cod_reg || ',' || cod_dep AS regdep", where
 	)
 	geoRegion = db.makeFeatureCollection(
 		regionTable, boxGeom, geom, geoid, 'Italia',
