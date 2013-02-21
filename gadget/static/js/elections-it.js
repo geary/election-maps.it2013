@@ -118,7 +118,7 @@ var elections = {
 			'IT': 3004
 		}
 	},
-	'2013-deputy-1': {
+	'2013-chamber-1': {
 		date: '2013-02-25',
 		tzHour: +1,
 		photos: false,
