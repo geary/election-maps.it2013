@@ -45,16 +45,6 @@ function longDateFromYMD( yyyymmdd ) {
 	});
 }
 
-function longDateFromYMD( yyyymmdd ) {
-	var ymd = yyyymmdd.split('-'), year = ymd[0];
-	if( ymd.length == 1 ) return year;
-	return T( 'dateFormat', {
-		year: year,
-		monthName: T( 'monthName' + ymd[1] ),
-		dayOfMonth: +ymd[2]
-	});
-}
-
 if( params.date ) {
 	var d = dateFromYMD( params.date, election.tzHour, election.tzMinute );
 	times.offset = d - times.gadgetLoaded;
