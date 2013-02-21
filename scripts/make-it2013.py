@@ -79,6 +79,15 @@ def makeNation( db ):
 			filename, private.TEMP_PATH, provinceTable,
 			geom, '3857', 'LATIN1', True
 		)
+
+		db.executeCommit( '''
+			ALTER TABLE %(provinceTable)s
+			ALTER COLUMN cod_pro TYPE varchar(3),
+			ALTER COLUMN cod_reg TYPE varchar(2),
+			ALTER COLUMN cod_dep TYPE varchar(2);
+		''' % {
+			'provinceTable': provinceTable,
+		})
 		
 		mergeGeometries( db,
 			provinceTable, regionTable,
