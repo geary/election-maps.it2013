@@ -2377,14 +2377,22 @@ function nationalEnabled() {
 	}
 	
 	function loadResultTable( json, loading ) {
-		if( loading )
-			cacheResults.add( json.electionid, json, opt.resultCacheTime );
-		
 		var geo = currentGeo();  //  geoJSON[current.geoid];
 		geo.results = geo.results || {};
 		var results = geo.results[electionKey] = json.table;
 		results.mode = json.mode;
-		var zero = ( json.mode == 'test'  &&  ! debug );
+		
+		if( loading ) {
+			cacheResults.add( json.electionid, json, opt.resultCacheTime );
+			fixupResults( geo, results );
+		}
+		
+		if( electionsPending.length == 0 )
+			geoReady();
+	}
+	
+	function fixupResults( geo, results ) {
+		var zero = ( results.mode == 'test'  &&  ! debug );
 		
 		var col = results.colsById = {};
 		col.candidates = 0;
@@ -2523,9 +2531,6 @@ function nationalEnabled() {
 			}
 			features.didMissingCheck = true;
 		}
-		
-		if( electionsPending.length == 0 )
-			geoReady();
 		
 		if( debug == 'verbose'  ||  ( missing.length  &&  debug  &&  debug != 'quiet' ) ) {
 			if( ! missing.length ) missing.push( 'none' );
