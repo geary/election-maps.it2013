@@ -7,20 +7,21 @@ function chooseName( s, indexes ) {
 }
 
 var coalitionsIT2013 = _.map([
-	// id|color|name_en|name_it
-	"C|#3366FF|Center-right coalition|Coalizione di centro-destra",
-	"I|#DE2910|Italy. Common Good|Italia. Bene Comune",
-	"S|#1560BD|With Monti for Italy|Scelta Civica, con Monti per l'Italia",
-	"R|#FF6600|Civil Revolution|Rivoluzione Civile",
-	"M|#FFFF00|Five Star Movement|Movimento 5 Stelle",
-	"D|#E75480|Stop the Decline|Fare per Fermare il Declino",
-	"X|#AAAAAA|Others|Altrui"
+	// id|color|leader|name_en|name_it
+	"C|#3366FF|Silvio Berlusconi|Center-Right|Centrodestra",
+	"I|#DE2910|Pierluigi Bersani|Italy. Common Good|Italia. Bene Comune",
+	"S|#1560BD|Mario Monti|With Monti for Italy|Con Monti per l'Italia",
+	"R|#FF6600|Antonio Ingroia|Civil Revolution|Rivoluzione Civile",
+	"M|#FFFF00|Beppe Grillo|Five Star Movement|Movimento 5 Stelle",
+	"D|#E75480|Oscar Giannino|Stop the Decline|FARE",
+	"X|#AAAAAA||Others|Altrui"
 ], function( s ) {
 	s = s.split('|');
 	return {
 		id: s[0],
 		color: s[1],
-		fullName: chooseName( s, { en:2, it:3 } ),
+		leader: s[2],
+		fullName: chooseName( s, { en:3, it:4 } ),
 		parties: []
 	};
 });

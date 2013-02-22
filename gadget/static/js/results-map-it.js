@@ -123,7 +123,7 @@ var debug = params.debug;
 //opt.candidate = '1';
 //opt.zoom = opt.zoom || 3;
 opt.fontsize = '15px';
-var sidebarWidth = 450;
+var sidebarWidth = 470;
 
 opt.resultCacheTime = 30 * 1000;
 opt.reloadTime = 60 * 1000;
@@ -218,7 +218,7 @@ document.write(
 		'div.scroller::-webkit-scrollbar-thumb:horizontal { border-width:0; border-bottom:1px; border-top:6px; }',
 		'div.scroller::-webkit-scrollbar-track:hover { -webkit-box-shadow:inset 1px 0 0 rgba(0,0,0,.1); background-color:rgba(0,0,0,.05); }',
 		'div.scroller::-webkit-scrollbar-track:active { -webkit-box-shadow:inset 1px 0 0 rgba(0,0,0,.14),inset -1px -1px 0 rgba(0,0,0,.07); background-color:rgba(0,0,0,.05); }',
-		'#maptip { position:absolute; z-index:10; border:1px solid #333; background:white; color:#222; white-space: nowrap; display:none; min-width:410px; }',
+		'#maptip { position:absolute; z-index:10; border:1px solid #333; background:white; color:#222; white-space: nowrap; display:none; min-width:340px; }',
 		'div.candidate-name { line-height:1em; }',
 		'div.first-name { font-size:85%; }',
 		'body.tv #election-title { font-size:24px; font-weight:bold; }',
@@ -265,7 +265,6 @@ document.write(
 		'td.legend-filler { border-color:transparent; }',
 		//'tr.legend-candidate td { width:20%; }',
 		'tr.legend-candidate td { cursor:pointer; }',
-		'tr.legend-candidate.legend-coalition { font-weight:bold; }',
 		'#maptip table.candidates tr.legend-candidate td { padding-top:2px; }',
 		'tr.legend-candidate.hover td { background-color:#F5F5F5; border-top:1px solid #D9D9D9; border-bottom:1px solid #D9D9D9; }',
 		'tr.legend-candidate.hover td.left { border-left:1px solid #D9D9D9; }',
@@ -1615,7 +1614,7 @@ function nationalEnabled() {
 				'</td>',
 				'<td colspan="3" class="right">',
 					'<div class="legend-candidate">',
-						T('allCoalitions'),
+						'<b>', T('allCoalitions'), '</b>',
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1632,6 +1631,7 @@ function nationalEnabled() {
 				isParty: true,
 				id: party.id,
 				fullName: party.fullName,
+				leader: party.leader,
 				votes: votes,
 				vsAll: votes / results.total
 			};
@@ -1665,7 +1665,9 @@ function nationalEnabled() {
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate">',
-						candidate.fullName || candidate.lastName,
+						candidate.isParty ? candidate.fullName :
+							S( '<b>', candidate.fullName, '</b>' ),
+						candidate.leader ? S( '&nbsp;&nbsp;', candidate.leader ) : '',
 					'</div>',
 				'</td>',
 				'<td>',
@@ -2617,7 +2619,8 @@ function nationalEnabled() {
 					// for candidates:
 					firstName: party.firstName,
 					lastName: party.lastName,
-					fullName: party.fullName
+					fullName: party.fullName,
+					leader: party.leader
 				});
 			}
 		}
