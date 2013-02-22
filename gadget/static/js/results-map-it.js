@@ -543,42 +543,42 @@ function nationalEnabled() {
 	
 	var tweakGeoJSON = {
 		IT: function( json, geoid ) {
-			//addContinents( json );
+			addContinents( json.continent, json.region );
+			addContinents( json.continent, json.deputy );
 		}
 	}
 	
-	//function addContinents( json ) {
-	//	var features = json.district.features;
-	//	function addContinent( id, name ) {
-	//		var feature = features.by[id] = json.continent.features.by[id];
-	//		feature.id = id;
-	//		feature.name = name;
-	//		features.push( feature );
-	//	}
-	//	addContinent( 'AF', T('continentAfrica') );
-	//	addContinent( 'AM', T('continentAmerica') );
-	//	addContinent( 'AO', T('continentAustraliaOceania') );
-	//	addContinent( 'AS', T('continentAsia') );
-	//	addContinent( 'EV', T('continentEurope') );
-	//	
-	//	//var width = 210000, height = 150000;
-	//	//var env = envelope( width, height );
-	//	//var feature = {
-	//	//	bbox: env.bbox,
-	//	//	centroid: [ 0, 0 ],
-	//	//	click: false,
-	//	//	draw: true,
-	//	//	geometry: {
-	//	//		coordinates: env.coordinates,
-	//	//		type: 'MultiPolygon'
-	//	//	},
-	//	//	id: 'GM0998',
-	//	//	name: "Briefstemmers",
-	//	//	type: 'Feature'
-	//	//};
-	//	//features.push( feature );
-	//	//features.by['GM0998'] = feature;
-	//}
+	function addContinents( continent, district ) {
+		var features = district.features;
+		function addContinent( id, name ) {
+			var feature = features.by[id] = continent.features.by[id];
+			feature.id = id;
+			feature.name = name;
+			features.push( feature );
+		}
+		addContinent( 'AFRICA_ASIA_OCEANIA_ANTARTIDE', T('continentAfricaAsiaOceania') );
+		addContinent( 'AMERICA_MERIDIONALE', T('continentSouthAmerica') );
+		addContinent( 'AMERICA_SETTENTRIONALE_E_CENTRALE', T('continentNorthAndCentralAmerica') );
+		addContinent( 'EUROPA', T('continentEurope') );
+		
+		//var width = 210000, height = 150000;
+		//var env = envelope( width, height );
+		//var feature = {
+		//	bbox: env.bbox,
+		//	centroid: [ 0, 0 ],
+		//	click: false,
+		//	draw: true,
+		//	geometry: {
+		//		coordinates: env.coordinates,
+		//		type: 'MultiPolygon'
+		//	},
+		//	id: 'GM0998',Africa, Asia, Oceania ed Antartide
+		//	name: "Briefstemmers",
+		//	type: 'Feature'
+		//};
+		//features.push( feature );
+		//features.by['GM0998'] = feature;
+	}
 	
 	function envelope( width, height ) {
 		var right = width / 2, left = -right, top = height / 2, bottom = -top,
@@ -830,8 +830,9 @@ function nationalEnabled() {
 		
 		outlineFeature( null );
 		
+		var m = 30000;
 		var bboxIT = {
-			bbox: [ 737758, 4390121, 2061653, 5957068 ]
+			bbox: [ 737758-m, 4390121-m, 2430000+m, 5957068+m ]
 		};
 		
 		var geo = {
@@ -1178,12 +1179,10 @@ function nationalEnabled() {
 	}
 	
 	function useInset() {
-		return false;
 		return true;
 	}
 	
 	function getInsetUnderlay() {
-		return null;
 		var zoom = map.getZoom();
 		var extra = zoom - 5;
 		var pow = Math.pow( 2, extra );
@@ -1192,27 +1191,24 @@ function nationalEnabled() {
 			delete feature.offset;
 		}
 		function set( feature, id ) {
-			var z = -2.9, x = 409.5, y = -1341.5;
+			var z = -0.8, x = 411, y = -1122;
 			var p = PolyGonzo.Mercator.coordToPixel( [0, 0 ], z );
 			feature.zoom = z + extra;
 			feature.offset = { x: ( x - p[0] ) * pow, y: ( y - p[1] ) * pow };
 		}
 		function insetAll( action ) {
 			function continent( id ) {
-				var feature = geo.district.features.by[id];
+				var feature = regionalGeo().features.by[id];
 				if( feature ) {
 					action( feature, id );
 				}
 			}
 
-			continent( 'AF' );
-			continent( 'AM' );
-			continent( 'AO' );
-			continent( 'AS' );
-			continent( 'EV' );
+			continent( 'AFRICA_ASIA_OCEANIA_ANTARTIDE' );
+			continent( 'AMERICA_MERIDIONALE' );
+			continent( 'AMERICA_SETTENTRIONALE_E_CENTRALE' );
+			continent( 'EUROPA' );
 		}
-		var geo = geoJSON[current.geoid];
-		if( ! geo ) return null;
 		if( ! useInset() ) {
 			insetAll( clear );
 			return null;
@@ -1222,7 +1218,7 @@ function nationalEnabled() {
 	}
 	
 	function insetGeo() {
-		var bbox = [ 1920000, 6524000, 2098000, 6629000 ];
+		var bbox = [ 1627000, 5320000, 2430000, 5790000 ];
 		var geo = makeBboxGeo( bbox, {
 			fillColor: '#F8F8F8',
 			fillOpacity: 1,

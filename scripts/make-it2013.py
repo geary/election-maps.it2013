@@ -8,22 +8,22 @@ database = 'it2013'
 schema = 'it'
 geom = 'geom'
 boxGeom = geom
-#continentLevel = '97'
+continentLevel = '97'
 
 regNameTable = schema + '.regname'
 depNameTable = schema + '.depname'
 
 
-#def loadContinents( db ):
-#	continentTable = schema + '.continent' + continentLevel
-#	srcfile = 'continents-%s' % continentLevel
-#	filename = '../shapes/shp/%s/%s.shp' %( srcfile, srcfile )
-#	print 'Loading %s' % filename
-#	db.dropTable( continentTable )
-#	db.loadShapefile(
-#		filename, private.TEMP_PATH, continentTable,
-#		geom, '3857', 'LATIN1', True
-#	)
+def loadContinents( db ):
+	continentTable = schema + '.continent' + continentLevel
+	srcfile = 'continents-%s' % continentLevel
+	filename = '../shapes/it2013/%s/%s.shp' %( srcfile, srcfile )
+	print 'Loading %s' % filename
+	db.dropTable( continentTable )
+	db.loadShapefile(
+		filename, private.TEMP_PATH, continentTable,
+		geom, '3857', 'LATIN1', True
+	)
 
 
 def loadNameTables( db ):
@@ -211,17 +211,17 @@ def writeNation( db, level, provinceTable, regionTable, deputyTable, nationTable
 		nationTable, boxGeom, geom, geoid, 'Italia',
 		'cod_nat', 'cod_nat', 'cod_nat', where
 	)
-	#	geoContinent = db.makeFeatureCollection(
-	#		schema + '.continent' + continentLevel,
-	#		boxGeom, geom, geoid, 'World',
-	#		'continent', 'continent', 'continent', where
-	#	)
+	geoContinent = db.makeFeatureCollection(
+		schema + '.continent' + continentLevel,
+		boxGeom, geom, geoid, 'World',
+		'continent', 'continent', 'continent', where
+	)
 	geo = {
 		'nation': geoNation,
 		'region': geoRegion,
 		'deputy': geoDeputy,
 		'province': geoDistrict,
-		# 'continent': geoContinent,
+		'continent': geoContinent,
 	}
 	writeGeoJSON( db, geoid, level, geo )
 
@@ -237,7 +237,7 @@ def writeGeoJSON( db, geoid, level, geo ):
 def main():
 	db = pg.Database( database = database )
 	loadNameTables( db )
-#	loadContinents( db )
+	loadContinents( db )
 	makeNation( db )
 	db.connection.commit()
 	db.connection.close()
