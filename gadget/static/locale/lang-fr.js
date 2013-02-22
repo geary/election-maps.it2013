@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Tous les candidats", 
 "allCandidatesShort": "Tous", 
+"allCoalitions": "", 
 "allParties": "Tous les partis", 
 "articqueCopyright": "Copyright ARTICQUE, contour des circonscriptions administratives", 
 "automaticUpdate": "Cette page se met \u00e0 jour automatiquement", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "", 
 "clickForLocal": "Cliquez pour obtenir des r\u00e9sultats d\u00e9taill\u00e9s", 
 "continentAfrica": "Africa", 

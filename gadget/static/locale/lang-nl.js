@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Alle kandidaten", 
 "allCandidatesShort": "Alle", 
+"allCoalitions": "", 
 "allParties": "Alle partijen", 
 "articqueCopyright": "Copyright ARTICQUE, grenzen van kiesdistricten", 
 "automaticUpdate": "Deze pagina wordt automatisch bijgewerkt", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "", 
 "clickForLocal": "Klik voor gedetailleerde resultaten", 
 "continentAfrica": "Africa", 

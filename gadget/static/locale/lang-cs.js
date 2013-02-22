@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "V\u0161ichni kandid\u00e1ti", 
 "allCandidatesShort": "V\u0161e", 
+"allCoalitions": "", 
 "allParties": "V\u0161echny strany", 
 "articqueCopyright": "Copyright ARTICQUE, hranice volebn\u00edch obvod\u016f", 
 "automaticUpdate": "Tato str\u00e1nka se automaticky aktualizuje", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Kliknut\u00edm zobraz\u00edte v\u00fdsledky prezidentsk\u00fdch voleb", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "Kliknut\u00edm zobraz\u00edte mapu se v\u0161emi kandid\u00e1ty", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Kliknut\u00edm zobraz\u00edte mapu", 
 "clickForLocal": "Kliknut\u00edm zobraz\u00edte podrobn\u00e9 v\u00fdsledky", 
 "continentAfrica": "Afrika", 

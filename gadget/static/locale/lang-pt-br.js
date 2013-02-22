@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Todos os candidatos", 
 "allCandidatesShort": "Todos", 
+"allCoalitions": "", 
 "allParties": "Todos os partidos", 
 "articqueCopyright": "Copyright ARTICQUE, limites de distritos legislativos", 
 "automaticUpdate": "Esta p\u00e1gina \u00e9 atualizada automaticamente", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "", 
 "clickForLocal": "Clique para obter resultados detalhados", 
 "continentAfrica": "Africa", 

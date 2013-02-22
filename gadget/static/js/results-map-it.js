@@ -24,8 +24,6 @@ if( $.browser.msie ) {
 		$body.addClass( 'ie7' );
 }
 
-indexArray( partiesIT2013, 'id' );
-
 opt.randomized = params.randomize || params.zero;
 
 var electionKey, election;
@@ -1076,11 +1074,11 @@ function nationalEnabled() {
 	
 	function colorize() {
 		if( params.province ) {
-			colorVotes( provincialGeo(), '#666666', 1, 1 );
+			colorVotes( provincialGeo(), '#444444', 1, 1 );
 			colorSimple( regionalGeo(), '#FFFFFF', '#444444', 1, 2 );
 		}
 		else {
-			colorVotes( regionalGeo(), '#666666', 1, 1 );
+			colorVotes( regionalGeo(), '#222222', 1, 2 );
 		}
 		colorSimple( nationalGeo(), '#FFFFFF', '#222222', 1, 2 );
 	}
@@ -1104,8 +1102,8 @@ function nationalEnabled() {
 		var time = now() + times.offset;
 		var results = geoResults();
 		var cols = results && results.cols, col = results && results.colsById;
-		var parties = election.parties;
-		if( !( parties && current.party ) ) {
+		var coalitions = election.coalitions;
+		if( !( coalitions && current.coalition ) ) {
 			// Multiple party view
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var row = featureResults( results, feature );
@@ -1136,9 +1134,9 @@ function nationalEnabled() {
 			// Single party heatmap
 			var rows = results.rows;
 			var minFract = Infinity, maxFract = 0;
-			var partyID = current.party, party = parties.by.id[partyID],
-				color = party.color;
-			var iColParty = results.colsById[ 'TabCount-' + partyID ];
+			var coalitionID = current.coalition, coalition= coalitions.by.id[coalitionID],
+				color = coalition.color;
+			var iColCoalition = results.colsById[ 'TabCount-' + coalitionID ];
 			var colID = col.ID;
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var row = featureResults( results, feature );
@@ -1146,7 +1144,7 @@ function nationalEnabled() {
 				if( row ) {
 					for( var iCol = 0;  iCol < colID;  iCol += colIncr )
 						total += row[iCol];
-					value = row[iColParty];
+					value = row[iColCoalition];
 					var fract = row.fract = total ? value / total : 0
 					if( fract ) {
 						minFract = Math.min( minFract, fract );
@@ -1157,7 +1155,7 @@ function nationalEnabled() {
 			var fractRange = maxFract - minFract;
 			for( var iFeature = -1, feature;  feature = features[++iFeature]; ) {
 				var row = featureResults( results, feature );
-				feature.fillColor = party.color;
+				feature.fillColor = coalition.color;
 				feature.fillOpacity =
 					! row  ||  row.fract == 0 ?
 						0 :
@@ -1467,12 +1465,12 @@ function nationalEnabled() {
 	}
 	
 	function makeCurrentCandidateValid() {
-		if( ! current.party )
+		if( ! current.coalition )
 			return;
 		var results = geoResults();
-		var col = results.totals.colsById[ 'TabCount-' + current.party ];
+		var col = results.totals.colsById[ 'TabCount-' + current.coalition ];
 		if( ! results.totals.row[col] )
-			current.party = null;
+			current.coalition = null;
 	}
 	
 	function nameCase( name ) {
@@ -1591,9 +1589,9 @@ function nationalEnabled() {
 		var colors = _.map( topCandidates, function( candidate ) {
 			return candidate.color;
 		});
-		var selected = current.party ? '' : ' selected';
+		var selected = current.coalition ? '' : ' selected';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-top" title="', T('clickForAllCandidatesMap'), '">',
+			'<tr class="legend-candidate', selected, '" id="legend-candidate-top" title="', T('clickForAllCoalitionsMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( colors, 2 ),
@@ -1601,7 +1599,7 @@ function nationalEnabled() {
 				'</td>',
 				'<td colspan="3" class="right">',
 					'<div class="legend-candidate">',
-						T('allCandidates'),
+						T('allCoalitions'),
 					'</div>',
 				'</td>',
 			'</tr>'
@@ -1609,9 +1607,9 @@ function nationalEnabled() {
 	}
 	
 	function formatSidebarCandidate( candidate ) {
-		var selected = ( candidate.id == current.party ) ? ' selected' : '';
+		var selected = ( candidate.id == current.coalition ) ? ' selected' : '';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForHeatMap'), '">',
+			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( candidate.color, 8 ),
@@ -1665,7 +1663,7 @@ function nationalEnabled() {
 	function formatListCandidate( candidate, i, list ) {
 		var cls = '';
 		if( i === 0 ) cls += ' first';
-		if( candidate.id == current.party ) cls += ' selected';
+		if( candidate.id == current.coalition ) cls += ' selected';
 		var vs = candidate.vsAll, pct = isNaN(vs) ? '&nbsp;' : formatPercent(vs);
 		//var voteDivs = S(
 		//	'<div class="candidate-percent">',
@@ -1752,7 +1750,7 @@ function nationalEnabled() {
 		if( row  &&  col ) {
 			row.geoid = geoid;
 			row.geo = geo;
-			var forced = election.parties && current.party;
+			var forced = election.coalitions && current.coalition;
 			top = getTopCandidates( results, row, 'votes', 6, forced );
 			var content = ! top.length ? '' : S(
 				'<div class="tipcontent">',
@@ -2011,7 +2009,7 @@ function nationalEnabled() {
 		function candidateId( element, click ) {
 			var id = element.id.replace(/^legend-candidate-/,'');
 			if( id == 'top' ) id = null;
-			if( params.click  &&  id == current.party ) id = null;
+			if( params.click  &&  id == current.coalition ) id = null;
 			return id;
 		}
 		
@@ -2023,7 +2021,7 @@ function nationalEnabled() {
 				$(this).addClass( 'hover' );
 				if( ! params.click ) {
 					var id = candidateId( this );
-					if( id == current.party ) return;
+					if( id == current.coalition ) return;
 					sidebarOneshot( function() {
 						setCandidate( id );
 					}, 200 );
@@ -2100,8 +2098,8 @@ function nationalEnabled() {
 		//});
 		
 		setCandidate = function( id, why ) {
-			if( params.click  ||  id != current.party ) {
-				current.party = id;
+			if( params.click  ||  id != current.coalition ) {
+				current.coalition = id;
 				loadView();
 			}
 			if( why ) analytics( why, 'candidate', id || 'all' );
@@ -2422,7 +2420,7 @@ function nationalEnabled() {
 		
 		var regRows = {};
 		
-		function addRow( idReg ) {
+		function newRow( idReg ) {
 			regRow = [];
 			for( var iCol = -1;  ++iCol < col.length; )
 				regRow[iCol] = 0;
@@ -2435,7 +2433,7 @@ function nationalEnabled() {
 			var id = row[colID];
 			var split = id.split('-');
 			var idReg = split[1] || id;
-			var regRow = regRows[idReg] || addRow( idReg );
+			var regRow = regRows[idReg] || newRow( idReg );
 			
 			for( var iCol = -1;  ++iCol < col.length; )
 				if( iCol != colID )
@@ -2446,11 +2444,65 @@ function nationalEnabled() {
 			cols: col,
 			rows: _.toArray( regRows )
 		};
+		
+		addCoalitionResults( json.table );
+		addCoalitionResults( json.regional );
+	}
+	
+	function addCoalitionResults( table ) {
+		var colCoa = makeCols( election.coalitions );
+		var col = table.cols, colID = _.indexOf( col, 'ID' );
+		
+		var parties = election.parties, coalitions = election.coalitions;
+		
+		var rowsCoa = [];
+		
+		function newRow( id ) {
+			row = [];
+			for( var iCol = -1;  ++iCol < colCoa.length; )
+				row[iCol] = 0;
+			row[colCoa.ID] = id;
+			return row;
+		}
+		
+		var rowsCoa = _.map( table.rows, function( row ) {
+			var rowCoa = newRow( row[colID] );
+			
+			for( var iCol = -1;  ++iCol < colID; ) {
+				var idParty = col[iCol].replace( 'TabCount-', '' );
+				var party = parties.by.id[idParty];
+				var coalition = party.coalition;
+				var iColCoa = coalition.index;
+				rowCoa[iColCoa] += row[iCol];
+			}
+			
+			rowCoa[colCoa.ID] = row[colID];
+			
+			for( var iCol = colID;  ++iCol < col.length; ) {
+				rowCoa[ colCoa.ID - colID + iCol ] = row[iCol];
+			}
+			
+			return rowCoa;
+		});
+		
+		table.parties = {
+			cols: table.cols,
+			rows: table.rows
+		};
+		
+		table.cols = colCoa;
+		table.rows = rowsCoa;
 	}
 	
 	function fixupResults( json, results, geo ) {
 		geo.results = geo.results || {};
 		geo.results[electionKey] = results;
+		
+		fixupResultsOne( json, results, geo );
+		fixupResultsOne( json, results.parties, geo );
+	}
+	
+	function fixupResultsOne( json, results, geo ) {
 		results.mode = json.mode;
 		
 		var zero = ( results.mode == 'test'  &&  ! debug );
@@ -2490,8 +2542,8 @@ function nationalEnabled() {
 				});
 			}
 		}
-		election.parties.forEach( function( party ) {
-			totalPush( 'TabCount-', party.id, 0, party );
+		election.coalitions.forEach( function( coalition ) {
+			totalPush( 'TabCount-', coalition.id, 0, coalition );
 		});
 		totalPush( null, 'TabTotal', 0 );
 		totalPush( null, 'NumBallotBoxes', 0 );

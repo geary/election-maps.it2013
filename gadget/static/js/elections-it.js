@@ -13,7 +13,8 @@ var coalitionsIT2013 = _.map([
 	"S|#1560BD|With Monti for Italy|Scelta Civica, con Monti per l'Italia",
 	"R|#FF6600|Civil Revolution|Rivoluzione Civile",
 	"M|#FFFF00|Five Star Movement|Movimento 5 Stelle",
-	"D|#E75480|Stop the Decline|Fare per Fermare il Declino"	
+	"D|#E75480|Stop the Decline|Fare per Fermare il Declino",
+	"X|#AAAAAA|Others|Altrui"
 ], function( s ) {
 	s = s.split('|');
 	return {
@@ -22,6 +23,9 @@ var coalitionsIT2013 = _.map([
 		fullName: chooseName( s, { en:2, it:3 } )
 	};
 });
+
+indexArray( coalitionsIT2013, 'id' );
+
 
 var partiesIT2013 = _.map([
 	// id|contests|coalition|color|name_en|name_it
@@ -100,11 +104,13 @@ var partiesIT2013 = _.map([
 	return {
 		id: s[0],
 		contests: s[1] || '',
-		coalition: s[2] || '',
-		color: s[3] || '#FFFFFF',
+		coalition: coalitionsIT2013.by.id[ s[2] || 'X' ],
+		color: s[3] || '#AAAAAA',
 		fullName: chooseName( s, { en:4, it:5 } ) || s[0].replace( /_/g, ' ' )
 	};
 });
+
+indexArray( partiesIT2013, 'id' );
 
 
 var elections = {
@@ -112,8 +118,9 @@ var elections = {
 		date: '2013-02-25',
 		tzHour: +1,
 		photos: false,
-		candidates: partiesIT2013,
+		candidates: coalitionsIT2013,
 		parties: partiesIT2013,
+		coalitions: coalitionsIT2013,
 		electionids: {
 			'IT': 3004
 		}
@@ -122,8 +129,9 @@ var elections = {
 		date: '2013-02-25',
 		tzHour: +1,
 		photos: false,
-		candidates: partiesIT2013,
+		candidates: coalitionsIT2013,
 		parties: partiesIT2013,
+		coalitions: coalitionsIT2013,
 		electionids: {
 			'IT': 3003
 		}
