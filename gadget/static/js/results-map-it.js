@@ -412,7 +412,11 @@ function formatSidebarTable( cells ) {
 				//	//'<a class="button', params.year == 2013 ? ' selected' : '', '" id="btn2013">',
 				//	//	2013,
 				//	//'</a>',
-					'<a class="button', params.province ? ' selected' : '', '" id="btnProvince">',
+					'<a class="button', params.province ? '' : ' selected', '" id="btnLevel-region">',
+						params.contest == 'senate' ? T('regions') : T('circos'),
+					'</a>',
+					'&nbsp;',
+					'<a class="button', params.province ? ' selected' : '', '" id="btnLevel-province">',
 						T('provinces'),
 					'</a>',
 					'&nbsp;&nbsp;&nbsp;',
@@ -2098,16 +2102,16 @@ function nationalEnabled() {
 			}
 		});
 		
-		$sidebar.delegate( '#btnProvince', {
+		$sidebar.delegate( '#btnLevel-province,#btnLevel-region', {
 			click: function( event ) {
-				toggleProvince();
+				setProvince( this.id == 'btnLevel-province' );
 				event.preventDefault();
 			}
 		});
 		
 		$sidebar.delegate( '#btnContest-senate,#btnContest-chamber', {
 			click: function( event ) {
-				setContest( this.id.replace(/^btnContest-/, '' ) );
+				setContest( this.id.split('-')[1] );
 				event.preventDefault();
 			}
 		});
@@ -2142,8 +2146,8 @@ function nationalEnabled() {
 		}
 	}
 	
-	function toggleProvince() {
-		params.province = ! params.province;
+	function setProvince( province ) {
+		params.province = !! province;
 		loadView();
 	}
 	
