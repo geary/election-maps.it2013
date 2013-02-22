@@ -617,109 +617,109 @@ function nationalEnabled() {
 		}
 	}
 	
-	function setPlayback() {
-		var play = getPlaybackParams();
-		if( ! play ) return;
-		play.player.setup();
-		setInterval( play.player.tick, play.time );
-	}
-	
-	function getPlaybackParams() {
-		var play = params.play;
-		if( ! play ) return false;
-		play = play.split( ',' );
-		var time = Math.max( play[1] || 5000, 1000 );
-		var type = play[0];
-		var player = players[type];
-		if( ! player ) return false;
-		return {
-			player: player,
-			type: type,
-			time: time
-		};
-	}
-	
-	function playType() {
-		var play = getPlaybackParams();
-		return play && play.type;
-	}
-	
-	function playCandidates() {
-		return playType() == 'candidates';
-	}
-	
-	function playCounties() {
-		return playType() == 'counties';
-	}
-	
-	function autoplay() {
-		return !! playType();
-	}
-	
-	function interactive() {
-		return ! autoplay();
-	}
-	
-	function tv() {
-		return autoplay();
-	}
-	
-	function web() {
-		return ! tv();
-	}
-	
-	var players = {
-		candidates: {
-			setup: function() {
-			},
-			tick: function() {
-				var topCandidates = getTopCandidates( state.results, -1, 'votes' );
-				if( ! current.party ) {
-					i = 0;
-				}
-				else {
-					for( var i = 0;  i < topCandidates.length;  ++i ) {
-						if( topCandidates[i].id == current.party ) {
-							++i;
-							if( i >= topCandidates.length )
-								i = -1;
-							break;
-						}
-					}
-				}
-				current.party = ( i >= 0  &&  topCandidates[i].id );
-				setCandidate( current.party );
-			}
-		},
-		counties: {
-			//setup: function() {
-			//	var features = state.geo.county.features;
-			//	//features.playOrder = sortArrayBy( features, function( feature ) {
-			//	//	return(
-			//	//		-feature.centroid[1] * 1000000000 + feature.centroid[0]
-			//	//	);
-			//	//});
-			//	features.playOrder = sortArrayBy( features, 'name' );
-			//},
-			//tick: function() {
-			//	var geo = state.geo.county;
-			//	var order = geo.features.playOrder,
-			//		next = order.next, length = order.length;
-			//	if( ! next  ||  next >= length ) next = 0;
-			//	while( next < length ) {
-			//		var feature = order[next++], id = feature.id;
-			//		var row = featureResults( results, feature );
-			//		var use = row && row[col.NumCountedBallotBoxes];
-			//		if( use ) {
-			//			outlineFeature({ geo:geo, feature:feature });
-			//			showTip({ geo:geo, feature:feature });
-			//			break;
-			//		}
-			//	}
-			//	order.next = next;
-			//}
-		}
-	};
+	//function setPlayback() {
+	//	var play = getPlaybackParams();
+	//	if( ! play ) return;
+	//	play.player.setup();
+	//	setInterval( play.player.tick, play.time );
+	//}
+	//
+	//function getPlaybackParams() {
+	//	var play = params.play;
+	//	if( ! play ) return false;
+	//	play = play.split( ',' );
+	//	var time = Math.max( play[1] || 5000, 1000 );
+	//	var type = play[0];
+	//	var player = players[type];
+	//	if( ! player ) return false;
+	//	return {
+	//		player: player,
+	//		type: type,
+	//		time: time
+	//	};
+	//}
+	//
+	//function playType() {
+	//	var play = getPlaybackParams();
+	//	return play && play.type;
+	//}
+	//
+	//function playCandidates() {
+	//	return playType() == 'candidates';
+	//}
+	//
+	//function playCounties() {
+	//	return playType() == 'counties';
+	//}
+	//
+	//function autoplay() {
+	//	return !! playType();
+	//}
+	//
+	//function interactive() {
+	//	return ! autoplay();
+	//}
+	//
+	//function tv() {
+	//	return autoplay();
+	//}
+	//
+	//function web() {
+	//	return ! tv();
+	//}
+	//
+	//var players = {
+	//	candidates: {
+	//		setup: function() {
+	//		},
+	//		tick: function() {
+	//			var topCandidates = getTopCandidates( state.results, -1, 'votes' );
+	//			if( ! current.party ) {
+	//				i = 0;
+	//			}
+	//			else {
+	//				for( var i = 0;  i < topCandidates.length;  ++i ) {
+	//					if( topCandidates[i].id == current.party ) {
+	//						++i;
+	//						if( i >= topCandidates.length )
+	//							i = -1;
+	//						break;
+	//					}
+	//				}
+	//			}
+	//			current.party = ( i >= 0  &&  topCandidates[i].id );
+	//			setCandidate( current.party );
+	//		}
+	//	},
+	//	counties: {
+	//		//setup: function() {
+	//		//	var features = state.geo.county.features;
+	//		//	//features.playOrder = sortArrayBy( features, function( feature ) {
+	//		//	//	return(
+	//		//	//		-feature.centroid[1] * 1000000000 + feature.centroid[0]
+	//		//	//	);
+	//		//	//});
+	//		//	features.playOrder = sortArrayBy( features, 'name' );
+	//		//},
+	//		//tick: function() {
+	//		//	var geo = state.geo.county;
+	//		//	var order = geo.features.playOrder,
+	//		//		next = order.next, length = order.length;
+	//		//	if( ! next  ||  next >= length ) next = 0;
+	//		//	while( next < length ) {
+	//		//		var feature = order[next++], id = feature.id;
+	//		//		var row = featureResults( results, feature );
+	//		//		var use = row && row[col.NumCountedBallotBoxes];
+	//		//		if( use ) {
+	//		//			outlineFeature({ geo:geo, feature:feature });
+	//		//			showTip({ geo:geo, feature:feature });
+	//		//			break;
+	//		//		}
+	//		//	}
+	//		//	order.next = next;
+	//		//}
+	//	}
+	//};
 	
 	function showError( type, file ) {
 		file = file.replace( '.json', '' ).replace( '-all', '' ).toUpperCase();
@@ -740,8 +740,8 @@ function nationalEnabled() {
 		]);
 	}
 	
-	$body.addClass( autoplay() ? 'autoplay' : 'interactive' );
-	$body.addClass( tv() ? 'tv' : 'web' );
+	//$body.addClass( autoplay() ? 'autoplay' : 'interactive' );
+	//$body.addClass( tv() ? 'tv' : 'web' );
 	// TODO: refactor with duplicate code in geoReady() and resizeViewNow()
 	var mapWidth = ww - sidebarWidth;
 	$body
@@ -783,7 +783,7 @@ function nationalEnabled() {
 			}, opt.reloadTime );
 		}
 		if( ! didGeoReady ) {
-			setPlayback();
+			//setPlayback();
 			didGeoReady = true;
 		}
 	}
@@ -1049,7 +1049,7 @@ function nationalEnabled() {
 			map: map,
 			geos: geos,
 			underlay: getInsetUnderlay,
-			events: playType() ? {} : polyEvents
+			events: /*playType() ? {} :*/ polyEvents
 		});
 		overlay.setMap( map );
 		setTimeout( function() {
@@ -1250,7 +1250,7 @@ function nationalEnabled() {
 		var feat = $.extend( {}, where.feature, {
 			fillColor: '#000000',
 			fillOpacity: 0,
-			strokeWidth: playCounties() ? 5 : opt.counties ? 1.5 : 2.5,
+			strokeWidth: /*playCounties() ? 5 : opt.counties ? 1.5 :*/ 2.5,
 			strokeColor: '#000000',
 			strokeOpacity: faint ? .25 : 1
 		});
@@ -1276,7 +1276,7 @@ function nationalEnabled() {
 	
 	var tipOffset = { x:10, y:20 };
 	var $maptip = $('#maptip'), tipHtml;
-	if( ! playType() ) {
+	//if( ! playType() ) {
 		$body.bind( 'click mousemove', moveTip );
 		$maptip.click( function( event ) {
 			//if( event.target.id == 'close-tip' ) {
@@ -1289,7 +1289,7 @@ function nationalEnabled() {
 			//	if( feature ) gotoGeo( feature, 'tap' );
 			//}
 		});
-	}
+	//}
 	
 	function showTip( where ) {
 		tipHtml = formatTip( where );
