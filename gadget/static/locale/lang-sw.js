@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Wagombea wote", 
 "allCandidatesShort": "Wote", 
+"allCoalitions": "", 
 "allParties": "Vyama Vyote", 
 "articqueCopyright": "Hakimiliki ARTICQUE, wilaya ya kutunga sheria", 
 "automaticUpdate": "Ukurasa huu unasasika kiotomatiki", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Bofya kwa matokeo ya urais", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "Bofya kwa ramani ya wagombea wote", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Bofya kwa ramanijoto ya mgombea", 
 "clickForLocal": "Bofya kwa maelezo ya kina", 
 "continentAfrica": "Africa", 

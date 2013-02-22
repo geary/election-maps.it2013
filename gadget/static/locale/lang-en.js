@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "All Candidates", 
 "allCandidatesShort": "All", 
+"allCoalitions": "All Coalitions", 
 "allParties": "All Parties", 
 "articqueCopyright": "Copyright ARTICQUE, legislative district boundaries", 
 "automaticUpdate": "This page updates automatically", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Click for presidential results", 
 "clickFor-senate": "Click for Senate results", 
 "clickForAllCandidatesMap": "Click for map of all candidates", 
+"clickForAllCoalitionsMap": "Click for map of all coalitions", 
+"clickForCoalitionHeatMap": "Click for coalition heatmap", 
 "clickForHeatMap": "Click for candidate heatmap", 
 "clickForLocal": "Click for detailed results", 
 "continentAfrica": "Africa", 

@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Todos los candidatos", 
 "allCandidatesShort": "Todos", 
+"allCoalitions": "", 
 "allParties": "Todos los partidos", 
 "articqueCopyright": "Derechos de autor ARTICQUE, los l\u00edmites de distritos legislativos", 
 "automaticUpdate": "Esta p\u00e1gina se actualiza autom\u00e1ticamente", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Haz clic para obtener resultados presidenciales", 
 "clickFor-senate": "Haz clic para obtener resultados del Senado", 
 "clickForAllCandidatesMap": "Haz clic para ver un mapa de todos los candidatos\n", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Haz clic para ver un mapa de calor sobre los candidatos", 
 "clickForLocal": "Haz clic para obtener resultados detallados", 
 "continentAfrica": "Africa", 

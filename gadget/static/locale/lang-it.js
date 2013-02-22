@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Tutti i candidati", 
 "allCandidatesShort": "Tutti", 
+"allCoalitions": "Tutti i coalizioni", 
 "allParties": "Tutti i partiti", 
 "articqueCopyright": "Copyright ARTICQUE, confini del distretto legislativo", 
 "automaticUpdate": "Questa pagina viene aggiornata automaticamente", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Fai clic per i risultati delle elezioni presidenziali", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "Fai clic per la mappa di tutti i candidati", 
+"clickForAllCoalitionsMap": "Fai clic per la mappa di tutti i coalizioni", 
+"clickForCoalitionHeatMap": "Fai clic per la heatmap dei coalizioni", 
 "clickForHeatMap": "Fai clic per la heatmap dei candidati", 
 "clickForLocal": "Fai clic per i risultati dettagliati", 
 "continentAfrica": "Africa", 

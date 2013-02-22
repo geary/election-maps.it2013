@@ -1,6 +1,7 @@
 loadStrings({
 "allCandidates": "Alle Kandidaten", 
 "allCandidatesShort": "Alle", 
+"allCoalitions": "", 
 "allParties": "Alle Parteien", 
 "articqueCopyright": "Copyright ARTICQUE, Wahlkreisgrenzen", 
 "automaticUpdate": "Diese Seite wird automatisch aktualisiert.", 
@@ -19,6 +20,8 @@ loadStrings({
 "clickFor-president": "Zum Anzeigen der Pr\u00e4sidentschaftswahlergebnisse klicken ", 
 "clickFor-senate": "", 
 "clickForAllCandidatesMap": "Zum Anzeigen einer Karte mit allen Kandidaten klicken ", 
+"clickForAllCoalitionsMap": "", 
+"clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Zum Anzeigen einer Karte der politischen Verteilung klicken ", 
 "clickForLocal": "Zum Anzeigen detaillierter Ergebnisse klicken ", 
 "continentAfrica": "Africa", 
