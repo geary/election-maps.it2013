@@ -790,16 +790,28 @@ function nationalEnabled() {
 		}
 	}
 	
+	function provincialGeo() {
+		return geoJSON[current.geoid].province;
+	}
+	
+	function regionalGeo() {
+		var json = geoJSON[current.geoid];
+		return params.contest == 'senate' ? json.region : json.deputy;
+	}
+	
+	function nationalGeo() {
+		return geoJSON[current.geoid].nation;
+	}
+	
 	function currentGeo() {
 		return currentGeos()[0];
 	}
 	
 	function currentGeos() {
-		var json = geoJSON[current.geoid];
 		var geos = [];
-		if( params.province ) geos.push( json.province );
-		geos.push( params.contest == 'senate' ? json.region : json.deputy );
-		geos.push( json.nation );
+		if( params.province ) geos.push( provincialGeo() );
+		geos.push( regionalGeo() );
+		geos.push( nationalGeo() );
 		return geos;
 	}
 	
@@ -1063,12 +1075,14 @@ function nationalEnabled() {
 	}
 	
 	function colorize() {
-		var json = geoJSON[current.geoid];
-		colorVotes( json.province, '#666666', 1, 1 );
-		colorSimple(
-			params.contest == 'senate' ? json.region : json.deputy, '#FFFFFF', '#444444', 1, 2
-		);
-		colorSimple( json.nation, '#FFFFFF', '#222222', 1, 2 );
+		if( params.province ) {
+			colorVotes( provincialGeo(), '#666666', 1, 1 );
+			colorSimple( regionalGeo(), '#FFFFFF', '#444444', 1, 2 );
+		}
+		else {
+			colorVotes( regionalGeo(), '#666666', 1, 1 );
+		}
+		colorSimple( nationalGeo(), '#FFFFFF', '#222222', 1, 2 );
 	}
 	
 	function colorSimple( geo, fillColor, strokeColor, strokeOpacity, strokeWidth ) {
@@ -2279,18 +2293,7 @@ function nationalEnabled() {
 		reloadTimer = null;
 		//delete params.randomize;
 		
-		var col = [];
-		election.candidates.forEach( function( candidate ) {
-			if( candidate.skip ) return;
-			col.push( 'TabCount-' + candidate.id );
-		});
-		col = col.concat(
-			'ID',
-			'TabTotal',
-			'NumBallotBoxes',
-			'NumCountedBallotBoxes'
-		);
-		indexArray( col );
+		var col = makeCols( election.candidates );
 		
 		var rows = _.map( currentGeo().features, function( feature ) {
 			var row = [];
@@ -2323,6 +2326,22 @@ function nationalEnabled() {
 		};
 		
 		loadResultTable( json, true );
+	}
+	
+	function makeCols( entities ) {
+		var col = [];
+		entities.forEach( function( entity ) {
+			if( entity.skip ) return;
+			col.push( 'TabCount-' + entity.id );
+		});
+		col = col.concat(
+			'ID',
+			'TabTotal',
+			'NumBallotBoxes',
+			'NumCountedBallotBoxes'
+		);
+		indexArray( col );
+		return col;
 	}
 	
 	handleJSONPError = function( json ) {
@@ -2378,28 +2397,62 @@ function nationalEnabled() {
 	function fixup( geoid, id ) {
 		switch( geoid ) {
 			case 'IT':
-				id = id.split('-')[2];
+				var s = id.split('-');
+				id = s[2] || s[0];
 				break;
 		}
 		return id;
 	}
 	
 	function loadResultTable( json, loading ) {
-		var geo = currentGeo();  //  geoJSON[current.geoid];
-		geo.results = geo.results || {};
-		var results = geo.results[electionKey] = json.table;
-		results.mode = json.mode;
-		
 		if( loading ) {
 			cacheResults.add( json.electionid, json, opt.resultCacheTime );
-			fixupResults( geo, results );
+			addRegionalResults( json );
+			
+			fixupResults( json, json.table, provincialGeo() );
+			fixupResults( json, json.regional, regionalGeo() );
 		}
 		
 		if( electionsPending.length == 0 )
 			geoReady();
 	}
 	
-	function fixupResults( geo, results ) {
+	function addRegionalResults( json ) {
+		var col = json.table.cols, colID = _.indexOf( col, 'ID' );
+		
+		var regRows = {};
+		
+		function addRow( idReg ) {
+			regRow = [];
+			for( var iCol = -1;  ++iCol < col.length; )
+				regRow[iCol] = 0;
+			regRow[colID] = idReg;
+			regRows[idReg] = regRow;
+			return regRow;
+		}
+		
+		_.each( json.table.rows, function( row ) {
+			var id = row[colID];
+			var split = id.split('-');
+			var idReg = split[1] || id;
+			var regRow = regRows[idReg] || addRow( idReg );
+			
+			for( var iCol = -1;  ++iCol < col.length; )
+				if( iCol != colID )
+					regRow[iCol] += row[iCol];
+		});
+		
+		json.regional = {
+			cols: col,
+			rows: _.toArray( regRows )
+		};
+	}
+	
+	function fixupResults( json, results, geo ) {
+		geo.results = geo.results || {};
+		geo.results[electionKey] = results;
+		results.mode = json.mode;
+		
 		var zero = ( results.mode == 'test'  &&  ! debug );
 		
 		var col = results.colsById = {};
