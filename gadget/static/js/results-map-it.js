@@ -123,7 +123,7 @@ var debug = params.debug;
 //opt.candidate = '1';
 //opt.zoom = opt.zoom || 3;
 opt.fontsize = '15px';
-var sidebarWidth = 420;
+var sidebarWidth = 450;
 
 opt.resultCacheTime = 30 * 1000;
 opt.reloadTime = 60 * 1000;
@@ -173,6 +173,11 @@ document.write(
 		'a.button.hover { background-color: #F6F6F6; background-image:linear-gradient(top,#F8F8F8,#F1F1F1); border:1px solid #C6C6C6; box-shadow:0px 1px 1px rgba(0,0,0,0.1); color:#222; }',
 		'a.button.selected { background-color: #DDD; background-image:linear-gradient(top,#DDD,#D0D0D0); border:1px solid #BBB; box-shadow:inset 0px 1px 2px rgba(0,0,0,0.1); color:#111; }',
 		'a.button.disabled { color:#AAA; }',
+		'div.expander { width:12px; height:12px; background-image: url(', imgUrl('sprites.png'), '); }',
+		'div.expander.hover { background-position:-12px 0px; }',
+		'div.expander.closed { background-position:-24px 0px; }',
+		'div.expander.closed.hover { background-position:-36px 0px; }',
+		'#sidebar div.expander { margin:0 2px 0 4px; }',
 		'#outer {}',
 		'.barvote { font-weight:bold; color:white; }',
 		'div.topbar-header, div.sidebar-header { padding:3px; }',
@@ -1601,6 +1606,9 @@ function nationalEnabled() {
 		return S(
 			'<tr class="legend-candidate legend-coalition', selected, '" id="legend-candidate-top" title="', T('clickForAllCoalitionsMap'), '">',
 				'<td class="left">',
+					formatExpander(),
+				'</td>',
+				'<td>',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( colors, 2 ),
 					'</div>',
@@ -1644,9 +1652,13 @@ function nationalEnabled() {
 			candidate.id == current.coalition ? ' selected' : '',
 			candidate.isParty ? ' legend-party' : ' legend-coalition'
 		);
+		var style = ( candidate.isParty ? 'display:none;' : '' );
 		return S(
-			'<tr class="legend-candidate', classes, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
+			'<tr class="legend-candidate', classes, '" id="legend-candidate-', candidate.id, '" style="', style, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
 				'<td class="left">',
+					candidate.isParty ? '' : formatExpander(),
+				'</td>',
+				'<td>',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( candidate.color, 8 ),
 					'</div>',
@@ -1669,6 +1681,13 @@ function nationalEnabled() {
 			'</tr>'
 		);
 	}
+	
+	function formatExpander() {
+		return S(
+			'<div class="expander closed">',
+			'</div>'
+		);
+	} 
 	
 	function formatCandidateList( topCandidates, formatter, header ) {
 		if( ! topCandidates.length )
@@ -2077,6 +2096,30 @@ function nationalEnabled() {
 				}
 				var id = candidateId( this, true );
 				setCandidate( id, 'click' );
+			}
+		});
+		
+		$sidebar.delegate( 'div.expander', {
+			mouseover: function( event ) {
+				$(this).addClass( 'hover' );
+			},
+			mouseout: function( event ) {
+				$(this).removeClass( 'hover' );
+			},
+			click: function( event ) {
+				var $expander = $(this);
+				var expand = $expander.is('.closed');
+				$expander.toggleClass( 'closed' );
+				var $tr = $expander.closest('tr');
+				if( $tr.is('#legend-candidate-top') ) {
+					$tr.nextAll('tr.legend-coalition').find('div.expander')
+						.toggleClass( 'closed', ! expand );
+					$tr.nextAll('tr.legend-party').toggle( expand );
+				}
+				else {
+					$tr.nextUntil('tr.legend-coalition').toggle( expand );
+				}
+				event.stopPropagation();
 			}
 		});
 		
