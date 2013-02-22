@@ -123,7 +123,7 @@ var debug = params.debug;
 //opt.candidate = '1';
 //opt.zoom = opt.zoom || 3;
 opt.fontsize = '15px';
-var sidebarWidth = 290;  // params.play ? 340 : 280;
+var sidebarWidth = 420;
 
 opt.resultCacheTime = 30 * 1000;
 opt.reloadTime = 60 * 1000;
@@ -260,6 +260,7 @@ document.write(
 		'td.legend-filler { border-color:transparent; }',
 		//'tr.legend-candidate td { width:20%; }',
 		'tr.legend-candidate td { cursor:pointer; }',
+		'tr.legend-candidate.legend-coalition { font-weight:bold; }',
 		'#maptip table.candidates tr.legend-candidate td { padding-top:2px; }',
 		'tr.legend-candidate.hover td { background-color:#F5F5F5; border-top:1px solid #D9D9D9; border-bottom:1px solid #D9D9D9; }',
 		'tr.legend-candidate.hover td.left { border-left:1px solid #D9D9D9; }',
@@ -1323,6 +1324,7 @@ function nationalEnabled() {
 	}
 	
 	function formatSpanColorPatch( colors, spaces, border ) {
+		if( ! colors ) return '';
 		if( ! colors.push ) colors = [ colors ];
 		border = border || '1px solid #C2C2C2';
 		return S(
@@ -1414,7 +1416,8 @@ function nationalEnabled() {
 		max = max || Infinity;
 		if( ! row ) return [];
 		var col = results.colsById;
-		if( row == -1 ) {
+		var totals = ( row == -1 );
+		if( totals ) {
 			row = results.totals.row;
 			col = results.totals.colsById;
 			colIncr = 1;
@@ -1423,6 +1426,9 @@ function nationalEnabled() {
 		var total = 0;
 		for( var i = 0, iCol = 0;  i < top.length; ++i, iCol += colIncr ) {
 			total += row[iCol];
+		}
+		if( totals ) {
+			results.total = total;
 		}
 		for( var i = 0, iCol = 0;  i < top.length; ++i, iCol += colIncr ) {
 			var candidate = top[i], votes = row[iCol];
@@ -1515,7 +1521,9 @@ function nationalEnabled() {
 					viewNational,
 				'</div>'
 			);
-			var candidates = _.map( topCandidates, formatSidebarCandidate );
+			var candidates = _.map( topCandidates, function( candidate ) {
+				return formatSidebarCandidate( results, candidate );
+			});
 			resultsScrollingHTML = none ? '' : S(
 				formatCandidateList(
 					[ top ].concat( candidates ),
@@ -1591,7 +1599,7 @@ function nationalEnabled() {
 		});
 		var selected = current.coalition ? '' : ' selected';
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-top" title="', T('clickForAllCoalitionsMap'), '">',
+			'<tr class="legend-candidate legend-coalition', selected, '" id="legend-candidate-top" title="', T('clickForAllCoalitionsMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( colors, 2 ),
@@ -1606,10 +1614,38 @@ function nationalEnabled() {
 		);
 	}
 	
-	function formatSidebarCandidate( candidate ) {
-		var selected = ( candidate.id == current.coalition ) ? ' selected' : '';
+	function formatSidebarCandidate( results, candidate ) {
+		var totals = results.parties.totals;
+		var coalition = election.coalitions.by.id[candidate.id];
+		var parties = _.map( coalition.parties, function( party ) {
+			var col = totals.colsById[ 'TabCount-' + party.id ];
+			var votes = totals.row[col];
+			return {
+				isParty: true,
+				id: party.id,
+				fullName: party.fullName,
+				votes: votes,
+				vsAll: votes / results.total
+			};
+		});
+		
+		parties = sortArrayBy( parties, 'votes', { numeric:true } ).reverse();
+		while( parties.length  &&  ! parties[parties.length-1].votes )
+			parties.pop();
+		
 		return S(
-			'<tr class="legend-candidate', selected, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
+			formatSidebarRow( candidate ),
+			_.map( parties, formatSidebarRow ).join('')
+		);
+	}
+	
+	function formatSidebarRow( candidate ) {
+		var classes = S(
+			candidate.id == current.coalition ? ' selected' : '',
+			candidate.isParty ? ' legend-party' : ' legend-coalition'
+		);
+		return S(
+			'<tr class="legend-candidate', classes, '" id="legend-candidate-', candidate.id, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
 				'<td class="left">',
 					'<div class="legend-candidate">',
 						formatSpanColorPatch( candidate.color, 8 ),
@@ -2498,11 +2534,11 @@ function nationalEnabled() {
 		geo.results = geo.results || {};
 		geo.results[electionKey] = results;
 		
-		fixupResultsOne( json, results, geo );
-		fixupResultsOne( json, results.parties, geo );
+		fixupResultsOne( json, results, geo, 'coalitions' );
+		fixupResultsOne( json, results.parties, geo, 'parties' );
 	}
 	
-	function fixupResultsOne( json, results, geo ) {
+	function fixupResultsOne( json, results, geo, list ) {
 		results.mode = json.mode;
 		
 		var zero = ( results.mode == 'test'  &&  ! debug );
@@ -2542,12 +2578,12 @@ function nationalEnabled() {
 				});
 			}
 		}
-		election.coalitions.forEach( function( coalition ) {
+		election[list].forEach( function( coalition ) {
 			totalPush( 'TabCount-', coalition.id, 0, coalition );
 		});
 		totalPush( null, 'TabTotal', 0 );
 		totalPush( null, 'NumBallotBoxes', 0 );
-		totalPush( null, 'NumCountedBallotBoxes', [0,0,0] );
+		totalPush( null, 'NumCountedBallotBoxes', 0 );
 		
 		//var fix = state.fix || {};
 		var features = geo.features;
@@ -2626,7 +2662,7 @@ function nationalEnabled() {
 				}
 				rowT[colT.TabTotal] += row[col.TabTotal];
 				rowT[colT.NumBallotBoxes] += row[col.NumBallotBoxes];
-				++rowT[colT.NumCountedBallotBoxes][ row[col.NumCountedBallotBoxes] ];
+				rowT[colT.NumCountedBallotBoxes] += row[col.NumCountedBallotBoxes];
 			}
 			row.candidateMax = candidateMax;
 		}

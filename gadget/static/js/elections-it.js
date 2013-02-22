@@ -20,7 +20,8 @@ var coalitionsIT2013 = _.map([
 	return {
 		id: s[0],
 		color: s[1],
-		fullName: chooseName( s, { en:2, it:3 } )
+		fullName: chooseName( s, { en:2, it:3 } ),
+		parties: []
 	};
 });
 
@@ -101,13 +102,16 @@ var partiesIT2013 = _.map([
 	"VOTO_DI_PROTESTA|c"
 ], function( s ) {
 	s = s.split('|');
-	return {
+	var coalition = coalitionsIT2013.by.id[ s[2] || 'X' ];
+	var party = {
 		id: s[0],
 		contests: s[1] || '',
-		coalition: coalitionsIT2013.by.id[ s[2] || 'X' ],
+		coalition: coalition,
 		color: s[3] || '#AAAAAA',
 		fullName: chooseName( s, { en:4, it:5 } ) || s[0].replace( /_/g, ' ' )
 	};
+	coalition.parties.push( party );
+	return party;
 });
 
 indexArray( partiesIT2013, 'id' );
