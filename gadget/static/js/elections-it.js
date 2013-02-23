@@ -14,7 +14,7 @@ var coalitionsIT2013 = _.map([
 	"R|#FF6600|Antonio Ingroia|Civil Revolution|Rivoluzione Civile",
 	"F|#FFFF00|Beppe Grillo|Five Star Movement|Movimento 5 Stelle",
 	"D|#E75480|Oscar Giannino|Stop the Decline|FARE",
-	"X|#AAAAAA||Others|Altrui"
+	"X|#AAAAAA||Others|Altri"
 ], function( s ) {
 	s = s.split('|');
 	return {
@@ -94,7 +94,7 @@ var partiesIT2013 = _.map([
 	"61||Rifondazione Missina Italiana",
 	"62||Riformisti Italiani",
 	"63|R|Civil Revolution|Rivoluzione Civile",
-	"64|M|Civic Choice|Scelta Civica Con Monti per l'Italia",
+	"64|M|Civic Choice|Scelta Civica con Monti per l'Italia",
 	"65|I|Left Ecology Freedom|Sinistra Ecologia Libert&agrave;",
 	"66||Staminali d'Italia",
 	"67|I|SVP|SVP",
