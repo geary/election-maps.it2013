@@ -10,7 +10,7 @@ var coalitionsIT2013 = _.map([
 	// id|color|leader|name_en|name_it
 	"C|#3366FF|Silvio Berlusconi|Center-Right|Centrodestra",
 	"I|#DE2910|Pierluigi Bersani|Italy. Common Good|Italia. Bene Comune",
-	"M|#1560BD|Mario Monti|With Monti for Italy|Con Monti per l'Italia",
+	"M|#009900|Mario Monti|With Monti for Italy|Con Monti per l'Italia",
 	"R|#FF6600|Antonio Ingroia|Civil Revolution|Rivoluzione Civile",
 	"F|#FFFF00|Beppe Grillo|Five Star Movement|Movimento 5 Stelle",
 	"D|#E75480|Oscar Giannino|Stop the Decline|FARE",
