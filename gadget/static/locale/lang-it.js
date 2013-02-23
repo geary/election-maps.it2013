@@ -1,7 +1,7 @@
 loadStrings({
 "allCandidates": "Tutti i candidati", 
 "allCandidatesShort": "Tutti", 
-"allCoalitions": "Tutti i coalizioni", 
+"allCoalitions": "Tutti", 
 "allParties": "Tutti i partiti", 
 "articqueCopyright": "Copyright ARTICQUE, confini del distretto legislativo", 
 "automaticUpdate": "Questa pagina viene aggiornata automaticamente", 
@@ -115,7 +115,7 @@ loadStrings({
 "partyPlural-Ind": "", 
 "percent": "Percentuale", 
 "percentFormat": "{{{n}}}%", 
-"percentReporting": "{{{percent}}} di presenza ({{counted}}/{{total}}{{kind}})", 
+"percentReporting": "{{{percent}}} seggi scrutinati ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "Voto popolare", 
 "president": "Presidente", 
 "presidentButton": "Pres.", 
