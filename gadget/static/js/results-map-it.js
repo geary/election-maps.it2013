@@ -1291,12 +1291,13 @@ function nationalEnabled() {
 	}
 	
 	function formatCandidateAreaPatch( candidate, max ) {
+		var color = candidate.coalition ? candidate.coalition.color : candidate.color;
 		var size = Math.round( Math.sqrt( candidate.vsTop ) * max );
 		var margin1 = Math.floor( ( max - size ) / 2 );
 		var margin2 = max - size - margin1;
 		return S(
 			'<div style="margin:', margin1, 'px ', margin2, 'px ', margin2, 'px ', margin1, 'px;">',
-				formatDivColorPatch( candidate.color, size, size ),
+				formatDivColorPatch( color, size, size ),
 			'</div>'
 		);
 	}
@@ -1804,7 +1805,11 @@ function nationalEnabled() {
 		if( ! feature ) return null;
 		var geoid = where.feature.id;
 		var future = false;
-		var geo = where.geo, results = geoResults(geo), col = results && results.colsById;
+		var geo = where.geo, results = geoResults(geo);
+		var party = election.parties.by.id[current.party];
+		if( party )
+			results = results.parties;
+		var col = results && results.colsById;
 		var row = geo.draw !== false  &&  featureResults( results, where.feature );
 		var top = [];
 		var boxes = 0, counted = 0;
@@ -2704,7 +2709,7 @@ function nationalEnabled() {
 				var candidates = row.candidates = [];
 				for( var iCol = 0;  iCol < colID;  ++iCol ) {
 					var idCol = cols[iCol], id = idCol.replace( 'TabCount-', '' );
-					var candidate = election.candidates.by.id[id];
+					var candidate = election.candidates.by.id[id] || election.parties.by.id[id];
 					if( round2  &&  ! candidate.round2 ) {
 						row[iCol] = 0;
 					}
