@@ -114,7 +114,7 @@ loadStrings({
 "partyPlural-GOP": "", 
 "partyPlural-Ind": "", 
 "percent": "Procento", 
-"percentFormat": "{{n}} %", 
+"percentFormat": "{{{n}}} %", 
 "percentReporting": "Se\u010dteno {{{percent}}} \u2013 ({{counted}}/{{total}}{{kind}}) okrsk\u016f", 
 "popularVote": "V\u0161elidov\u00e9 hlasov\u00e1n\u00ed", 
 "president": "Prezident", 
