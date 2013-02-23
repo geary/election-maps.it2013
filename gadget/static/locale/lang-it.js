@@ -114,7 +114,7 @@ loadStrings({
 "partyPlural-GOP": "", 
 "partyPlural-Ind": "", 
 "percent": "Percentuale", 
-"percentFormat": "{{n}}%", 
+"percentFormat": "{{{n}}}%", 
 "percentReporting": "{{{percent}}} di presenza ({{counted}}/{{total}}{{kind}})", 
 "popularVote": "Voto popolare", 
 "president": "Presidente", 
