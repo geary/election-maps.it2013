@@ -25,6 +25,7 @@ loadStrings({
 "clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "", 
 "clickForLocal": "Cliquez pour obtenir des r\u00e9sultats d\u00e9taill\u00e9s", 
+"clickForPartyHeatMap": "", 
 "continentAfrica": "Africa", 
 "continentAfricaAsiaOceania": "", 
 "continentAmerica": "America", 

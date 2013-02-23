@@ -25,6 +25,7 @@ loadStrings({
 "clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Bofya kwa ramanijoto ya mgombea", 
 "clickForLocal": "Bofya kwa maelezo ya kina", 
+"clickForPartyHeatMap": "", 
 "continentAfrica": "Africa", 
 "continentAfricaAsiaOceania": "", 
 "continentAmerica": "America", 

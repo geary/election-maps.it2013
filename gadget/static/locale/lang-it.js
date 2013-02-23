@@ -25,6 +25,7 @@ loadStrings({
 "clickForCoalitionHeatMap": "Fai clic per la heatmap dei coalizioni", 
 "clickForHeatMap": "Fai clic per la heatmap dei candidati", 
 "clickForLocal": "Fai clic per i risultati dettagliati", 
+"clickForPartyHeatMap": "Fai clic per la heatmap dei partito", 
 "continentAfrica": "Africa", 
 "continentAfricaAsiaOceania": "Africa, Asia, Oceania ed Antartide", 
 "continentAmerica": "America", 
