@@ -1409,7 +1409,7 @@ function nationalEnabled() {
 			col = results.totals.colsById;
 			colIncr = 1;
 		}
-		var top = ( row.candidates || results.parties || [] ).slice();
+		var top = ( row.candidates || [] ).slice();
 		var total = 0;
 		for( var i = 0, iCol = 0;  i < top.length; ++i, iCol += colIncr ) {
 			total += row[iCol];
