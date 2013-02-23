@@ -25,6 +25,7 @@ loadStrings({
 "clickForCoalitionHeatMap": "", 
 "clickForHeatMap": "Zum Anzeigen einer Karte der politischen Verteilung klicken ", 
 "clickForLocal": "Zum Anzeigen detaillierter Ergebnisse klicken ", 
+"clickForPartyHeatMap": "", 
 "continentAfrica": "Africa", 
 "continentAfricaAsiaOceania": "", 
 "continentAmerica": "America", 
