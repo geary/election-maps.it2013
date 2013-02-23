@@ -80,7 +80,7 @@ loadStrings({
 "house": "", 
 "houseButton": "", 
 "houseDistrict": "", 
-"itSource": "Source: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
+"itSource": "Fonte: <a target=\"_blank\" href=\"http://www.elezioni.interno.it/\">Ministero dell\u2019Interno</a>", 
 "italy": "Italia", 
 "languageName": "Italian", 
 "legendNotUp": "", 

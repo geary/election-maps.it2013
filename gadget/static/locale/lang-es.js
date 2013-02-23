@@ -80,7 +80,7 @@ loadStrings({
 "house": "C\u00e1mara", 
 "houseButton": "C\u00e1mara", 
 "houseDistrict": "{{name}} distrito {{number}}", 
-"itSource": "Fuente: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
+"itSource": "", 
 "italy": "Italia", 
 "languageName": "Espa\u00f1ol", 
 "legendNotUp": "{{party}} no sujeto a la reelecci\u00f3n", 

@@ -80,7 +80,7 @@ loadStrings({
 "house": "", 
 "houseButton": "", 
 "houseDistrict": "", 
-"itSource": "Bron: CZSO (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
+"itSource": "", 
 "italy": "Itali\u00eb", 
 "languageName": "Nederlands", 
 "legendNotUp": "", 
