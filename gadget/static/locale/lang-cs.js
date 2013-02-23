@@ -80,7 +80,7 @@ loadStrings({
 "house": "", 
 "houseButton": "", 
 "houseDistrict": "", 
-"itSource": "Zdrojov\u00e1 data \u010cSU (<a target=\"_blank\" href=\"http://www.volby.cz/\">www.volby.cz</a>)", 
+"itSource": "", 
 "italy": "It\u00e1lie", 
 "languageName": "Czech", 
 "legendNotUp": "", 
