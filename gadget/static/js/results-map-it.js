@@ -370,38 +370,16 @@ function contentTable() {
 			//	'</div>',
 			//'</div>',
 			'<div id="sidebar">',
-				formatSidebarTable( [] ),
+				'<div class="sidebar-header" id="sidebar-header">',
+				'</div>',
+				'<div class="scroller" id="sidebar-scroll">',
+				'</div>',
 			'</div>',
 			'<div style="width:100%;">',
 				'<div id="map" style="width:100%; height:100%;">',
 				'</div>',
 			'</div>',
 		'</div>'
-	);
-}
-
-function formatSidebarTable( cells ) {
-	function filler() {
-		return S(
-			'<td class="legend-filler">',
-				'<div class="legend-filler">',
-					'&nbsp;',
-				'</div>',
-			'</td>'
-		);
-	}
-	function row( cells ) {
-		return S(
-			'<tr>',
-				cells.length ? cells.join('') : filler(),
-			'</tr>'
-		);
-	}
-	return S(
-		'<table cellpadding="0" cellspacing="0" style="width:100%; vertical-align:middle;">',
-			row( cells.slice( 0, 5 ) ),
-			row( cells.slice( 5 ) ),
-		'</table>'
 	);
 }
 
@@ -1470,8 +1448,21 @@ function nationalEnabled() {
 	}
 	
 	function setLegend() {
+		saveLegendState();
 		makeCurrentCandidateValid();
-		$('#sidebar').html( formatSidebar() );
+		var sidebar = formatSidebar();
+		$('#sidebar-header').html( sidebar.header );
+		$('#sidebar-scroll').html( sidebar.scroller );
+	}
+	
+	var legendState = {};
+	
+	function saveLegendState() {
+		var state = legendState = { expand: {} };
+		$('#sidebar-list tr.legend-coalition').each( function( i, tr ) {
+			var id = tr.id.replace( 'legend-candidate-', '' );
+			state.expand[id] = ! $(tr).find('div.expander').is('.closed');
+		});
 	}
 	
 	function makeCurrentCandidateValid() {
@@ -1550,9 +1541,9 @@ function nationalEnabled() {
 		//		T('linkToMap'),
 		//	'</a>'
 		//) : '';
-		return S(
-			'<div id="sidebar">',
-				'<div class="sidebar-header">',
+		return {
+			header: S(
+				'<div>',
 					'<div id="election-title" class="title-text">',
 						'<div style="font-weight:bold; padding:5px 0 0 2px; float:left;">',
 							T('italy'),
@@ -1586,15 +1577,17 @@ function nationalEnabled() {
 					'<div id="sidebar-results-header">',
 						resultsHeaderHTML,
 					'</div>',
-				'</div>',
-				'<div class="scroller" id="sidebar-scroll">',
+				'</div>'
+			),
+			scroller: S(
+				'<div>',
 					resultsScrollingHTML,
 					'<div id="sidebar-attrib" class="faint-text" style="padding:4px 8px 0 4px; border-top:1px solid #C2C2C2;">',
 						T('itSource'),
 					'</div>',
-				'</div>',
-			'</div>'
-		);
+				'</div>'
+			)
+		};
 	}
 	
 	function formatSidebarTopCandidates( topCandidates ) {
@@ -1605,7 +1598,7 @@ function nationalEnabled() {
 		return S(
 			'<tr class="legend-candidate legend-coalition', selected, '" id="legend-candidate-top" title="', T('clickForAllCoalitionsMap'), '">',
 				'<td class="left">',
-					formatExpander(),
+					formatExpander( 'top' ),
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate">',
@@ -1641,22 +1634,25 @@ function nationalEnabled() {
 		while( parties.length  &&  ! parties[parties.length-1].votes )
 			parties.pop();
 		
+		var show = legendState.expand && legendState.expand[candidate.id];
 		return S(
-			formatSidebarRow( candidate ),
-			_.map( parties, formatSidebarRow ).join('')
+			formatSidebarRow( candidate, true ),
+			_.map( parties, function( party ) {
+				return formatSidebarRow( party, show );
+			}).join('')
 		);
 	}
 	
-	function formatSidebarRow( candidate ) {
+	function formatSidebarRow( candidate, show ) {
 		var classes = S(
 			candidate.id == current.coalition ? ' selected' : '',
 			candidate.isParty ? ' legend-party' : ' legend-coalition'
 		);
-		var style = ( candidate.isParty ? 'display:none;' : '' );
+		var style = ( show ? '' : 'display:none;' );
 		return S(
 			'<tr class="legend-candidate', classes, '" id="legend-candidate-', candidate.id, '" style="', style, '" title="', candidate.fullName, '\n', T('clickForCoalitionHeatMap'), '">',
 				'<td class="left">',
-					candidate.isParty ? '' : formatExpander(),
+					candidate.isParty ? '' : formatExpander( candidate.id ),
 				'</td>',
 				'<td>',
 					'<div class="legend-candidate">',
@@ -1684,9 +1680,10 @@ function nationalEnabled() {
 		);
 	}
 	
-	function formatExpander() {
+	function formatExpander( id ) {
+		var expand = legendState.expand && legendState.expand[id];
 		return S(
-			'<div class="expander closed">',
+			'<div class="expander', expand ? '' : ' closed', '">',
 			'</div>'
 		);
 	} 
@@ -1710,7 +1707,7 @@ function nationalEnabled() {
 			'</tr>'
 		) : '';
 		return S(
-			'<table class="candidates" cellpadding="0" cellspacing="0">',
+			'<table id="sidebar-list" class="candidates" cellpadding="0" cellspacing="0">',
 				thead,
 				mapjoin( topCandidates, formatter ),
 			'</table>'
