@@ -2756,7 +2756,7 @@ function nationalEnabled() {
 			for( var feature, iFeature = -1;  feature = features[++iFeature]; ) {
 				var id = feature.id;
 				if( ! rowsByID[id] )
-					missing.push( S( id, ' in geo but not in results' ) );
+					missing.push( S( id, ' (', feature.name || '?', ') in geo but not in results' ) );
 			}
 			features.didMissingCheck = true;
 		}
