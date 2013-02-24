@@ -24,6 +24,17 @@ if( $.browser.msie ) {
 		$body.addClass( 'ie7' );
 }
 
+var continents = {
+	AFRICA_ASIA_OCEANIA_ANTARTIDE:
+		T('continentAfricaAsiaOceania'),
+	AMERICA_MERIDIONALE:
+		T('continentSouthAmerica'),
+	AMERICA_SETTENTRIONALE_E_CENTRALE:
+		T('continentNorthAndCentralAmerica'),
+	EUROPA:
+		T('continentEurope')
+};
+
 opt.randomized = params.randomize || params.zero;
 
 var electionKey, election;
@@ -525,23 +536,19 @@ function nationalEnabled() {
 	
 	var tweakGeoJSON = {
 		IT: function( json, geoid ) {
-			addContinents( json.continent, json.region );
-			addContinents( json.continent, json.deputy );
+			addContinents( json );
 		}
 	}
 	
-	function addContinents( continent, district ) {
-		var features = district.features;
-		function addContinent( id, name ) {
-			var feature = features.by[id] = continent.features.by[id];
-			feature.id = id;
-			feature.name = name;
-			features.push( feature );
+	function addContinents( json ) {
+		for( var cid in continents ) {
+			var rid = 'R_' + cid;
+			var name = continents[cid];
+			var continent = json.continent.features.by[cid];
+			addFeature( json.province, cid, name, continent, S( rid, ',', rid ) );
+			addFeature( json.region, rid, name, continent );
+			addFeature( json.deputy, rid, name, continent );
 		}
-		addContinent( 'AFRICA_ASIA_OCEANIA_ANTARTIDE', T('continentAfricaAsiaOceania') );
-		addContinent( 'AMERICA_MERIDIONALE', T('continentSouthAmerica') );
-		addContinent( 'AMERICA_SETTENTRIONALE_E_CENTRALE', T('continentNorthAndCentralAmerica') );
-		addContinent( 'EUROPA', T('continentEurope') );
 		
 		//var width = 210000, height = 150000;
 		//var env = envelope( width, height );
@@ -560,6 +567,17 @@ function nationalEnabled() {
 		//};
 		//features.push( feature );
 		//features.by['GM0998'] = feature;
+	}
+	
+	function addFeature( geo, id, name, feature, regdep ) {
+		var features = geo.features;
+		feature = _.clone( feature );
+		feature.id = id;
+		feature.name = name;
+		feature.regdep = regdep;
+		feature.index = features.length;
+		features.by[id] = feature;
+		features.push( feature );
 	}
 	
 	function envelope( width, height ) {
@@ -1173,27 +1191,24 @@ function nationalEnabled() {
 		var extra = zoom - 5;
 		var pow = Math.pow( 2, extra );
 		function clear( feature ) {
+			if( ! feature ) return;
 			delete feature.zoom;
 			delete feature.offset;
 		}
 		function set( feature, id ) {
+			if( ! feature ) return;
 			var z = -0.8, x = 411, y = -1122;
 			var p = PolyGonzo.Mercator.coordToPixel( [0, 0 ], z );
 			feature.zoom = z + extra;
 			feature.offset = { x: ( x - p[0] ) * pow, y: ( y - p[1] ) * pow };
 		}
 		function insetAll( action ) {
-			function continent( id ) {
-				var feature = regionalGeo().features.by[id];
-				if( feature ) {
-					action( feature, id );
-				}
+			for( var id in continents ) {
+				if( params.province )
+					action( provincialGeo().features.by[id], id );
+				id = 'R_' + id;
+				action( regionalGeo().features.by[id], id );
 			}
-			
-			continent( 'AFRICA_ASIA_OCEANIA_ANTARTIDE' );
-			continent( 'AMERICA_MERIDIONALE' );
-			continent( 'AMERICA_SETTENTRIONALE_E_CENTRALE' );
-			continent( 'EUROPA' );
 		}
 		if( ! useInset() ) {
 			insetAll( clear );
@@ -2528,7 +2543,7 @@ function nationalEnabled() {
 		_.each( json.table.rows, function( row ) {
 			var id = row[colID];
 			var split = id.split('-');
-			var idReg = split[1] || id;
+			var idReg = split[1] || 'R_' + id;
 			var regRow = regRows[idReg] || newRow( idReg );
 			
 			for( var iCol = -1;  ++iCol < col.length; )
