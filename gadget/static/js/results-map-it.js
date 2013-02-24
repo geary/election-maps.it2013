@@ -2518,8 +2518,10 @@ function nationalEnabled() {
 			cacheResults.add( json.electionid, json, opt.resultCacheTime );
 			addRegionalResults( json );
 			
-			fixupResults( json, json.table, provincialGeo() );
-			fixupResults( json, json.regional, regionalGeo() );
+			var error =
+				fixupResults( json, json.table, provincialGeo() ) +
+				fixupResults( json, json.regional, regionalGeo() );
+			if( error ) alert( error.replace( /\n+$/, '' ) );
 		}
 		
 		if( electionsPending.length == 0 )
@@ -2609,8 +2611,10 @@ function nationalEnabled() {
 		geo.results = geo.results || {};
 		geo.results[electionKey] = results;
 		
-		fixupResultsOne( json, results, geo, 'coalitions' );
-		fixupResultsOne( json, results.parties, geo, 'parties' );
+		return(
+			fixupResultsOne( json, results, geo, 'coalitions' ) +
+			fixupResultsOne( json, results.parties, geo, 'parties' )
+		);
 	}
 	
 	function fixupResultsOne( json, results, geo, list ) {
@@ -2747,20 +2751,24 @@ function nationalEnabled() {
 			for( var row, iRow = -1;  row = rows[++iRow]; ) {
 				var id = row[colID];
 				if( ! features.by[id] )
-					missing.push( S( id, ' in results but not in GeoJSON' ) );
+					missing.push( S( id, ' in results but not in geo' ) );
 			}
 			for( var feature, iFeature = -1;  feature = features[++iFeature]; ) {
 				var id = feature.id;
 				if( ! rowsByID[id] )
-					missing.push( S( id, ' in GeoJSON but not in results' ) );
+					missing.push( S( id, ' in geo but not in results' ) );
 			}
 			features.didMissingCheck = true;
 		}
 		
 		if( debug == 'verbose'  ||  ( missing.length  &&  debug  &&  debug != 'quiet' ) ) {
 			if( ! missing.length ) missing.push( 'none' );
-			alert( S( 'Missing locations:\n', missing.sort().join( '\n' ) ) );
+			return S(
+				'Missing locations in ', geo.table, ':\n',
+				missing.sort().join( '\n' ), '\n\n'
+			);
 		}
+		return '';
 	}
 	
 	function objToSortedKeys( obj ) {
