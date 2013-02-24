@@ -31,7 +31,7 @@ indexArray( coalitionsIT2013, 'id' );
 
 var partiesIT2013 = _.map([
 	// id|coalition|name_en|name_it
-	"1||Basta Tasse",
+	"1|C|Basta Tasse",
 	"2||Cantiere Popolare",
 	"3||Casapound Italia",
 	"4|I|Democratic Centre|Centro Democratico",
@@ -75,7 +75,7 @@ var partiesIT2013 = _.map([
 	"42||Movimento Naturalista Italiano",
 	"43||Movimento P.P.A.",
 	"44||Movimento Progetto Italia - MID",
-	"45||MPA - Partito dei Siciliani",
+	"45|C|MPA - Partito dei Siciliani",
 	"46||No Alla Chiusura Degli Ospedali",
 	"47||P.C.I. Marxista-Leninista",
 	"48||Partito Comunista",
@@ -94,7 +94,7 @@ var partiesIT2013 = _.map([
 	"61||Rifondazione Missina Italiana",
 	"62||Riformisti Italiani",
 	"63|R|Civil Revolution|Rivoluzione Civile",
-	"64|M|Civic Choice|Scelta Civica",
+	"64|M|Civic Choice|Scelta Civica con Monti per l'Italia",
 	"65|I|Left Ecology Freedom|Sinistra Ecologia Libert&agrave;",
 	"66||Staminali d'Italia",
 	"67|I|SVP|SVP",
