@@ -94,7 +94,7 @@ var partiesIT2013 = _.map([
 	"61||Rifondazione Missina Italiana",
 	"62||Riformisti Italiani",
 	"63|R|Civil Revolution|Rivoluzione Civile",
-	"64|M|Civic Choice|Scelta Civica con Monti per l'Italia",
+	"64|M|Civic Choice|Scelta Civica",
 	"65|I|Left Ecology Freedom|Sinistra Ecologia Libert&agrave;",
 	"66||Staminali d'Italia",
 	"67|I|SVP|SVP",
