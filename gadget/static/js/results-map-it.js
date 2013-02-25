@@ -1378,7 +1378,7 @@ function nationalEnabled() {
 	}
 	
 	function formatSidebarReportingGroups( results ) {
-		return T( 'percentReporting', totalReporting(results) );
+		return T( 'percentReportingOnly', totalReporting(results) );
 		var totals = results.totals,
 			col = totals.colsById.NumCountedBallotBoxes,
 			counts = totals.row[col],
@@ -1404,7 +1404,7 @@ function nationalEnabled() {
 	}
 	
 	function formatSidebarReportingPercent( results ) {
-		return T( 'percentReporting', totalReporting(results) );
+		return T( 'percentReportingOnly', totalReporting(results) );
 	}
 	
 	function totalReporting( results ) {
@@ -1865,7 +1865,7 @@ function nationalEnabled() {
 		}
 		
 		var reporting =
-			boxes ? T( 'percentReporting', {
+			boxes ? T( 'percentReportingOnly', {
 				percent: formatPercent( counted / boxes ),
 				counted: counted,
 				total: boxes,

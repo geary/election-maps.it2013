@@ -116,6 +116,7 @@ loadStrings({
 "percent": "Asilimia", 
 "percentFormat": "{{{n}}}%", 
 "percentReporting": "Kuripoti {{{percent}}} ({{counted}}/{{total}}{{kind}})", 
+"percentReportingOnly": "Kuripoti {{{percent}}}", 
 "popularVote": "Kura Maarufu", 
 "president": "Rais", 
 "presidentButton": "Rais", 
