@@ -150,7 +150,7 @@ var candidateZero = { id: '0' };
 
 function loadCandidatePatterns( callback ) {
 	var loading = 0;
-	election.candidates.forEach( loadPattern );
+	_.each( election.candidates, loadPattern );
 	loadPattern( candidateZero );
 	function loadPattern( candidate ) {
 		++loading;
@@ -2405,7 +2405,7 @@ function nationalEnabled() {
 	function getElections( electionids ) {
 		electionLoading = electionids[0];
 		electionsPending = [].concat( electionids );
-		electionids.forEach( function( electionid ) {
+		_.each( electionids, function( electionid ) {
 			var url = S(
 				'https://pollinglocation.googleapis.com/results?',
 				'electionid=', electionid,
@@ -2460,7 +2460,7 @@ function nationalEnabled() {
 	
 	function makeCols( entities ) {
 		var col = [];
-		entities.forEach( function( entity ) {
+		_.each( entities, function( entity ) {
 			if( entity.skip ) return;
 			col.push( 'TabCount-' + entity.id );
 		});
@@ -2679,7 +2679,7 @@ function nationalEnabled() {
 				});
 			}
 		}
-		election[list].forEach( function( party ) {
+		_.each( election[list], function( party ) {
 			totalPush( 'TabCount-', party.id, 0, party );
 		});
 		totalPush( null, 'TabTotal', 0 );
