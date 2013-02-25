@@ -1424,7 +1424,8 @@ function nationalEnabled() {
 		};
 	}
 	
-	function getTopCandidates( results, row, sortBy, max, force ) {
+	function getTopCandidates( results, row, sortBy, max, forceOn ) {
+		var forceDown = 'X';  // move to elections-*.js?
 		var showAll = false;
 		var colIncr = 1;
 		max = max || Infinity;
@@ -1450,8 +1451,8 @@ function nationalEnabled() {
 			candidate.vsAll = votes / total;
 			//candidate.total = total;
 		}
-		if( force ) {
-			var forced = indexArray( top, 'id' ).by.id[force];
+		if( forceOn ) {
+			var forced = indexArray( top, 'id' ).by.id[forceOn];
 		}
 		top = sortArrayBy( top, sortBy, { numeric:true } )
 			.reverse()
@@ -1467,15 +1468,23 @@ function nationalEnabled() {
 			while( top.length  &&  ! top[top.length-1].votes )
 				top.pop();
 		if( forced ) {
-			if( ! indexArray( top, 'id' ).by.id[force] ) {
+			if( ! indexArray( top, 'id' ).by.id[forceOn] ) {
 				//forced.vsTop = Math.max( forced.votes / most, .25 );
 				forced.vsTop = forced.votes / most;
 				if( top.length == max )
 					top.pop();
 				top.push( forced );
 			}
-			top.force = indexArray( top, 'id' ).by.id[force].index;
+			top.force = indexArray( top, 'id' ).by.id[forceOn].index;
 		}
+		if( forceDown ) {
+			var down = indexArray( top, 'id' ).by.id[forceDown];
+			if( down ) {
+				top.splice( down.index, 1 );
+				top.push( down );
+			}
+		}
+		indexArray( top, 'id' );
 		return top;
 	}
 	
