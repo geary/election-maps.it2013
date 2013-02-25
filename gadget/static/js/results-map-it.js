@@ -1437,7 +1437,9 @@ function nationalEnabled() {
 			col = results.totals.colsById;
 			colIncr = 1;
 		}
-		var top = ( row.candidates || [] ).slice();
+		var top = _.map( row.candidates || [], function( candidate ) {
+			return _.clone( candidate );
+		});
 		var total = 0;
 		for( var i = 0, iCol = 0;  i < top.length; ++i, iCol += colIncr ) {
 			total += row[iCol];
