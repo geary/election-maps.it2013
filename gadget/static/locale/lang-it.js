@@ -116,6 +116,7 @@ loadStrings({
 "percent": "Percentuale", 
 "percentFormat": "{{{n}}}%", 
 "percentReporting": "{{{percent}}} seggi scrutinati ({{counted}}/{{total}}{{kind}})", 
+"percentReportingOnly": "{{{percent}}} seggi scrutinati", 
 "popularVote": "Voto popolare", 
 "president": "Presidente", 
 "presidentButton": "Pres.", 

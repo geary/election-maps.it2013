@@ -116,6 +116,7 @@ loadStrings({
 "percent": "Prozent", 
 "percentFormat": "{{{n}}}%", 
 "percentReporting": "{{{percent}}} gez\u00e4hlter Stimmen ({{counted}}/{{total}}{{kind}})", 
+"percentReportingOnly": "{{{percent}}} gez\u00e4hlter Stimmen", 
 "popularVote": "Stimmen bei Direktwahl", 
 "president": "Pr\u00e4sident", 
 "presidentButton": "Pr\u00e4s.", 

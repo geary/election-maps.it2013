@@ -116,6 +116,7 @@ loadStrings({
 "percent": "", 
 "percentFormat": "{{{n}}}%", 
 "percentReporting": "{{{percent}}} van resultaten doorgegeven ({{counted}}/{{total}}{{kind}})", 
+"percentReportingOnly": "{{{percent}}} van resultaten doorgegeven", 
 "popularVote": "", 
 "president": "", 
 "presidentButton": "", 
