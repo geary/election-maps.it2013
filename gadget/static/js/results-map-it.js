@@ -140,8 +140,8 @@ opt.resultCacheTime = 30 * 1000;
 opt.reloadTime = 60 * 1000;
 
 // Non-auto-refresh settings to use after results are final
-//opt.resultCacheTime = Infinity;  // cache forever
-//opt.reloadTime = false;  // no auto-reload
+opt.resultCacheTime = Infinity;  // cache forever
+opt.reloadTime = false;  // no auto-reload
 
 var zoom;
 
@@ -1545,16 +1545,16 @@ function nationalEnabled() {
 				'</a>'
 			) : '&nbsp;';
 			resultsHeaderHTML = S(
-				'<div id="percent-reporting" class="body-text">',
-					formatSidebarReporting( results ),
-				'</div>',
-				'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
-					test ? 'color:red; font-weight:bold;' : '',
-				'">',
-					test ? T('testData') : T('automaticUpdate'),
-				'</div>',
-				'<div style="padding-bottom:3px;">',
-					viewNational,
+				//'<div id="percent-reporting" class="body-text">',
+				//	formatSidebarReporting( results ),
+				//'</div>',
+				//'<div id="auto-update" class="subtitle-text" style="margin-bottom:8px; ',
+				//	test ? 'color:red; font-weight:bold;' : '',
+				//'">',
+				//	test ? T('testData') : T('automaticUpdate'),
+				//'</div>',
+				'<div style="padding-bottom:8px;">',
+					//viewNational,
 				'</div>'
 			);
 			var candidates = _.map( topCandidates, function( candidate ) {
@@ -1864,13 +1864,13 @@ function nationalEnabled() {
 			counted = row[col.NumCountedBallotBoxes];
 		}
 		
-		var reporting =
-			boxes ? T( 'percentReportingOnly', {
-				percent: formatPercent( counted / boxes ),
-				counted: counted,
-				total: boxes,
-				kind: ''
-			}) : T('waitingForVotes');
+		var reporting = '';
+			//boxes ? T( 'percentReportingOnly', {
+			//	percent: formatPercent( counted / boxes ),
+			//	counted: counted,
+			//	total: boxes,
+			//	kind: ''
+			//}) : T('waitingForVotes');
 		
 		//var clickForLocal =
 		//	top.length &&
