@@ -32,7 +32,7 @@ indexArray( coalitionsIT2013, 'id' );
 var partiesIT2013 = _.map([
 	// id|coalition|name_en|name_it
 	"1|C|Basta Tasse",
-	"2||Cantiere Popolare",
+	"2|C|Cantiere Popolare",
 	"3||Casapound Italia",
 	"4|I|Democratic Centre|Centro Democratico",
 	"5||Civilta' Rurale Sviluppo",
